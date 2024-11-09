@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarte aux Pommes à la Québécoise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f8f8f8;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tarte aux Pommes à la Québécoise</h1>
+
+    <div class="section">
+        <h2>DESCRIPTION</h2>
+        <p>Tarte aux pommes québécoise traditionnelle.</p>
+    </div>
+
+    <div class="section">
+        <h2>OBSERVATION</h2>
+        <p>(Terminologie culinaire classique)<br>
+        Tourte : pâté.<br>
+        Tourtière : assiette dans laquelle se cuit le pâté.</p>
+    </div>
+
+    <div class="section">
+        <h2>VALEUR NUTRITIVE</h2>
+        <p>Une portion (1/8ème d'une tarte de 20 cm (8") de diamètre) représente environ 360 calories.</p>
+    </div>
+
+    <div class="section">
+        <h2>PROPORTIONS</h2>
+        <p>1 tarte de 20 cm (8") de diamètre ou 8 portions.</p>
+    </div>
+
+    <div class="section">
+        <h2>COMPOSITION ET MISE EN PLACE</h2>
+        <h3>PÂTE BRISÉE</h3>
+        <p>1 recette (450 grammes/1 livre) de pâte brisée (page 127)</p>
+
+        <h3>DORURE</h3>
+        <p>1 jaune d'œuf, 1 c. à soupe d'eau et 1 pincée de sel dans 1 bol approprié</p>
+
+        <h3>GARNISSAGE</h3>
+        <p>- Cassonade et fécule :<br>
+        4 c. à soupe de cassonade, 2 c. à soupe de fécule de maïs et ¼ c. à café de cannelle ou de muscade (facultatif) dans 1 bol approprié</p>
+        <p>- Pommes :<br>
+        5 à 6 pommes McIntosh moyennes, coupées en demi-quartiers, plongées 1 seconde au fur et à mesure dans de l'eau salée, puis épongées et détaillées en morceaux de 9 mm (3/8") d'épaisseur</p>
+        <p>- Beurre :<br>
+        75 mL (1/3 t.) de petits dés de beurre doux bien froids dans 1 bol approprié</p>
+        <p>- Sucre :<br>
+        5 c. à soupe de sucre blanc granulé dans 1 bol approprié</p>
+    </div>
+
+    <div class="section">
+        <h2>EXÉCUTION</h2>
+        <h3>PRÉPARER LE FOUR</h3>
+        <p>Si l'élément du bas avance vers le centre du four, placer une des grilles sur la coulisse inférieure ; sinon, sur la coulisse au-dessus. Dans ce dernier cas, il est préférable de cuire la tarte sur une plaque ou une poêle en fonte épaisse de dimension appropriée que l'on place sur la grille inférieure et que l'on préchauffe. Préchauffer le four à 260 °C (500 °F).</p>
+
+        <h2>PRÉPARER LA DORURE</h2>
+        <p>Avec un pinceau, délayer le jaune d'œuf avec l'eau et le sel.</p>
+
+        <h2>DIVISER LA PÂTE EN DEUX</h2>
+        <p>Couper la pâte en deux morceaux, l'un faisant 2/5èmes, l'autre 3/5èmes de la quantité totale. Fariner, brosser chaque morceau et les façonner en galettes de 9 mm (3/8") d'épaisseur.</p>
+
+        <h2>ABAISSER LA PETITE GALETTE</h2>
+        <p>Saupoudrer légèrement de farine la planche à pâtisserie. Saupoudrer de farine et brosser le morceau de pâte de façon à bien sécher sa surface. Déposer la galette de pâte au centre de la planche ; bien essuyer le rouleau à pâte avec un linge puis, avec le rouleau, abaisser progressivement la pâte à une épaisseur uniforme de 2,25 mm (3/32") tout en lui donnant une forme circulaire d'un diamètre de 25 cm (10") supérieur à l'assiette. Chaque fois que le rouleau a tendance à coller à la pâte, la fariner, la brosser, la retourner, puis fariner et brosser la partie supérieure.</p>
+
+        <h2>FONCER L'ASSIETTE À TARTE</h2>
+        <p>Brosser la pâte ; déposer le rouleau au centre, ramener le pan opposé à soi sur le rouleau ; enrouler la pâte autour du rouleau en la brossant bien au fur et à mesure. Soulever le rouleau, déposer le bord du pan de pâte sur le rebord de l'assiette de façon qu'il déborde de 2,5 cm (1"). Appuyer légèrement le rouleau sur le rebord de l'assiette et le faire rouler avec soin de façon à dérouler la pâte au-dessus de l'assiette. Tout en soulevant avec le bout des doigts d'une main le bord de la pâte, avec les doigts de l'autre la repousser délicatement contre le fond et les parois de l'assiette.</p>
+
+        <!-- Add the remaining parts of the recipe in the same format -->
+
+    </div>
+</body>
+</html>

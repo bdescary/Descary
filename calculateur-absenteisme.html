@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculateur de Taux d'Absentéisme - France</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -20,7 +23,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
@@ -41,11 +44,53 @@
             opacity: 0.9;
         }
 
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
         .main-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 30px;
             margin-bottom: 30px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
         }
 
         .card {
@@ -68,6 +113,12 @@
             padding-bottom: 10px;
         }
 
+        .card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
         .form-group {
             margin-bottom: 20px;
         }
@@ -80,6 +131,7 @@
         }
 
         input[type="number"],
+        input[type="text"],
         select {
             width: 100%;
             padding: 12px 15px;
@@ -90,6 +142,7 @@
         }
 
         input[type="number"]:focus,
+        input[type="text"]:focus,
         select:focus {
             outline: none;
             border-color: #667eea;
@@ -120,6 +173,27 @@
             transform: translateY(0);
         }
 
+        .btn-secondary {
+            background: #10b981;
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            margin-top: 10px;
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
         .result-box {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             border-radius: 15px;
@@ -142,6 +216,34 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .kpi-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .kpi-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 10px 0;
+        }
+
+        .kpi-label {
+            color: #666;
+            font-size: 0.9em;
+            font-weight: 600;
         }
 
         .result-value {
@@ -209,6 +311,7 @@
             border-radius: 20px;
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 30px;
         }
 
         .sectors-reference h2 {
@@ -267,6 +370,28 @@
             line-height: 1.6;
         }
 
+        .success-box {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+        }
+
+        .success-box h3 {
+            color: #065f46;
+        }
+
+        .success-box p, .success-box ul {
+            color: #047857;
+        }
+
+        .success-box ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .success-box li {
+            margin-bottom: 5px;
+        }
+
         .sources {
             background: white;
             border-radius: 20px;
@@ -295,6 +420,91 @@
             margin-right: 10px;
         }
 
+        .history-item {
+            background: #f5f7fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .history-item:hover {
+            background: #e5e7eb;
+            transform: translateX(5px);
+        }
+
+        .history-info {
+            flex: 1;
+        }
+
+        .history-date {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .history-details {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .history-rate {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-left: 20px;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .icon-btn:hover {
+            background: #764ba2;
+            transform: scale(1.1);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+
+        .recommendations {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .recommendations h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .recommendations ul {
+            margin-left: 20px;
+        }
+
+        .recommendations li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
         @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
@@ -306,6 +516,22 @@
 
             .result-value {
                 font-size: 2.5em;
+            }
+
+            .kpi-value {
+                font-size: 2em;
+            }
+
+            .btn-group {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                width: 100%;
             }
         }
 
@@ -333,132 +559,347 @@
             font-size: 12px;
             font-weight: normal;
         }
+
+        .period-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .period-btn {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .period-btn:hover {
+            border-color: #667eea;
+        }
+
+        .period-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .absence-types {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 50px 20px;
+            color: #999;
+        }
+
+        .no-data p:first-child {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>📊 Calculateur de Taux d'Absentéisme</h1>
-            <p>Outil de calcul et d'analyse pour les entreprises françaises</p>
+            <p>Outil professionnel de calcul et d'analyse pour les entreprises françaises</p>
         </header>
 
-        <div class="main-content">
-            <div class="card">
-                <h2>Calculer votre taux d'absentéisme</h2>
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('calculator')">📊 Calculateur</button>
+            <button class="tab" onclick="switchTab('advanced')">⚙️ Analyse Avancée</button>
+            <button class="tab" onclick="switchTab('financial')">💰 Impact Financier</button>
+            <button class="tab" onclick="switchTab('history')">📜 Historique</button>
+            <button class="tab" onclick="switchTab('sectors')">📈 Secteurs</button>
+        </div>
 
-                <form id="absenceForm">
-                    <div class="form-group">
-                        <label for="sector">
-                            Secteur d'activité
-                            <span class="tooltip" data-tooltip="Sélectionnez votre secteur pour une comparaison pertinente">ℹ️</span>
-                        </label>
-                        <select id="sector" required>
-                            <option value="">-- Sélectionnez un secteur --</option>
-                            <option value="sante">Santé et action sociale</option>
-                            <option value="transport">Transport et logistique</option>
-                            <option value="industrie">Industrie</option>
-                            <option value="btp">BTP</option>
-                            <option value="commerce">Commerce</option>
-                            <option value="services">Services</option>
-                            <option value="horeca">Hôtellerie-restauration</option>
-                            <option value="finance">Finance et assurance</option>
-                            <option value="administration">Administration publique</option>
-                            <option value="autre">Autre secteur</option>
-                        </select>
+        <!-- TAB 1: CALCULATEUR SIMPLE -->
+        <div id="calculator" class="tab-content active">
+            <div class="main-content">
+                <div class="card">
+                    <h2>Calculer votre taux d'absentéisme</h2>
+
+                    <form id="absenceForm">
+                        <div class="form-group">
+                            <label for="companyName">
+                                Nom de l'entreprise (optionnel)
+                                <span class="tooltip" data-tooltip="Pour l'historique et les exports">ℹ️</span>
+                            </label>
+                            <input type="text" id="companyName" placeholder="Ex: Mon Entreprise">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Période de calcul</label>
+                            <div class="period-selector">
+                                <button type="button" class="period-btn active" data-days="22" onclick="selectPeriod(this, 22)">Mensuel<br>(22j)</button>
+                                <button type="button" class="period-btn" data-days="66" onclick="selectPeriod(this, 66)">Trimestriel<br>(66j)</button>
+                                <button type="button" class="period-btn" data-days="220" onclick="selectPeriod(this, 220)">Annuel<br>(220j)</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sector">
+                                Secteur d'activité
+                                <span class="tooltip" data-tooltip="Sélectionnez votre secteur pour une comparaison pertinente">ℹ️</span>
+                            </label>
+                            <select id="sector" required>
+                                <option value="">-- Sélectionnez un secteur --</option>
+                                <option value="sante">Santé et action sociale</option>
+                                <option value="transport">Transport et logistique</option>
+                                <option value="industrie">Industrie</option>
+                                <option value="btp">BTP</option>
+                                <option value="commerce">Commerce</option>
+                                <option value="services">Services</option>
+                                <option value="horeca">Hôtellerie-restauration</option>
+                                <option value="finance">Finance et assurance</option>
+                                <option value="administration">Administration publique</option>
+                                <option value="autre">Autre secteur</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="totalEmployees">
+                                Nombre total d'employés
+                                <span class="tooltip" data-tooltip="Nombre moyen d'employés sur la période">ℹ️</span>
+                            </label>
+                            <input type="number" id="totalEmployees" min="1" required placeholder="Ex: 50">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="workDays">
+                                Jours ouvrés sur la période
+                                <span class="tooltip" data-tooltip="Nombre de jours travaillés théoriques">ℹ️</span>
+                            </label>
+                            <input type="number" id="workDays" min="1" value="22" required placeholder="Ex: 220">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="absenceDays">
+                                Nombre total de jours d'absence
+                                <span class="tooltip" data-tooltip="Total des jours d'absence pour tous les employés">ℹ️</span>
+                            </label>
+                            <input type="number" id="absenceDays" min="0" required placeholder="Ex: 55">
+                        </div>
+
+                        <button type="submit" class="btn">Calculer le taux d'absentéisme</button>
+                    </form>
+
+                    <div class="info-box">
+                        <h3>💡 Formule de calcul</h3>
+                        <p><strong>Taux d'absentéisme = (Nombre de jours d'absence / (Nombre d'employés × Jours ouvrés)) × 100</strong></p>
                     </div>
-
-                    <div class="form-group">
-                        <label for="totalEmployees">
-                            Nombre total d'employés
-                            <span class="tooltip" data-tooltip="Nombre moyen d'employés sur la période">ℹ️</span>
-                        </label>
-                        <input type="number" id="totalEmployees" min="1" required placeholder="Ex: 50">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="workDays">
-                            Jours ouvrés sur la période
-                            <span class="tooltip" data-tooltip="Nombre de jours travaillés théoriques (ex: 220 pour une année)">ℹ️</span>
-                        </label>
-                        <input type="number" id="workDays" min="1" value="220" required placeholder="Ex: 220">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="absenceDays">
-                            Nombre total de jours d'absence
-                            <span class="tooltip" data-tooltip="Total des jours d'absence pour tous les employés">ℹ️</span>
-                        </label>
-                        <input type="number" id="absenceDays" min="0" required placeholder="Ex: 550">
-                    </div>
-
-                    <button type="submit" class="btn">Calculer le taux d'absentéisme</button>
-                </form>
-
-                <div class="info-box">
-                    <h3>💡 Formule de calcul</h3>
-                    <p><strong>Taux d'absentéisme = (Nombre de jours d'absence / (Nombre d'employés × Jours ouvrés)) × 100</strong></p>
                 </div>
-            </div>
 
-            <div class="card">
-                <h2>Résultats de l'analyse</h2>
+                <div class="card">
+                    <h2>Résultats de l'analyse</h2>
 
-                <div id="resultBox" class="result-box">
-                    <div class="result-label">Votre taux d'absentéisme</div>
-                    <div class="result-value" id="resultValue">0%</div>
+                    <div id="resultBox" class="result-box">
+                        <div class="result-label">Votre taux d'absentéisme</div>
+                        <div class="result-value" id="resultValue">0%</div>
 
-                    <div class="comparison">
-                        <div class="comparison-item">
-                            <span class="comparison-label">Moyenne nationale</span>
-                            <span class="comparison-value" id="nationalComparison">5.5%</span>
+                        <div class="comparison">
+                            <div class="comparison-item">
+                                <span class="comparison-label">Moyenne nationale</span>
+                                <span class="comparison-value" id="nationalComparison">5.5%</span>
+                            </div>
+                            <div class="comparison-item">
+                                <span class="comparison-label">Moyenne de votre secteur</span>
+                                <span class="comparison-value" id="sectorComparison">-</span>
+                            </div>
+                            <div class="comparison-item">
+                                <span class="comparison-label">Différence vs secteur</span>
+                                <span class="comparison-value" id="difference">-</span>
+                            </div>
                         </div>
-                        <div class="comparison-item">
-                            <span class="comparison-label">Moyenne de votre secteur</span>
-                            <span class="comparison-value" id="sectorComparison">-</span>
+
+                        <div class="info-box" id="interpretation" style="display:none;">
+                            <h3>📈 Interprétation</h3>
+                            <p id="interpretationText"></p>
                         </div>
-                        <div class="comparison-item">
-                            <span class="comparison-label">Différence vs secteur</span>
-                            <span class="comparison-value" id="difference">-</span>
+
+                        <div class="btn-group">
+                            <button class="btn btn-secondary" onclick="saveToHistory()">💾 Sauvegarder</button>
+                            <button class="btn btn-secondary" onclick="exportToPDF()">📄 Export PDF</button>
                         </div>
                     </div>
 
-                    <div class="info-box" id="interpretation" style="display:none;">
-                        <h3>📈 Interprétation</h3>
-                        <p id="interpretationText"></p>
+                    <div id="placeholderMessage" class="no-data">
+                        <p>📋</p>
+                        <p style="font-size: 1.2em;">Remplissez le formulaire pour voir vos résultats</p>
                     </div>
-                </div>
-
-                <div id="placeholderMessage" style="text-align: center; padding: 50px 20px; color: #999;">
-                    <p style="font-size: 3em;">📋</p>
-                    <p style="font-size: 1.2em;">Remplissez le formulaire pour voir vos résultats</p>
                 </div>
             </div>
         </div>
 
-        <div class="sectors-reference">
-            <h2>📊 Taux d'absentéisme moyen par secteur en France (2024)</h2>
-            <div id="sectorsContainer"></div>
+        <!-- TAB 2: ANALYSE AVANCÉE -->
+        <div id="advanced" class="tab-content">
+            <div class="main-content">
+                <div class="card">
+                    <h2>Analyse détaillée par type d'absence</h2>
+                    <form id="advancedForm">
+                        <div class="form-group">
+                            <label for="adv_totalEmployees">Nombre total d'employés</label>
+                            <input type="number" id="adv_totalEmployees" min="1" required placeholder="Ex: 50">
+                        </div>
 
-            <div class="info-box" style="margin-top: 20px;">
-                <h3>ℹ️ À propos de ces données</h3>
-                <p>Les taux présentés sont des moyennes nationales basées sur les dernières études disponibles. Le taux d'absentéisme peut varier selon la taille de l'entreprise, la région, et d'autres facteurs.</p>
+                        <div class="form-group">
+                            <label for="adv_workDays">Jours ouvrés sur la période</label>
+                            <input type="number" id="adv_workDays" min="1" value="220" required placeholder="Ex: 220">
+                        </div>
+
+                        <h3>Répartition des absences par type</h3>
+                        <div class="absence-types">
+                            <div class="form-group">
+                                <label for="sickLeave">Arrêts maladie ordinaires</label>
+                                <input type="number" id="sickLeave" min="0" value="0" placeholder="Jours">
+                            </div>
+                            <div class="form-group">
+                                <label for="longSickLeave">Arrêts longue durée</label>
+                                <input type="number" id="longSickLeave" min="0" value="0" placeholder="Jours">
+                            </div>
+                            <div class="form-group">
+                                <label for="workAccident">Accidents du travail</label>
+                                <input type="number" id="workAccident" min="0" value="0" placeholder="Jours">
+                            </div>
+                            <div class="form-group">
+                                <label for="maternityLeave">Congés maternité/paternité</label>
+                                <input type="number" id="maternityLeave" min="0" value="0" placeholder="Jours">
+                            </div>
+                            <div class="form-group">
+                                <label for="unauthorizedAbsence">Absences non justifiées</label>
+                                <input type="number" id="unauthorizedAbsence" min="0" value="0" placeholder="Jours">
+                            </div>
+                            <div class="form-group">
+                                <label for="otherAbsence">Autres absences</label>
+                                <input type="number" id="otherAbsence" min="0" value="0" placeholder="Jours">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn">Analyser en détail</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2>Résultats de l'analyse avancée</h2>
+                    <div id="advancedResults" class="no-data">
+                        <p>📊</p>
+                        <p>Complétez le formulaire pour voir l'analyse détaillée</p>
+                    </div>
+                    <div id="advancedChartContainer" style="display:none;">
+                        <div class="chart-container">
+                            <canvas id="absenceChart"></canvas>
+                        </div>
+                        <div id="advancedKPIs"></div>
+                        <div id="advancedRecommendations"></div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="sources">
-            <h3>📚 Sources des données</h3>
-            <ul>
-                <li><strong>Assurance Maladie</strong> - Statistiques sur les arrêts de travail en France</li>
-                <li><strong>Malakoff Humanis</strong> - Baromètre Absentéisme et Engagement 2024</li>
-                <li><strong>Ayming</strong> - Baromètre de l'Absentéisme et de l'Engagement</li>
-                <li><strong>DARES (Ministère du Travail)</strong> - Direction de l'Animation de la Recherche, des Études et des Statistiques</li>
-                <li><strong>AG2R La Mondiale</strong> - Études sur l'absentéisme en entreprise</li>
-            </ul>
+        <!-- TAB 3: IMPACT FINANCIER -->
+        <div id="financial" class="tab-content">
+            <div class="main-content">
+                <div class="card">
+                    <h2>Calculateur d'impact financier</h2>
+                    <form id="financialForm">
+                        <div class="form-group">
+                            <label for="fin_employees">Nombre d'employés</label>
+                            <input type="number" id="fin_employees" min="1" required placeholder="Ex: 50">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fin_absenceDays">Total de jours d'absence (année)</label>
+                            <input type="number" id="fin_absenceDays" min="0" required placeholder="Ex: 550">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="avgSalary">
+                                Salaire moyen journalier (€)
+                                <span class="tooltip" data-tooltip="Salaire brut journalier moyen de vos employés">ℹ️</span>
+                            </label>
+                            <input type="number" id="avgSalary" min="0" step="0.01" required placeholder="Ex: 150">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="replacementCost">
+                                Coût de remplacement par jour (€)
+                                <span class="tooltip" data-tooltip="Coût des intérimaires, heures supplémentaires, etc.">ℹ️</span>
+                            </label>
+                            <input type="number" id="replacementCost" min="0" step="0.01" placeholder="Ex: 200 (0 si aucun)">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productivityLoss">
+                                Perte de productivité (%)
+                                <span class="tooltip" data-tooltip="Estimation de la perte de productivité liée à l'absence">ℹ️</span>
+                            </label>
+                            <input type="number" id="productivityLoss" min="0" max="100" value="30" placeholder="Ex: 30">
+                        </div>
+
+                        <button type="submit" class="btn">Calculer l'impact financier</button>
+                    </form>
+
+                    <div class="info-box">
+                        <h3>💡 Composantes du coût</h3>
+                        <p>Le coût total de l'absentéisme inclut : le maintien de salaire, les coûts de remplacement, la perte de productivité, et les coûts administratifs.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Impact financier estimé</h2>
+                    <div id="financialResults" class="no-data">
+                        <p>💰</p>
+                        <p>Complétez le formulaire pour estimer les coûts</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: HISTORIQUE -->
+        <div id="history" class="tab-content">
+            <div class="card full-width">
+                <h2>Historique des calculs</h2>
+                <div id="historyList"></div>
+                <button class="btn btn-danger" onclick="clearHistory()" style="width: auto; margin-top: 20px;">🗑️ Effacer l'historique</button>
+            </div>
+        </div>
+
+        <!-- TAB 5: SECTEURS -->
+        <div id="sectors" class="tab-content">
+            <div class="sectors-reference">
+                <h2>📊 Taux d'absentéisme moyen par secteur en France (2024)</h2>
+                <div id="sectorsContainer"></div>
+
+                <div class="info-box" style="margin-top: 20px;">
+                    <h3>ℹ️ À propos de ces données</h3>
+                    <p>Les taux présentés sont des moyennes nationales basées sur les dernières études disponibles. Le taux d'absentéisme peut varier selon la taille de l'entreprise, la région, et d'autres facteurs.</p>
+                </div>
+            </div>
+
+            <div class="sources">
+                <h3>📚 Sources des données</h3>
+                <ul>
+                    <li><strong>Assurance Maladie (ameli.fr)</strong> - Statistiques sur les arrêts de travail en France</li>
+                    <li><strong>Malakoff Humanis</strong> - Baromètre Absentéisme et Engagement 2024</li>
+                    <li><strong>Ayming</strong> - Baromètre de l'Absentéisme et de l'Engagement 2024</li>
+                    <li><strong>DARES (Ministère du Travail)</strong> - Direction de l'Animation de la Recherche, des Études et des Statistiques</li>
+                    <li><strong>AG2R La Mondiale</strong> - Études sur l'absentéisme en entreprise</li>
+                    <li><strong>Institut Sapiens</strong> - Études économiques sur le coût de l'absentéisme</li>
+                </ul>
+            </div>
         </div>
     </div>
 
     <script>
-        // Données par secteur (source: études récentes absentéisme France 2023-2024)
+        // Données par secteur
         const sectorData = {
             sante: { name: "Santé et action sociale", rate: 7.8 },
             transport: { name: "Transport et logistique", rate: 7.2 },
@@ -473,24 +914,29 @@
         };
 
         const nationalAverage = 5.5;
+        let currentCalculation = null;
+        let absenceChart = null;
 
-        // Afficher les secteurs
-        function displaySectors() {
-            const container = document.getElementById('sectorsContainer');
-            const sectors = Object.values(sectorData).filter(s => s.name !== "Autre secteur");
+        // Gestion des onglets
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
-            // Trier par taux décroissant
-            sectors.sort((a, b) => b.rate - a.rate);
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
 
-            sectors.forEach(sector => {
-                const div = document.createElement('div');
-                div.className = 'sector-item';
-                div.innerHTML = `
-                    <span class="sector-name">${sector.name}</span>
-                    <span class="sector-rate">${sector.rate}%</span>
-                `;
-                container.appendChild(div);
-            });
+            if (tabName === 'history') {
+                displayHistory();
+            } else if (tabName === 'sectors') {
+                displaySectors();
+            }
+        }
+
+        // Sélection de période
+        function selectPeriod(btn, days) {
+            document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('workDays').value = days;
         }
 
         // Calculer le taux d'absentéisme
@@ -521,23 +967,57 @@
             }
         }
 
-        // Gérer la soumission du formulaire
+        // Générer des recommandations
+        function generateRecommendations(userRate, sectorRate) {
+            const recommendations = [];
+
+            if (userRate > sectorRate + 1) {
+                recommendations.push("Mettre en place un suivi régulier des indicateurs d'absentéisme");
+                recommendations.push("Réaliser un audit des conditions de travail et de l'organisation");
+                recommendations.push("Développer une politique de prévention des RPS (Risques Psychosociaux)");
+                recommendations.push("Former les managers à la détection des signaux faibles");
+                recommendations.push("Proposer un dispositif d'écoute et d'accompagnement des salariés");
+            } else if (userRate > sectorRate) {
+                recommendations.push("Maintenir une communication régulière avec les équipes");
+                recommendations.push("Analyser les causes principales d'absence");
+                recommendations.push("Renforcer les actions de prévention santé");
+            } else {
+                recommendations.push("Capitaliser sur vos bonnes pratiques");
+                recommendations.push("Partager vos méthodes de prévention en interne");
+                recommendations.push("Maintenir un dialogue social de qualité");
+                recommendations.push("Continuer à investir dans le bien-être au travail");
+            }
+
+            return recommendations;
+        }
+
+        // Formulaire simple
         document.getElementById('absenceForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
+            const companyName = document.getElementById('companyName').value || 'Non spécifié';
             const sector = document.getElementById('sector').value;
             const totalEmployees = parseInt(document.getElementById('totalEmployees').value);
             const workDays = parseInt(document.getElementById('workDays').value);
             const absenceDays = parseInt(document.getElementById('absenceDays').value);
 
-            // Calculer le taux
             const userRate = calculateAbsenteeism(totalEmployees, workDays, absenceDays);
             const sectorRate = sectorData[sector].rate;
+
+            currentCalculation = {
+                companyName,
+                sector: sectorData[sector].name,
+                totalEmployees,
+                workDays,
+                absenceDays,
+                rate: userRate,
+                sectorRate,
+                date: new Date().toISOString()
+            };
 
             // Afficher les résultats
             document.getElementById('resultValue').textContent = userRate + '%';
 
-            // Comparaisons
             const nationalComp = document.getElementById('nationalComparison');
             nationalComp.textContent = nationalAverage + '%';
             nationalComp.className = 'comparison-value ' + getComparisonClass(userRate, nationalAverage);
@@ -551,21 +1031,354 @@
             diff.textContent = (diffValue > 0 ? '+' : '') + diffValue.toFixed(1) + ' pts';
             diff.className = 'comparison-value ' + getComparisonClass(userRate, sectorRate);
 
-            // Interprétation
             document.getElementById('interpretationText').textContent = generateInterpretation(userRate, sectorRate);
             document.getElementById('interpretation').style.display = 'block';
 
-            // Afficher la boîte de résultats
             document.getElementById('placeholderMessage').style.display = 'none';
             document.getElementById('resultBox').classList.add('show');
 
-            // Scroll vers les résultats sur mobile
             if (window.innerWidth <= 768) {
                 document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth' });
             }
         });
 
-        // Initialiser l'affichage des secteurs au chargement
+        // Formulaire avancé
+        document.getElementById('advancedForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const totalEmployees = parseInt(document.getElementById('adv_totalEmployees').value);
+            const workDays = parseInt(document.getElementById('adv_workDays').value);
+
+            const sickLeave = parseInt(document.getElementById('sickLeave').value) || 0;
+            const longSickLeave = parseInt(document.getElementById('longSickLeave').value) || 0;
+            const workAccident = parseInt(document.getElementById('workAccident').value) || 0;
+            const maternityLeave = parseInt(document.getElementById('maternityLeave').value) || 0;
+            const unauthorizedAbsence = parseInt(document.getElementById('unauthorizedAbsence').value) || 0;
+            const otherAbsence = parseInt(document.getElementById('otherAbsence').value) || 0;
+
+            const totalAbsence = sickLeave + longSickLeave + workAccident + maternityLeave + unauthorizedAbsence + otherAbsence;
+            const rate = calculateAbsenteeism(totalEmployees, workDays, totalAbsence);
+
+            // Afficher le graphique
+            displayAdvancedResults({
+                sickLeave,
+                longSickLeave,
+                workAccident,
+                maternityLeave,
+                unauthorizedAbsence,
+                otherAbsence,
+                totalAbsence,
+                rate,
+                totalEmployees,
+                workDays
+            });
+        });
+
+        function displayAdvancedResults(data) {
+            document.getElementById('advancedResults').style.display = 'none';
+            document.getElementById('advancedChartContainer').style.display = 'block';
+
+            // KPIs
+            const kpisHtml = `
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Taux global</div>
+                        <div class="kpi-value">${data.rate}%</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Total jours absents</div>
+                        <div class="kpi-value">${data.totalAbsence}</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Absence moyenne/employé</div>
+                        <div class="kpi-value">${(data.totalAbsence / data.totalEmployees).toFixed(1)}j</div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('advancedKPIs').innerHTML = kpisHtml;
+
+            // Graphique
+            const ctx = document.getElementById('absenceChart').getContext('2d');
+
+            if (absenceChart) {
+                absenceChart.destroy();
+            }
+
+            absenceChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Maladie ordinaire', 'Longue durée', 'Accident travail', 'Maternité/Paternité', 'Non justifiées', 'Autres'],
+                    datasets: [{
+                        data: [data.sickLeave, data.longSickLeave, data.workAccident, data.maternityLeave, data.unauthorizedAbsence, data.otherAbsence],
+                        backgroundColor: [
+                            '#667eea',
+                            '#764ba2',
+                            '#f59e0b',
+                            '#10b981',
+                            '#ef4444',
+                            '#6b7280'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Répartition des absences par type'
+                        }
+                    }
+                }
+            });
+
+            // Recommandations
+            const recHtml = `
+                <div class="recommendations">
+                    <h4>💡 Recommandations basées sur l'analyse</h4>
+                    <ul>
+                        ${data.sickLeave > data.totalAbsence * 0.5 ? '<li>Les arrêts maladie ordinaires représentent une part importante. Envisagez des actions de prévention santé.</li>' : ''}
+                        ${data.longSickLeave > 0 ? '<li>Présence d\'arrêts longue durée : mettez en place un dispositif de maintien du lien avec les salariés absents.</li>' : ''}
+                        ${data.workAccident > 0 ? '<li>Accidents du travail détectés : renforcez les mesures de sécurité et la formation.</li>' : ''}
+                        ${data.unauthorizedAbsence > 0 ? '<li>Absences non justifiées : identifiez les causes (désengagement, conditions de travail).</li>' : ''}
+                        <li>Organisez des entretiens de retour pour comprendre les causes d'absence.</li>
+                        <li>Développez une culture de prévention et de bien-être au travail.</li>
+                    </ul>
+                </div>
+            `;
+            document.getElementById('advancedRecommendations').innerHTML = recHtml;
+        }
+
+        // Formulaire financier
+        document.getElementById('financialForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const employees = parseInt(document.getElementById('fin_employees').value);
+            const absenceDays = parseInt(document.getElementById('fin_absenceDays').value);
+            const avgSalary = parseFloat(document.getElementById('avgSalary').value);
+            const replacementCost = parseFloat(document.getElementById('replacementCost').value) || 0;
+            const productivityLoss = parseFloat(document.getElementById('productivityLoss').value) / 100;
+
+            // Calculs
+            const salaryCost = absenceDays * avgSalary;
+            const replacementTotal = absenceDays * replacementCost;
+            const productivityCost = absenceDays * avgSalary * productivityLoss;
+            const adminCost = absenceDays * 20; // Estimation coût administratif
+            const totalCost = salaryCost + replacementTotal + productivityCost + adminCost;
+            const costPerEmployee = totalCost / employees;
+            const costPerDay = totalCost / 365;
+
+            const resultsHtml = `
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Coût total annuel</div>
+                        <div class="kpi-value">${totalCost.toLocaleString('fr-FR')}€</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Coût par employé</div>
+                        <div class="kpi-value">${costPerEmployee.toLocaleString('fr-FR')}€</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Coût quotidien</div>
+                        <div class="kpi-value">${costPerDay.toLocaleString('fr-FR')}€</div>
+                    </div>
+                </div>
+
+                <div class="comparison" style="margin-top: 20px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">Détail des coûts</h3>
+                    <div class="comparison-item">
+                        <span class="comparison-label">Maintien de salaire</span>
+                        <span>${salaryCost.toLocaleString('fr-FR')}€</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="comparison-label">Coûts de remplacement</span>
+                        <span>${replacementTotal.toLocaleString('fr-FR')}€</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="comparison-label">Perte de productivité</span>
+                        <span>${productivityCost.toLocaleString('fr-FR')}€</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="comparison-label">Coûts administratifs</span>
+                        <span>${adminCost.toLocaleString('fr-FR')}€</span>
+                    </div>
+                </div>
+
+                <div class="info-box" style="margin-top: 20px;">
+                    <h3>💰 Impact financier</h3>
+                    <p>L'absentéisme coûte à votre entreprise environ <strong>${totalCost.toLocaleString('fr-FR')}€ par an</strong>, soit ${(totalCost / employees / 12).toFixed(0)}€ par employé et par mois.</p>
+                    <p style="margin-top: 10px;">Une réduction de 1 point du taux d'absentéisme pourrait vous faire économiser environ <strong>${(totalCost / (absenceDays / (employees * 220)) * 0.01).toLocaleString('fr-FR')}€</strong>.</p>
+                </div>
+
+                <div class="success-box" style="margin-top: 20px;">
+                    <h3>✅ Actions pour réduire les coûts</h3>
+                    <ul>
+                        <li>Investir dans la prévention santé (retour sur investissement estimé à 3-4€ par euro investi)</li>
+                        <li>Améliorer la qualité de vie au travail</li>
+                        <li>Former les managers à la gestion des absences</li>
+                        <li>Mettre en place des entretiens de retour après absence</li>
+                        <li>Développer la reconnaissance et l'engagement des salariés</li>
+                    </ul>
+                </div>
+            `;
+
+            document.getElementById('financialResults').innerHTML = resultsHtml;
+            document.getElementById('financialResults').classList.remove('no-data');
+        });
+
+        // Sauvegarder dans l'historique
+        function saveToHistory() {
+            if (!currentCalculation) return;
+
+            let history = JSON.parse(localStorage.getItem('absenceHistory') || '[]');
+            history.unshift(currentCalculation);
+
+            // Limiter à 50 entrées
+            if (history.length > 50) {
+                history = history.slice(0, 50);
+            }
+
+            localStorage.setItem('absenceHistory', JSON.stringify(history));
+            alert('Calcul sauvegardé dans l\'historique !');
+        }
+
+        // Afficher l'historique
+        function displayHistory() {
+            const history = JSON.parse(localStorage.getItem('absenceHistory') || '[]');
+            const container = document.getElementById('historyList');
+
+            if (history.length === 0) {
+                container.innerHTML = '<div class="no-data"><p>📜</p><p>Aucun calcul sauvegardé</p></div>';
+                return;
+            }
+
+            let html = '';
+            history.forEach((item, index) => {
+                const date = new Date(item.date);
+                html += `
+                    <div class="history-item">
+                        <div class="history-info">
+                            <div class="history-date">${date.toLocaleDateString('fr-FR')} - ${item.companyName}</div>
+                            <div class="history-details">
+                                ${item.sector} | ${item.totalEmployees} employés | ${item.workDays} jours ouvrés | ${item.absenceDays} jours d'absence
+                            </div>
+                        </div>
+                        <div class="history-rate">${item.rate}%</div>
+                        <div class="history-actions">
+                            <button class="icon-btn" onclick="deleteHistoryItem(${index})" title="Supprimer">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Supprimer un élément de l'historique
+        function deleteHistoryItem(index) {
+            let history = JSON.parse(localStorage.getItem('absenceHistory') || '[]');
+            history.splice(index, 1);
+            localStorage.setItem('absenceHistory', JSON.stringify(history));
+            displayHistory();
+        }
+
+        // Effacer tout l'historique
+        function clearHistory() {
+            if (confirm('Êtes-vous sûr de vouloir effacer tout l\'historique ?')) {
+                localStorage.removeItem('absenceHistory');
+                displayHistory();
+            }
+        }
+
+        // Afficher les secteurs
+        function displaySectors() {
+            const container = document.getElementById('sectorsContainer');
+            if (container.innerHTML) return; // Déjà affiché
+
+            const sectors = Object.values(sectorData).filter(s => s.name !== "Autre secteur");
+            sectors.sort((a, b) => b.rate - a.rate);
+
+            sectors.forEach(sector => {
+                const div = document.createElement('div');
+                div.className = 'sector-item';
+                div.innerHTML = `
+                    <span class="sector-name">${sector.name}</span>
+                    <span class="sector-rate">${sector.rate}%</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Export PDF
+        async function exportToPDF() {
+            if (!currentCalculation) return;
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Configuration
+            const margin = 20;
+            let yPos = margin;
+
+            // Titre
+            doc.setFontSize(20);
+            doc.setTextColor(102, 126, 234);
+            doc.text('Rapport d\'Absentéisme', margin, yPos);
+            yPos += 15;
+
+            // Date
+            doc.setFontSize(10);
+            doc.setTextColor(100);
+            doc.text(`Généré le ${new Date().toLocaleDateString('fr-FR')}`, margin, yPos);
+            yPos += 15;
+
+            // Informations
+            doc.setFontSize(12);
+            doc.setTextColor(0);
+            doc.text(`Entreprise: ${currentCalculation.companyName}`, margin, yPos);
+            yPos += 7;
+            doc.text(`Secteur: ${currentCalculation.sector}`, margin, yPos);
+            yPos += 7;
+            doc.text(`Nombre d'employés: ${currentCalculation.totalEmployees}`, margin, yPos);
+            yPos += 7;
+            doc.text(`Jours ouvrés: ${currentCalculation.workDays}`, margin, yPos);
+            yPos += 7;
+            doc.text(`Jours d'absence: ${currentCalculation.absenceDays}`, margin, yPos);
+            yPos += 15;
+
+            // Résultat principal
+            doc.setFontSize(16);
+            doc.setTextColor(102, 126, 234);
+            doc.text(`Taux d'absentéisme: ${currentCalculation.rate}%`, margin, yPos);
+            yPos += 15;
+
+            // Comparaisons
+            doc.setFontSize(12);
+            doc.setTextColor(0);
+            doc.text('Comparaisons:', margin, yPos);
+            yPos += 7;
+            doc.text(`- Moyenne nationale: ${nationalAverage}%`, margin + 5, yPos);
+            yPos += 7;
+            doc.text(`- Moyenne du secteur: ${currentCalculation.sectorRate}%`, margin + 5, yPos);
+            yPos += 7;
+            const diff = currentCalculation.rate - currentCalculation.sectorRate;
+            doc.text(`- Différence: ${diff > 0 ? '+' : ''}${diff.toFixed(1)} points`, margin + 5, yPos);
+            yPos += 15;
+
+            // Interprétation
+            doc.setFontSize(10);
+            const interpretation = generateInterpretation(currentCalculation.rate, currentCalculation.sectorRate);
+            const splitText = doc.splitTextToSize(interpretation, 170);
+            doc.text(splitText, margin, yPos);
+
+            // Télécharger
+            doc.save(`rapport-absenteisme-${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
+        // Initialiser
         displaySectors();
     </script>
 </body>

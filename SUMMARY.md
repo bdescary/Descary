@@ -12,7 +12,16 @@ Fichier HTML complet et autonome contenant :
 - ✅ Design professionnel avec animations
 - ✅ Compatible mobile, tablette et desktop
 
-### 2. **README-QUIZ.md** (8 KB)
+### 2. **quiz-elementor-version.html** (50 KB) 🆕
+Version optimisée pour WordPress et Elementor :
+- ✅ Styles CSS encapsulés avec préfixes `.mq-` (pas de conflits)
+- ✅ JavaScript dans un namespace `MedicatQuiz` (isolé)
+- ✅ IDs uniques préfixés `mq` (compatibilité WordPress)
+- ✅ Prêt pour widget HTML Elementor (copier-coller)
+- ✅ Compatible tous thèmes WordPress
+- ✅ Même fonctionnalités que la version standard
+
+### 3. **README-QUIZ.md** (8 KB)
 Documentation complète incluant :
 - ✅ Description du projet et objectifs
 - ✅ Fonctionnalités détaillées
@@ -22,7 +31,18 @@ Documentation complète incluant :
 - ✅ Notes sur la conformité RGPD
 - ✅ Roadmap des optimisations futures
 
-### 3. **INTEGRATION-GUIDE.md** (16 KB)
+### 4. **ELEMENTOR-GUIDE.md** (12 KB) 🆕
+Guide spécifique WordPress/Elementor incluant :
+- ✅ 3 méthodes d'intégration (Widget HTML, Shortcode, Plugin)
+- ✅ Instructions pas à pas avec captures d'écran textuelles
+- ✅ Personnalisation des couleurs et styles
+- ✅ Intégration Contact Form 7, WPForms, Gravity Forms
+- ✅ Configuration Google Analytics pour WordPress
+- ✅ Code PHP pour sauvegarder les résultats en base
+- ✅ Dashboard admin WordPress pour voir les leads
+- ✅ Résolution de problèmes spécifiques Elementor
+
+### 5. **INTEGRATION-GUIDE.md** (16 KB)
 Guide technique pour l'intégration avec :
 - ✅ Exemples d'intégration CRM (HubSpot, Salesforce)
 - ✅ Configuration email automatique (EmailJS, API custom)
@@ -188,20 +208,34 @@ Modifier la fonction `getRecommendationForCategory()`
 
 ```
 Descary/
-├── quiz-evaluation-medicat.html    # Quiz complet (45 KB)
+├── quiz-evaluation-medicat.html    # Quiz autonome version standard (45 KB)
+├── quiz-elementor-version.html     # Quiz optimisé WordPress/Elementor (50 KB) 🆕
 ├── README-QUIZ.md                  # Documentation générale (8 KB)
-├── INTEGRATION-GUIDE.md            # Guide technique (16 KB)
+├── ELEMENTOR-GUIDE.md              # Guide WordPress/Elementor (12 KB) 🆕
+├── INTEGRATION-GUIDE.md            # Guide technique général (16 KB)
 └── SUMMARY.md                      # Ce fichier (résumé)
 ```
 
 ## ✨ Prêt à l'Emploi !
 
 Le quiz est **100% fonctionnel** et prêt à être déployé.
+
+### 🌐 Version Standard (Sites web classiques)
 Il vous suffit de :
 1. ✅ Ouvrir `quiz-evaluation-medicat.html` dans un navigateur pour tester
 2. ✅ Configurer l'intégration CRM (voir INTEGRATION-GUIDE.md)
 3. ✅ Ajouter le consentement RGPD
 4. ✅ Déployer sur votre site web
+
+### 🎨 Version WordPress/Elementor (Nouveau !)
+Pour intégrer dans WordPress avec Elementor :
+1. ✅ Ouvrir `quiz-elementor-version.html`
+2. ✅ Copier **TOUT** le contenu du fichier
+3. ✅ Dans Elementor, ajouter un widget **HTML**
+4. ✅ Coller le code dans le widget
+5. ✅ Publier !
+
+📖 **Guide complet** : Voir ELEMENTOR-GUIDE.md pour les détails et options avancées
 
 ---
 

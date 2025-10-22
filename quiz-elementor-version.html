@@ -1,0 +1,1185 @@
+<!--
+    QUIZ MEDICAT PARTNER - VERSION ELEMENTOR/WORDPRESS
+
+    INSTRUCTIONS D'INTÉGRATION :
+    1. Dans Elementor, ajouter un widget "HTML"
+    2. Copier-coller TOUT ce code dans le widget
+    3. Publier la page
+
+    Cette version utilise des sélecteurs CSS spécifiques pour éviter les conflits
+    avec les styles WordPress/Elementor
+-->
+
+<div id="medicat-quiz-container" class="medicat-quiz-wrapper">
+    <style>
+        /* Styles isolés pour éviter les conflits avec WordPress/Elementor */
+        #medicat-quiz-container {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        #medicat-quiz-container * {
+            box-sizing: border-box;
+        }
+
+        .medicat-quiz-wrapper {
+            --mq-primary: #0066cc;
+            --mq-secondary: #004999;
+            --mq-accent: #00a3e0;
+            --mq-success: #28a745;
+            --mq-warning: #ffc107;
+            --mq-danger: #dc3545;
+            --mq-light-bg: #f8f9fa;
+            --mq-white: #ffffff;
+            --mq-text-dark: #333333;
+            --mq-text-light: #666666;
+            --mq-border: #dee2e6;
+        }
+
+        .mq-container {
+            background: var(--mq-white);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        .mq-header {
+            background: linear-gradient(135deg, var(--mq-primary), var(--mq-secondary));
+            color: var(--mq-white);
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .mq-header h1 {
+            font-size: 2.2em;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+            color: var(--mq-white);
+        }
+
+        .mq-header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+            margin: 5px 0;
+            color: var(--mq-white);
+        }
+
+        .mq-header .mq-subtitle {
+            font-size: 0.95em;
+            opacity: 0.85;
+            font-style: italic;
+        }
+
+        .mq-content {
+            padding: 40px 30px;
+        }
+
+        .mq-welcome {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .mq-welcome h2 {
+            color: var(--mq-primary);
+            font-size: 1.8em;
+            margin: 0 0 20px 0;
+        }
+
+        .mq-welcome p {
+            color: var(--mq-text-light);
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin: 0 0 15px 0;
+        }
+
+        .mq-welcome ul {
+            text-align: left;
+            max-width: 600px;
+            margin: 20px auto;
+            list-style: none;
+            padding: 0;
+        }
+
+        .mq-welcome li {
+            padding: 10px 0 10px 30px;
+            position: relative;
+            color: var(--mq-text-light);
+        }
+
+        .mq-welcome li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--mq-success);
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .mq-info-form {
+            background: var(--mq-light-bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .mq-form-group {
+            margin-bottom: 20px;
+        }
+
+        .mq-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--mq-text-dark);
+        }
+
+        .mq-form-group input,
+        .mq-form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--mq-border);
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        .mq-form-group input:focus,
+        .mq-form-group select:focus {
+            outline: none;
+            border-color: var(--mq-primary);
+        }
+
+        .mq-question-container {
+            display: none;
+            animation: mqFadeIn 0.5s;
+        }
+
+        .mq-question-container.active {
+            display: block;
+        }
+
+        @keyframes mqFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .mq-progress-bar {
+            background: var(--mq-light-bg);
+            height: 12px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .mq-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--mq-primary), var(--mq-accent));
+            border-radius: 10px;
+            transition: width 0.4s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .mq-question-header {
+            margin-bottom: 25px;
+        }
+
+        .mq-question-number {
+            color: var(--mq-primary);
+            font-weight: 600;
+            font-size: 0.95em;
+            margin-bottom: 10px;
+        }
+
+        .mq-question-text {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: var(--mq-text-dark);
+            line-height: 1.4;
+            margin: 10px 0;
+        }
+
+        .mq-question-category {
+            display: inline-block;
+            background: var(--mq-accent);
+            color: var(--mq-white);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-top: 10px;
+        }
+
+        .mq-options {
+            margin: 25px 0;
+        }
+
+        .mq-option {
+            background: var(--mq-white);
+            border: 2px solid var(--mq-border);
+            padding: 18px 20px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .mq-option:hover {
+            border-color: var(--mq-primary);
+            background: var(--mq-light-bg);
+            transform: translateX(5px);
+        }
+
+        .mq-option input[type="radio"] {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .mq-option label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 1.05em;
+            color: var(--mq-text-dark);
+            margin: 0;
+        }
+
+        .mq-option.selected {
+            border-color: var(--mq-primary);
+            background: linear-gradient(135deg, rgba(0, 102, 204, 0.1), rgba(0, 163, 224, 0.1));
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.2);
+        }
+
+        .mq-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        .mq-btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.05em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: inherit;
+        }
+
+        .mq-btn-primary {
+            background: linear-gradient(135deg, var(--mq-primary), var(--mq-secondary));
+            color: var(--mq-white);
+            flex: 1;
+        }
+
+        .mq-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 102, 204, 0.4);
+        }
+
+        .mq-btn-primary:disabled {
+            background: var(--mq-border);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .mq-btn-secondary {
+            background: var(--mq-white);
+            color: var(--mq-primary);
+            border: 2px solid var(--mq-primary);
+        }
+
+        .mq-btn-secondary:hover {
+            background: var(--mq-light-bg);
+            transform: translateY(-2px);
+        }
+
+        .mq-results {
+            display: none;
+        }
+
+        .mq-results.active {
+            display: block;
+            animation: mqFadeIn 0.5s;
+        }
+
+        .mq-score-circle {
+            width: 200px;
+            height: 200px;
+            margin: 30px auto;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--mq-white);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .mq-score-label {
+            font-size: 0.3em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 5px;
+        }
+
+        .mq-maturity-level {
+            text-align: center;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 15px;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+
+        .mq-level-debutant {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            color: var(--mq-white);
+        }
+
+        .mq-level-intermediaire {
+            background: linear-gradient(135deg, #ffa726, #fb8c00);
+            color: var(--mq-white);
+        }
+
+        .mq-level-avance {
+            background: linear-gradient(135deg, #66bb6a, #43a047);
+            color: var(--mq-white);
+        }
+
+        .mq-level-expert {
+            background: linear-gradient(135deg, #42a5f5, #1e88e5);
+            color: var(--mq-white);
+        }
+
+        .mq-category-scores {
+            margin: 30px 0;
+        }
+
+        .mq-category-score {
+            margin-bottom: 25px;
+        }
+
+        .mq-category-name {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--mq-text-dark);
+        }
+
+        .mq-category-bar {
+            background: var(--mq-light-bg);
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .mq-category-fill {
+            height: 100%;
+            border-radius: 15px;
+            transition: width 1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 12px;
+            color: var(--mq-white);
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .mq-recommendations {
+            margin: 40px 0;
+        }
+
+        .mq-recommendations h3 {
+            color: var(--mq-primary);
+            font-size: 1.6em;
+            margin: 0 0 20px 0;
+            text-align: center;
+        }
+
+        .mq-recommendation-card {
+            background: var(--mq-light-bg);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            border-left: 5px solid var(--mq-primary);
+            transition: all 0.3s;
+        }
+
+        .mq-recommendation-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .mq-recommendation-card h4 {
+            color: var(--mq-primary);
+            margin: 0 0 12px 0;
+            font-size: 1.2em;
+        }
+
+        .mq-recommendation-card p {
+            color: var(--mq-text-light);
+            line-height: 1.6;
+            margin: 0 0 10px 0;
+        }
+
+        .mq-priority-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .mq-priority-high {
+            background: #ffe5e5;
+            color: var(--mq-danger);
+        }
+
+        .mq-priority-medium {
+            background: #fff8e5;
+            color: #ff8c00;
+        }
+
+        .mq-priority-low {
+            background: #e5f5ff;
+            color: var(--mq-primary);
+        }
+
+        .mq-cta {
+            background: linear-gradient(135deg, var(--mq-primary), var(--mq-secondary));
+            color: var(--mq-white);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .mq-cta h3 {
+            font-size: 1.8em;
+            margin: 0 0 15px 0;
+            color: var(--mq-white);
+        }
+
+        .mq-cta p {
+            font-size: 1.1em;
+            margin: 0 0 25px 0;
+            opacity: 0.95;
+        }
+
+        .mq-cta-button {
+            background: var(--mq-white);
+            color: var(--mq-primary);
+            padding: 15px 40px;
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: all 0.3s;
+        }
+
+        .mq-cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            color: var(--mq-primary);
+            text-decoration: none;
+        }
+
+        .mq-hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .mq-container {
+                border-radius: 10px;
+            }
+
+            .mq-header {
+                padding: 30px 20px;
+            }
+
+            .mq-header h1 {
+                font-size: 1.6em;
+            }
+
+            .mq-content {
+                padding: 25px 20px;
+            }
+
+            .mq-buttons {
+                flex-direction: column;
+            }
+
+            .mq-btn {
+                width: 100%;
+            }
+
+            .mq-score-circle {
+                width: 150px;
+                height: 150px;
+                font-size: 2.5em;
+            }
+        }
+    </style>
+
+    <div class="mq-container">
+        <div class="mq-header">
+            <h1>Quiz d'Évaluation des Besoins</h1>
+            <p>Évaluez la maturité de votre entreprise en gestion de l'absentéisme</p>
+            <p class="mq-subtitle">Medicat Partner - Expert en prévention depuis 36 ans</p>
+        </div>
+
+        <div class="mq-content">
+            <!-- Section d'accueil -->
+            <div id="mqWelcome" class="mq-welcome">
+                <h2>Bienvenue dans votre diagnostic personnalisé</h2>
+                <p>Ce quiz vous permettra d'évaluer la situation actuelle de votre entreprise en matière de prévention de l'absentéisme et de qualité de vie au travail.</p>
+
+                <ul>
+                    <li>15 questions ciblées sur vos pratiques actuelles</li>
+                    <li>Un score de maturité personnalisé</li>
+                    <li>Des recommandations adaptées à vos besoins</li>
+                    <li>Une feuille de route pour améliorer votre performance</li>
+                </ul>
+
+                <div class="mq-info-form">
+                    <h3 style="margin: 0 0 20px 0; color: var(--mq-primary);">Informations sur votre entreprise</h3>
+                    <div class="mq-form-group">
+                        <label for="mqCompanyName">Nom de l'entreprise *</label>
+                        <input type="text" id="mqCompanyName" required placeholder="Votre entreprise">
+                    </div>
+                    <div class="mq-form-group">
+                        <label for="mqContactName">Votre nom *</label>
+                        <input type="text" id="mqContactName" required placeholder="Prénom Nom">
+                    </div>
+                    <div class="mq-form-group">
+                        <label for="mqContactEmail">Email professionnel *</label>
+                        <input type="email" id="mqContactEmail" required placeholder="prenom.nom@entreprise.fr">
+                    </div>
+                    <div class="mq-form-group">
+                        <label for="mqCompanySize">Taille de l'entreprise *</label>
+                        <select id="mqCompanySize" required>
+                            <option value="">Sélectionnez...</option>
+                            <option value="1-49">1 à 49 collaborateurs</option>
+                            <option value="50-249">50 à 249 collaborateurs</option>
+                            <option value="250-999">250 à 999 collaborateurs</option>
+                            <option value="1000+">1000+ collaborateurs</option>
+                        </select>
+                    </div>
+                    <div class="mq-form-group">
+                        <label for="mqSector">Secteur d'activité *</label>
+                        <input type="text" id="mqSector" required placeholder="Ex: Industrie, Services, Santé...">
+                    </div>
+                </div>
+
+                <button class="mq-btn mq-btn-primary" onclick="MedicatQuiz.start()" style="display: block; margin: 30px auto;">
+                    Commencer l'évaluation
+                </button>
+            </div>
+
+            <!-- Section du quiz -->
+            <div id="mqQuizSection" class="mq-hidden">
+                <div class="mq-progress-bar">
+                    <div class="mq-progress-fill" id="mqProgress"></div>
+                </div>
+
+                <div id="mqQuestions"></div>
+
+                <div class="mq-buttons">
+                    <button class="mq-btn mq-btn-secondary mq-hidden" id="mqPrevBtn" onclick="MedicatQuiz.prev()">
+                        Précédent
+                    </button>
+                    <button class="mq-btn mq-btn-primary" id="mqNextBtn" onclick="MedicatQuiz.next()">
+                        Suivant
+                    </button>
+                    <button class="mq-btn mq-btn-primary mq-hidden" id="mqSubmitBtn" onclick="MedicatQuiz.submit()">
+                        Voir mes résultats
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section des résultats -->
+            <div id="mqResults" class="mq-results">
+                <h2 style="text-align: center; color: var(--mq-primary); font-size: 2em; margin: 0 0 20px 0;">
+                    Vos Résultats
+                </h2>
+
+                <div class="mq-score-circle" id="mqScoreCircle">
+                    <div>
+                        <span id="mqTotalScore">0</span><span style="font-size: 0.6em;">/100</span>
+                    </div>
+                    <div class="mq-score-label">Score global</div>
+                </div>
+
+                <div class="mq-maturity-level" id="mqMaturityLevel"></div>
+
+                <div class="mq-category-scores" id="mqCategoryScores"></div>
+
+                <div class="mq-recommendations" id="mqRecommendations"></div>
+
+                <div class="mq-cta">
+                    <h3>Prêt à transformer votre entreprise ?</h3>
+                    <p>Nos experts sont à votre disposition pour vous accompagner dans votre démarche de prévention de l'absentéisme</p>
+                    <a href="https://www.medicat-partner.fr/contact" class="mq-cta-button">
+                        Contactez-nous
+                    </a>
+                    <p style="margin-top: 20px; font-size: 0.95em;">
+                        📧 Un rapport détaillé vous sera envoyé par email
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Encapsulation dans un namespace pour éviter les conflits avec WordPress/Elementor
+        var MedicatQuiz = (function() {
+            'use strict';
+
+            const quizData = {
+                categories: {
+                    absenteisme: "Mesure de l'absentéisme",
+                    qvct: "Qualité de Vie au Travail",
+                    management: "Management & Leadership",
+                    prevention: "Prévention des risques",
+                    engagement: "Engagement des collaborateurs"
+                },
+                questions: [
+                    {
+                        id: 1,
+                        category: "absenteisme",
+                        text: "Quel est le taux d'absentéisme actuel dans votre entreprise ?",
+                        options: [
+                            { text: "Moins de 3%", points: 25 },
+                            { text: "Entre 3% et 5%", points: 18 },
+                            { text: "Entre 5% et 7%", points: 10 },
+                            { text: "Plus de 7% ou je ne sais pas", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        category: "absenteisme",
+                        text: "Suivez-vous les indicateurs d'absentéisme de manière régulière et structurée ?",
+                        options: [
+                            { text: "Oui, avec des tableaux de bord mensuels détaillés", points: 25 },
+                            { text: "Oui, mais de manière trimestrielle", points: 18 },
+                            { text: "Occasionnellement, sans réelle structure", points: 8 },
+                            { text: "Non, nous n'avons pas de suivi formalisé", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 3,
+                        category: "absenteisme",
+                        text: "Analysez-vous les causes de l'absentéisme dans votre entreprise ?",
+                        options: [
+                            { text: "Oui, avec des analyses approfondies et des plans d'action", points: 25 },
+                            { text: "Oui, mais de manière superficielle", points: 15 },
+                            { text: "Rarement", points: 5 },
+                            { text: "Non", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 4,
+                        category: "qvct",
+                        text: "Avez-vous mis en place une politique de Qualité de Vie et des Conditions de Travail (QVCT) ?",
+                        options: [
+                            { text: "Oui, formalisée avec un plan d'action et un budget dédié", points: 25 },
+                            { text: "Oui, mais de manière informelle", points: 15 },
+                            { text: "En cours de réflexion", points: 8 },
+                            { text: "Non, pas encore", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 5,
+                        category: "qvct",
+                        text: "Comment évaluez-vous la satisfaction et le bien-être de vos collaborateurs ?",
+                        options: [
+                            { text: "Enquêtes régulières avec suivi des actions", points: 25 },
+                            { text: "Enquêtes annuelles sans suivi structuré", points: 15 },
+                            { text: "Informellement, lors d'entretiens", points: 8 },
+                            { text: "Nous ne l'évaluons pas", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 6,
+                        category: "qvct",
+                        text: "Proposez-vous des aménagements pour favoriser l'équilibre vie professionnelle/vie personnelle ?",
+                        options: [
+                            { text: "Oui, multiples options (télétravail, horaires flexibles, etc.)", points: 25 },
+                            { text: "Oui, quelques options", points: 15 },
+                            { text: "Très limité", points: 5 },
+                            { text: "Non", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 7,
+                        category: "management",
+                        text: "Vos managers sont-ils formés au leadership et à la gestion d'équipe ?",
+                        options: [
+                            { text: "Oui, formations régulières et accompagnement personnalisé", points: 25 },
+                            { text: "Oui, formation initiale lors de la prise de poste", points: 15 },
+                            { text: "Formation ponctuelle uniquement", points: 8 },
+                            { text: "Non, pas de formation spécifique", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 8,
+                        category: "management",
+                        text: "Les managers sont-ils sensibilisés à la détection des signaux faibles (RPS, démotivation...) ?",
+                        options: [
+                            { text: "Oui, avec des outils et protocoles clairs", points: 25 },
+                            { text: "Oui, mais sans outils formalisés", points: 15 },
+                            { text: "Sensibilisation minimale", points: 5 },
+                            { text: "Non", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 9,
+                        category: "management",
+                        text: "Existe-t-il des parcours de carrière diversifiés au-delà du management ?",
+                        options: [
+                            { text: "Oui, plusieurs parcours clairement définis (expert, projet, etc.)", points: 25 },
+                            { text: "Oui, mais peu formalisés", points: 15 },
+                            { text: "En cours de réflexion", points: 8 },
+                            { text: "Non, le management est la seule évolution", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 10,
+                        category: "prevention",
+                        text: "Avez-vous évalué les risques professionnels (Document Unique) récemment ?",
+                        options: [
+                            { text: "Oui, mise à jour annuelle avec plans d'action", points: 25 },
+                            { text: "Oui, mais pas de mise à jour régulière", points: 12 },
+                            { text: "Document obsolète", points: 5 },
+                            { text: "Non ou inexistant", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 11,
+                        category: "prevention",
+                        text: "Des actions de prévention des Risques Psycho-Sociaux (RPS) sont-elles en place ?",
+                        options: [
+                            { text: "Oui, programme structuré avec suivi", points: 25 },
+                            { text: "Quelques actions ponctuelles", points: 15 },
+                            { text: "Sensibilisation uniquement", points: 5 },
+                            { text: "Non", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 12,
+                        category: "prevention",
+                        text: "Accompagnez-vous les salariés lors de leur retour après un arrêt long ?",
+                        options: [
+                            { text: "Oui, protocole formalisé avec entretien et aménagement", points: 25 },
+                            { text: "Oui, entretien informel", points: 15 },
+                            { text: "Rarement", points: 5 },
+                            { text: "Non", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 13,
+                        category: "engagement",
+                        text: "Comment évaluez-vous l'engagement de vos collaborateurs ?",
+                        options: [
+                            { text: "Très engagés, fort sentiment d'appartenance", points: 25 },
+                            { text: "Plutôt engagés", points: 18 },
+                            { text: "Engagement moyen", points: 10 },
+                            { text: "Faible engagement", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 14,
+                        category: "engagement",
+                        text: "Quel est votre taux de turnover annuel ?",
+                        options: [
+                            { text: "Moins de 5%", points: 25 },
+                            { text: "Entre 5% et 10%", points: 18 },
+                            { text: "Entre 10% et 15%", points: 10 },
+                            { text: "Plus de 15%", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 15,
+                        category: "engagement",
+                        text: "Les collaborateurs peuvent-ils exprimer leurs besoins et attentes librement ?",
+                        options: [
+                            { text: "Oui, culture de transparence et canaux multiples", points: 25 },
+                            { text: "Oui, mais de manière limitée", points: 15 },
+                            { text: "Communication descendante principalement", points: 5 },
+                            { text: "Non, peu d'opportunités d'expression", points: 0 }
+                        ]
+                    }
+                ]
+            };
+
+            let currentQuestion = 0;
+            let answers = [];
+            let userInfo = {};
+
+            function start() {
+                const companyName = document.getElementById('mqCompanyName').value;
+                const contactName = document.getElementById('mqContactName').value;
+                const contactEmail = document.getElementById('mqContactEmail').value;
+                const companySize = document.getElementById('mqCompanySize').value;
+                const sector = document.getElementById('mqSector').value;
+
+                if (!companyName || !contactName || !contactEmail || !companySize || !sector) {
+                    alert('Veuillez remplir tous les champs obligatoires');
+                    return;
+                }
+
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(contactEmail)) {
+                    alert('Veuillez entrer une adresse email valide');
+                    return;
+                }
+
+                userInfo = { companyName, contactName, contactEmail, companySize, sector };
+
+                document.getElementById('mqWelcome').classList.add('mq-hidden');
+                document.getElementById('mqQuizSection').classList.remove('mq-hidden');
+
+                renderQuestion();
+                updateProgress();
+            }
+
+            function renderQuestion() {
+                const container = document.getElementById('mqQuestions');
+                container.innerHTML = '';
+
+                const question = quizData.questions[currentQuestion];
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'mq-question-container active';
+
+                questionDiv.innerHTML = `
+                    <div class="mq-question-header">
+                        <div class="mq-question-number">Question ${currentQuestion + 1} sur ${quizData.questions.length}</div>
+                        <div class="mq-question-text">${question.text}</div>
+                        <span class="mq-question-category">${quizData.categories[question.category]}</span>
+                    </div>
+                    <div class="mq-options">
+                        ${question.options.map((option, index) => `
+                            <div class="mq-option ${answers[currentQuestion] === index ? 'selected' : ''}"
+                                 onclick="MedicatQuiz.selectOption(${index})">
+                                <input type="radio"
+                                       name="mq${question.id}"
+                                       id="mq${question.id}_${index}"
+                                       ${answers[currentQuestion] === index ? 'checked' : ''}>
+                                <label for="mq${question.id}_${index}">${option.text}</label>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+
+                container.appendChild(questionDiv);
+
+                document.getElementById('mqPrevBtn').classList.toggle('mq-hidden', currentQuestion === 0);
+                document.getElementById('mqNextBtn').classList.toggle('mq-hidden', currentQuestion === quizData.questions.length - 1);
+                document.getElementById('mqSubmitBtn').classList.toggle('mq-hidden', currentQuestion !== quizData.questions.length - 1);
+
+                updateProgress();
+            }
+
+            function selectOption(optionIndex) {
+                answers[currentQuestion] = optionIndex;
+                renderQuestion();
+            }
+
+            function prev() {
+                if (currentQuestion > 0) {
+                    currentQuestion--;
+                    renderQuestion();
+                }
+            }
+
+            function next() {
+                if (answers[currentQuestion] === undefined) {
+                    alert('Veuillez sélectionner une réponse avant de continuer');
+                    return;
+                }
+
+                if (currentQuestion < quizData.questions.length - 1) {
+                    currentQuestion++;
+                    renderQuestion();
+                }
+            }
+
+            function updateProgress() {
+                const progress = ((currentQuestion + 1) / quizData.questions.length) * 100;
+                document.getElementById('mqProgress').style.width = progress + '%';
+            }
+
+            function submit() {
+                if (answers[currentQuestion] === undefined) {
+                    alert('Veuillez répondre à la dernière question');
+                    return;
+                }
+
+                if (answers.length !== quizData.questions.length) {
+                    alert('Veuillez répondre à toutes les questions');
+                    return;
+                }
+
+                calculateResults();
+            }
+
+            function calculateResults() {
+                const categoryScores = {};
+                const categoryMaxScores = {};
+
+                quizData.questions.forEach((question, index) => {
+                    const category = question.category;
+                    const answer = answers[index];
+                    const points = question.options[answer].points;
+
+                    if (!categoryScores[category]) {
+                        categoryScores[category] = 0;
+                        categoryMaxScores[category] = 0;
+                    }
+
+                    categoryScores[category] += points;
+                    categoryMaxScores[category] += 25;
+                });
+
+                const totalScore = Object.values(categoryScores).reduce((a, b) => a + b, 0);
+                const maxScore = Object.values(categoryMaxScores).reduce((a, b) => a + b, 0);
+                const scorePercentage = Math.round((totalScore / maxScore) * 100);
+
+                displayResults(scorePercentage, categoryScores, categoryMaxScores);
+            }
+
+            function displayResults(score, categoryScores, categoryMaxScores) {
+                document.getElementById('mqQuizSection').classList.add('mq-hidden');
+                document.getElementById('mqResults').classList.add('active');
+
+                document.getElementById('mqTotalScore').textContent = score;
+
+                let level, levelClass, levelText;
+                if (score >= 80) {
+                    level = "Expert";
+                    levelClass = "mq-level-expert";
+                    levelText = "🌟 Niveau Expert - Vous êtes un modèle en matière de gestion de l'absentéisme et de QVCT !";
+                } else if (score >= 60) {
+                    level = "Avancé";
+                    levelClass = "mq-level-avance";
+                    levelText = "✅ Niveau Avancé - Vous avez mis en place de bonnes pratiques, quelques axes d'amélioration restent à explorer.";
+                } else if (score >= 40) {
+                    level = "Intermédiaire";
+                    levelClass = "mq-level-intermediaire";
+                    levelText = "⚠️ Niveau Intermédiaire - Vous avez entamé une démarche, mais de nombreuses opportunités d'amélioration existent.";
+                } else {
+                    level = "Débutant";
+                    levelClass = "mq-level-debutant";
+                    levelText = "🚀 Niveau Débutant - C'est le moment de structurer votre approche ! Un fort potentiel d'amélioration vous attend.";
+                }
+
+                const scoreCircle = document.getElementById('mqScoreCircle');
+                scoreCircle.style.background = getScoreColor(score);
+
+                const maturityLevel = document.getElementById('mqMaturityLevel');
+                maturityLevel.className = 'mq-maturity-level ' + levelClass;
+                maturityLevel.textContent = levelText;
+
+                const categoryScoresContainer = document.getElementById('mqCategoryScores');
+                categoryScoresContainer.innerHTML = '<h3 style="color: var(--mq-primary); margin: 0 0 20px 0;">Analyse par domaine</h3>';
+
+                for (const [categoryKey, categoryScore] of Object.entries(categoryScores)) {
+                    const maxScore = categoryMaxScores[categoryKey];
+                    const percentage = Math.round((categoryScore / maxScore) * 100);
+                    const categoryName = quizData.categories[categoryKey];
+
+                    categoryScoresContainer.innerHTML += `
+                        <div class="mq-category-score">
+                            <div class="mq-category-name">
+                                <span>${categoryName}</span>
+                                <span>${percentage}%</span>
+                            </div>
+                            <div class="mq-category-bar">
+                                <div class="mq-category-fill" style="width: ${percentage}%; background: ${getScoreColor(percentage)};"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                generateRecommendations(score, categoryScores, categoryMaxScores);
+
+                console.log('Résultats:', { userInfo, score, categoryScores, level });
+            }
+
+            function getScoreColor(score) {
+                if (score >= 80) return 'linear-gradient(135deg, #42a5f5, #1e88e5)';
+                if (score >= 60) return 'linear-gradient(135deg, #66bb6a, #43a047)';
+                if (score >= 40) return 'linear-gradient(135deg, #ffa726, #fb8c00)';
+                return 'linear-gradient(135deg, #ff6b6b, #ee5a6f)';
+            }
+
+            function generateRecommendations(totalScore, categoryScores, categoryMaxScores) {
+                const recommendations = [];
+
+                for (const [categoryKey, categoryScore] of Object.entries(categoryScores)) {
+                    const maxScore = categoryMaxScores[categoryKey];
+                    const percentage = (categoryScore / maxScore) * 100;
+                    const categoryName = quizData.categories[categoryKey];
+
+                    if (percentage < 40) {
+                        recommendations.push(getRecommendationForCategory(categoryKey, 'high', categoryName));
+                    } else if (percentage < 70) {
+                        recommendations.push(getRecommendationForCategory(categoryKey, 'medium', categoryName));
+                    }
+                }
+
+                if (totalScore < 50) {
+                    recommendations.unshift({
+                        title: "Diagnostic approfondi recommandé",
+                        description: "Nous vous recommandons un audit complet de votre situation pour identifier les leviers prioritaires d'action. Nos experts peuvent vous accompagner dans cette démarche.",
+                        priority: "high",
+                        service: "Audit & Diagnostic"
+                    });
+                }
+
+                displayRecommendations(recommendations);
+            }
+
+            function getRecommendationForCategory(category, priority, categoryName) {
+                const recommendationsData = {
+                    absenteisme: {
+                        high: {
+                            title: "Mettre en place un système de pilotage de l'absentéisme",
+                            description: `Votre score en "${categoryName}" indique un besoin urgent de structurer le suivi de l'absentéisme. Medicat Partner peut vous accompagner avec des tableaux de bord personnalisés et des indicateurs clés pour piloter efficacement votre absentéisme.`,
+                            service: "Solution de pilotage de l'absentéisme"
+                        },
+                        medium: {
+                            title: "Optimiser le pilotage de l'absentéisme",
+                            description: `Vous avez déjà entamé un suivi de l'absentéisme. Nous pouvons vous aider à aller plus loin avec des analyses prédictives et des plans d'action ciblés.`,
+                            service: "Analyse approfondie de l'absentéisme"
+                        }
+                    },
+                    qvct: {
+                        high: {
+                            title: "Structurer votre politique QVCT",
+                            description: `La mise en place d'une politique de Qualité de Vie et des Conditions de Travail est essentielle. Nos experts vous accompagnent dans la définition et le déploiement d'une stratégie QVCT adaptée à votre culture d'entreprise.`,
+                            service: "Accompagnement QVCT"
+                        },
+                        medium: {
+                            title: "Renforcer votre démarche QVCT",
+                            description: `Votre démarche QVCT est engagée. Nous pouvons vous aider à la formaliser davantage et à mesurer son impact sur la performance et le bien-être.`,
+                            service: "Optimisation QVCT"
+                        }
+                    },
+                    management: {
+                        high: {
+                            title: "Former et accompagner vos managers",
+                            description: `Les managers sont la clé de voûte de la prévention. Nous proposons des formations sur-mesure et un accompagnement personnalisé pour développer un management bienveillant et performant.`,
+                            service: "Formation des managers"
+                        },
+                        medium: {
+                            title: "Développer les compétences managériales",
+                            description: `Vos managers bénéficient déjà de formation. Allons plus loin avec un accompagnement continu et des outils pratiques de détection des signaux faibles.`,
+                            service: "Coaching managérial"
+                        }
+                    },
+                    prevention: {
+                        high: {
+                            title: "Structurer votre politique de prévention",
+                            description: `La prévention des risques professionnels nécessite une approche structurée. Nous vous accompagnons dans l'évaluation des risques, la mise à jour du DUERP et la mise en place d'actions concrètes.`,
+                            service: "Programme de prévention des risques"
+                        },
+                        medium: {
+                            title: "Renforcer la prévention des RPS",
+                            description: `Complétez votre démarche de prévention avec un focus sur les risques psychosociaux et le bien-être mental de vos collaborateurs.`,
+                            service: "Prévention RPS"
+                        }
+                    },
+                    engagement: {
+                        high: {
+                            title: "Développer l'engagement des collaborateurs",
+                            description: `L'engagement est crucial pour réduire l'absentéisme et le turnover. Nous vous aidons à créer une culture d'entreprise attractive et à fidéliser vos talents.`,
+                            service: "Programme d'engagement collaborateur"
+                        },
+                        medium: {
+                            title: "Optimiser la fidélisation",
+                            description: `Renforcez l'engagement de vos équipes avec des enquêtes régulières, des plans de carrière personnalisés et une communication transparente.`,
+                            service: "Stratégie de fidélisation"
+                        }
+                    }
+                };
+
+                const rec = recommendationsData[category][priority];
+                return {
+                    title: rec.title,
+                    description: rec.description,
+                    priority: priority,
+                    service: rec.service
+                };
+            }
+
+            function displayRecommendations(recommendations) {
+                const container = document.getElementById('mqRecommendations');
+                container.innerHTML = '<h3>Nos recommandations personnalisées</h3>';
+
+                if (recommendations.length === 0) {
+                    container.innerHTML += `
+                        <div class="mq-recommendation-card">
+                            <h4>Excellente performance !</h4>
+                            <p>Votre entreprise démontre une maturité exemplaire en matière de prévention de l'absentéisme.
+                            Continuez sur cette voie et n'hésitez pas à nous solliciter pour maintenir et optimiser vos pratiques.</p>
+                            <span class="mq-priority-badge mq-priority-low">Maintien de l'excellence</span>
+                        </div>
+                    `;
+                } else {
+                    recommendations.forEach(rec => {
+                        const priorityClass = rec.priority === 'high' ? 'mq-priority-high' :
+                                            rec.priority === 'medium' ? 'mq-priority-medium' : 'mq-priority-low';
+                        const priorityText = rec.priority === 'high' ? 'Priorité Haute' :
+                                           rec.priority === 'medium' ? 'Priorité Moyenne' : 'Priorité Basse';
+
+                        container.innerHTML += `
+                            <div class="mq-recommendation-card">
+                                <h4>${rec.title}</h4>
+                                <p>${rec.description}</p>
+                                <p><strong>Service recommandé:</strong> ${rec.service}</p>
+                                <span class="mq-priority-badge ${priorityClass}">${priorityText}</span>
+                            </div>
+                        `;
+                    });
+                }
+            }
+
+            // API publique
+            return {
+                start: start,
+                selectOption: selectOption,
+                prev: prev,
+                next: next,
+                submit: submit
+            };
+        })();
+    </script>
+</div>

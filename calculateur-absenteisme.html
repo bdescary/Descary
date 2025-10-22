@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur de Taux d'Absentéisme - Entreprise Française</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+
+        .info-box h3 {
+            color: #1976D2;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .info-box p {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .calculator-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            background: #f5f5f5;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .input-hint {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .results {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f9f9f9;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .result-label {
+            color: #555;
+            font-weight: 500;
+        }
+
+        .result-value {
+            color: #333;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .main-result {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .main-result .label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .main-result .value {
+            font-size: 42px;
+            font-weight: 700;
+        }
+
+        .interpretation {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .interpretation.good {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            color: #2e7d32;
+        }
+
+        .interpretation.warning {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            color: #e65100;
+        }
+
+        .interpretation.alert {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            color: #c62828;
+        }
+
+        .absence-types {
+            margin-top: 20px;
+        }
+
+        .absence-type-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+            padding: 8px 15px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Calculateur de Taux d'Absentéisme</h1>
+        <p class="subtitle">Conforme aux normes françaises du droit du travail</p>
+
+        <div class="info-box">
+            <h3>📌 Formule de calcul</h3>
+            <p>
+                <strong>Taux d'absentéisme = (Nombre d'heures d'absence / Nombre d'heures théoriques travaillées) × 100</strong><br>
+                Ce calculateur vous permet de mesurer l'absentéisme dans votre entreprise selon les standards français.
+                Les absences peuvent inclure : maladie, accidents du travail, congés sans solde, absences injustifiées, etc.
+            </p>
+        </div>
+
+        <form id="calculatorForm">
+            <div class="calculator-section">
+                <div class="section-title">1. Période d'analyse</div>
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="periodType">Type de période</label>
+                        <select id="periodType">
+                            <option value="mensuel">Mensuel</option>
+                            <option value="trimestriel">Trimestriel</option>
+                            <option value="annuel">Annuel</option>
+                            <option value="personnalise">Personnalisé</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="customPeriodGroup" style="display: none;">
+                        <label for="customDays">Nombre de jours de la période</label>
+                        <input type="number" id="customDays" min="1" value="30">
+                    </div>
+                </div>
+            </div>
+
+            <div class="calculator-section">
+                <div class="section-title">2. Effectif et temps de travail</div>
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="employees">Nombre de salariés</label>
+                        <input type="number" id="employees" min="1" value="10" required>
+                        <div class="input-hint">Effectif moyen sur la période</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="weeklyHours">Heures hebdomadaires (par salarié)</label>
+                        <input type="number" id="weeklyHours" min="1" max="48" value="35" step="0.5" required>
+                        <div class="input-hint">Durée légale : 35h en France</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calculator-section">
+                <div class="section-title">3. Absences (en heures ou en jours)</div>
+                <div class="form-group">
+                    <label for="inputMode">Mode de saisie</label>
+                    <select id="inputMode">
+                        <option value="heures">En heures</option>
+                        <option value="jours">En jours</option>
+                    </select>
+                </div>
+
+                <div id="heuresMode">
+                    <div class="form-group">
+                        <label for="absenceHours">Total des heures d'absence</label>
+                        <input type="number" id="absenceHours" min="0" value="0" step="0.5">
+                        <div class="input-hint">Somme de toutes les absences sur la période</div>
+                    </div>
+                </div>
+
+                <div id="joursMode" class="hidden">
+                    <div class="form-group">
+                        <label for="absenceDays">Total des jours d'absence</label>
+                        <input type="number" id="absenceDays" min="0" value="0" step="0.5">
+                        <div class="input-hint">Nombre de jours ouvrés d'absence</div>
+                    </div>
+                </div>
+
+                <div class="absence-types">
+                    <label>
+                        <input type="checkbox" id="showDetails">
+                        Afficher le détail par type d'absence
+                    </label>
+
+                    <div id="detailsSection" class="hidden" style="margin-top: 15px;">
+                        <div class="absence-type-row">
+                            <label>Maladie ordinaire</label>
+                            <input type="number" id="maladie" min="0" value="0" step="0.5">
+                        </div>
+                        <div class="absence-type-row">
+                            <label>Accident du travail / Maladie professionnelle</label>
+                            <input type="number" id="accident" min="0" value="0" step="0.5">
+                        </div>
+                        <div class="absence-type-row">
+                            <label>Congés sans solde</label>
+                            <input type="number" id="congesSansSolde" min="0" value="0" step="0.5">
+                        </div>
+                        <div class="absence-type-row">
+                            <label>Absences injustifiées</label>
+                            <input type="number" id="injustifiees" min="0" value="0" step="0.5">
+                        </div>
+                        <div class="absence-type-row">
+                            <label>Autres absences</label>
+                            <input type="number" id="autres" min="0" value="0" step="0.5">
+                        </div>
+                        <div class="input-hint" style="margin-top: 10px;">
+                            Note: Les congés payés légaux ne sont généralement pas comptabilisés dans l'absentéisme
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn">Calculer le taux d'absentéisme</button>
+        </form>
+
+        <div id="results" class="results">
+            <div class="main-result">
+                <div class="label">Taux d'absentéisme</div>
+                <div class="value" id="mainRate">0%</div>
+            </div>
+
+            <div class="result-item">
+                <span class="result-label">Heures théoriques travaillées</span>
+                <span class="result-value" id="theoricalHours">0 h</span>
+            </div>
+
+            <div class="result-item">
+                <span class="result-label">Heures d'absence totales</span>
+                <span class="result-value" id="totalAbsence">0 h</span>
+            </div>
+
+            <div class="result-item">
+                <span class="result-label">Nombre de salariés</span>
+                <span class="result-value" id="displayEmployees">0</span>
+            </div>
+
+            <div class="result-item">
+                <span class="result-label">Période analysée</span>
+                <span class="result-value" id="displayPeriod">-</span>
+            </div>
+
+            <div id="detailsResults" class="hidden" style="margin-top: 20px;">
+                <h3 style="margin-bottom: 15px; color: #333;">Détail par type d'absence</h3>
+                <div id="detailsContent"></div>
+            </div>
+
+            <div id="interpretation" class="interpretation"></div>
+        </div>
+    </div>
+
+    <script>
+        // Gestion de l'affichage des modes
+        document.getElementById('periodType').addEventListener('change', function() {
+            const customGroup = document.getElementById('customPeriodGroup');
+            customGroup.style.display = this.value === 'personnalise' ? 'block' : 'none';
+        });
+
+        document.getElementById('inputMode').addEventListener('change', function() {
+            const heuresMode = document.getElementById('heuresMode');
+            const joursMode = document.getElementById('joursMode');
+
+            if (this.value === 'heures') {
+                heuresMode.classList.remove('hidden');
+                joursMode.classList.add('hidden');
+            } else {
+                heuresMode.classList.add('hidden');
+                joursMode.classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('showDetails').addEventListener('change', function() {
+            const detailsSection = document.getElementById('detailsSection');
+            detailsSection.classList.toggle('hidden', !this.checked);
+        });
+
+        // Fonction de calcul
+        document.getElementById('calculatorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Récupération des valeurs
+            const periodType = document.getElementById('periodType').value;
+            const employees = parseFloat(document.getElementById('employees').value);
+            const weeklyHours = parseFloat(document.getElementById('weeklyHours').value);
+            const inputMode = document.getElementById('inputMode').value;
+            const showDetails = document.getElementById('showDetails').checked;
+
+            // Calcul du nombre de semaines
+            let weeks;
+            switch(periodType) {
+                case 'mensuel':
+                    weeks = 4.33; // Moyenne mensuelle
+                    break;
+                case 'trimestriel':
+                    weeks = 13;
+                    break;
+                case 'annuel':
+                    weeks = 52;
+                    break;
+                case 'personnalise':
+                    weeks = parseFloat(document.getElementById('customDays').value) / 7;
+                    break;
+            }
+
+            // Heures théoriques
+            const theoricalHours = employees * weeklyHours * weeks;
+
+            // Heures d'absence
+            let absenceHours;
+            if (inputMode === 'heures') {
+                absenceHours = parseFloat(document.getElementById('absenceHours').value);
+            } else {
+                const absenceDays = parseFloat(document.getElementById('absenceDays').value);
+                const hoursPerDay = weeklyHours / 5; // Conversion jours -> heures
+                absenceHours = absenceDays * hoursPerDay;
+            }
+
+            // Détails par type
+            let detailsHTML = '';
+            if (showDetails) {
+                const maladie = parseFloat(document.getElementById('maladie').value) || 0;
+                const accident = parseFloat(document.getElementById('accident').value) || 0;
+                const congesSansSolde = parseFloat(document.getElementById('congesSansSolde').value) || 0;
+                const injustifiees = parseFloat(document.getElementById('injustifiees').value) || 0;
+                const autres = parseFloat(document.getElementById('autres').value) || 0;
+
+                const total = maladie + accident + congesSansSolde + injustifiees + autres;
+
+                const details = [
+                    { label: 'Maladie ordinaire', value: maladie },
+                    { label: 'Accident du travail / Maladie pro.', value: accident },
+                    { label: 'Congés sans solde', value: congesSansSolde },
+                    { label: 'Absences injustifiées', value: injustifiees },
+                    { label: 'Autres', value: autres }
+                ];
+
+                details.forEach(item => {
+                    if (item.value > 0) {
+                        const percentage = total > 0 ? ((item.value / total) * 100).toFixed(1) : 0;
+                        const unit = inputMode === 'heures' ? 'h' : 'j';
+                        detailsHTML += `
+                            <div class="result-item">
+                                <span class="result-label">${item.label}</span>
+                                <span class="result-value">${item.value} ${unit} (${percentage}%)</span>
+                            </div>
+                        `;
+                    }
+                });
+            }
+
+            // Calcul du taux
+            const rate = theoricalHours > 0 ? (absenceHours / theoricalHours) * 100 : 0;
+
+            // Affichage des résultats
+            document.getElementById('mainRate').textContent = rate.toFixed(2) + '%';
+            document.getElementById('theoricalHours').textContent = theoricalHours.toFixed(0) + ' h';
+            document.getElementById('totalAbsence').textContent = absenceHours.toFixed(1) + ' h';
+            document.getElementById('displayEmployees').textContent = employees;
+
+            let periodLabel;
+            switch(periodType) {
+                case 'mensuel': periodLabel = 'Mensuel'; break;
+                case 'trimestriel': periodLabel = 'Trimestriel'; break;
+                case 'annuel': periodLabel = 'Annuel'; break;
+                case 'personnalise': periodLabel = document.getElementById('customDays').value + ' jours'; break;
+            }
+            document.getElementById('displayPeriod').textContent = periodLabel;
+
+            // Affichage des détails
+            if (showDetails && detailsHTML) {
+                document.getElementById('detailsResults').classList.remove('hidden');
+                document.getElementById('detailsContent').innerHTML = detailsHTML;
+            } else {
+                document.getElementById('detailsResults').classList.add('hidden');
+            }
+
+            // Interprétation
+            const interpretation = document.getElementById('interpretation');
+            let interpretationText = '';
+            let interpretationClass = '';
+
+            if (rate < 3) {
+                interpretationClass = 'good';
+                interpretationText = '✅ <strong>Taux excellent</strong> - Votre taux d\'absentéisme est très bas, ce qui indique une bonne santé organisationnelle.';
+            } else if (rate < 5) {
+                interpretationClass = 'good';
+                interpretationText = '✅ <strong>Taux bon</strong> - Votre taux d\'absentéisme est dans la moyenne française (environ 4-5%).';
+            } else if (rate < 8) {
+                interpretationClass = 'warning';
+                interpretationText = '⚠️ <strong>Taux à surveiller</strong> - Votre taux d\'absentéisme est légèrement élevé. Il peut être utile d\'identifier les causes principales.';
+            } else {
+                interpretationClass = 'alert';
+                interpretationText = '🔴 <strong>Taux élevé</strong> - Votre taux d\'absentéisme est préoccupant. Il est recommandé de mettre en place des actions correctives et d\'analyser les causes (conditions de travail, climat social, organisation, etc.).';
+            }
+
+            interpretation.className = 'interpretation ' + interpretationClass;
+            interpretation.innerHTML = interpretationText;
+
+            // Affichage des résultats
+            document.getElementById('results').classList.add('show');
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+    </script>
+</body>
+</html>

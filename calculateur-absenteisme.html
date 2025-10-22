@@ -15,19 +15,30 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            padding: 30px 20px;
         }
 
         .container {
             background: white;
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 900px;
+            max-width: 1400px;
             width: 100%;
             padding: 40px;
+            margin: 0 auto;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        @media (min-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1.2fr 1fr;
+                align-items: start;
+            }
         }
 
         h1 {
@@ -40,16 +51,26 @@
         .subtitle {
             text-align: center;
             color: #666;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             font-size: 14px;
+        }
+
+        .header {
+            margin-bottom: 25px;
+        }
+
+        @media (min-width: 1024px) {
+            .header {
+                grid-column: 1 / -1;
+            }
         }
 
         .info-box {
             background: #e3f2fd;
             border-left: 4px solid #2196F3;
             padding: 15px;
-            margin-bottom: 30px;
-            border-radius: 4px;
+            margin-bottom: 20px;
+            border-radius: 8px;
         }
 
         .info-box h3 {
@@ -65,21 +86,39 @@
         }
 
         .calculator-section {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+        }
+
+        .left-column {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .right-column {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (min-width: 1024px) {
+            .right-column {
+                position: sticky;
+                top: 20px;
+                align-self: start;
+            }
         }
 
         .section-title {
             background: #f5f5f5;
-            padding: 12px 15px;
+            padding: 10px 15px;
             border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 18px;
+            margin-bottom: 15px;
+            font-size: 16px;
             color: #333;
             font-weight: 600;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         label {
@@ -93,10 +132,10 @@
         input[type="number"],
         select {
             width: 100%;
-            padding: 12px 15px;
+            padding: 10px 12px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 15px;
             transition: border-color 0.3s;
         }
 
@@ -121,6 +160,36 @@
         @media (max-width: 768px) {
             .grid {
                 grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 25px 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .main-result .value {
+                font-size: 38px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+
+            .container {
+                padding: 20px 15px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .main-result .value {
+                font-size: 32px;
             }
         }
 
@@ -148,8 +217,7 @@
         }
 
         .results {
-            margin-top: 30px;
-            padding: 25px;
+            padding: 20px;
             background: #f9f9f9;
             border-radius: 12px;
             display: none;
@@ -158,6 +226,12 @@
         .results.show {
             display: block;
             animation: slideIn 0.4s ease-out;
+        }
+
+        @media (min-width: 1024px) {
+            .results {
+                margin-top: 0;
+            }
         }
 
         @keyframes slideIn {
@@ -174,41 +248,47 @@
         .result-item {
             display: flex;
             justify-content: space-between;
-            padding: 15px;
-            margin-bottom: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
             background: white;
             border-radius: 8px;
             border-left: 4px solid #667eea;
+            align-items: center;
+            gap: 10px;
         }
 
         .result-label {
             color: #555;
             font-weight: 500;
+            font-size: 13px;
         }
 
         .result-value {
             color: #333;
             font-weight: 700;
-            font-size: 18px;
+            font-size: 16px;
+            white-space: nowrap;
         }
 
         .main-result {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 20px;
+            padding: 25px 20px;
             border-radius: 12px;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .main-result .label {
-            font-size: 14px;
+            font-size: 13px;
             opacity: 0.9;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .main-result .value {
-            font-size: 42px;
+            font-size: 48px;
             font-weight: 700;
         }
 
@@ -268,19 +348,14 @@
 </head>
 <body>
     <div class="container">
-        <h1>📊 Calculateur de Taux d'Absentéisme</h1>
-        <p class="subtitle">Conforme aux normes françaises du droit du travail</p>
-
-        <div class="info-box">
-            <h3>📌 Formule de calcul</h3>
-            <p>
-                <strong>Taux d'absentéisme = (Nombre d'heures d'absence / Nombre d'heures théoriques travaillées) × 100</strong><br>
-                Ce calculateur vous permet de mesurer l'absentéisme dans votre entreprise selon les standards français.
-                Les absences peuvent inclure : maladie, accidents du travail, congés sans solde, absences injustifiées, etc.
-            </p>
+        <div class="header">
+            <h1>📊 Calculateur de Taux d'Absentéisme</h1>
+            <p class="subtitle">Conforme aux normes françaises du droit du travail</p>
         </div>
 
-        <form id="calculatorForm">
+        <div class="main-layout">
+            <div class="left-column">
+                <form id="calculatorForm">
             <div class="calculator-section">
                 <div class="section-title">1. Période d'analyse</div>
                 <div class="grid">
@@ -376,10 +451,20 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn">Calculer le taux d'absentéisme</button>
-        </form>
+                    <button type="submit" class="btn">Calculer le taux d'absentéisme</button>
+                </form>
+            </div>
 
-        <div id="results" class="results">
+            <div class="right-column">
+                <div class="info-box">
+                    <h3>📌 Formule de calcul</h3>
+                    <p>
+                        <strong>Taux d'absentéisme = (Heures d'absence / Heures théoriques) × 100</strong><br>
+                        Mesure l'absentéisme dans votre entreprise selon les standards français (maladie, accidents du travail, congés sans solde, etc.).
+                    </p>
+                </div>
+
+                <div id="results" class="results">
             <div class="main-result">
                 <div class="label">Taux d'absentéisme</div>
                 <div class="value" id="mainRate">0%</div>
@@ -410,7 +495,9 @@
                 <div id="detailsContent"></div>
             </div>
 
-            <div id="interpretation" class="interpretation"></div>
+                    <div id="interpretation" class="interpretation"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -563,7 +650,11 @@
 
             // Affichage des résultats
             document.getElementById('results').classList.add('show');
-            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+            // Scroll uniquement sur mobile
+            if (window.innerWidth < 1024) {
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
         });
     </script>
 </body>

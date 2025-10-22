@@ -1,30 +1,49 @@
-<!--
-    QUIZ MEDICAT PARTNER - VERSION ELEMENTOR/WORDPRESS
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Quiz d'Évaluation - Medicat Partner</title>
 
-    INSTRUCTIONS D'INTÉGRATION :
-    1. Dans Elementor, ajouter un widget "HTML"
-    2. Copier-coller TOUT ce code dans le widget
-    3. Publier la page
+    <!--
+        QUIZ MEDICAT PARTNER - VERSION WORDPRESS/ELEMENTOR
 
-    Cette version utilise des sélecteurs CSS spécifiques pour éviter les conflits
-    avec les styles WordPress/Elementor
--->
+        Ce fichier HTML complet peut être utilisé de 3 façons :
 
-<div id="medicat-quiz-container" class="medicat-quiz-wrapper">
+        1. STANDALONE : Ouvrir directement dans un navigateur pour tester
+        2. ELEMENTOR : Copier TOUT le code et coller dans un widget HTML Elementor
+        3. IFRAME : Héberger le fichier et l'intégrer via <iframe> dans Elementor
+
+        Optimisations Elementor :
+        ✓ Styles CSS encapsulés (préfixe .mq-)
+        ✓ JavaScript dans namespace MedicatQuiz
+        ✓ IDs uniques préfixés mq
+        ✓ Aucun conflit avec WordPress/thèmes
+    -->
+
     <style>
-        /* Styles isolés pour éviter les conflits avec WordPress/Elementor */
-        #medicat-quiz-container {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 0;
-            line-height: 1.6;
-        }
-
+        /* Reset pour assurer la compatibilité */
         #medicat-quiz-container * {
             box-sizing: border-box;
         }
 
+        /* Styles globaux du container */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        #medicat-quiz-container {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+            line-height: 1.6;
+        }
+
+        /* Variables CSS - Facile à personnaliser */
         .medicat-quiz-wrapper {
             --mq-primary: #0066cc;
             --mq-secondary: #004999;
@@ -516,6 +535,11 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+            #medicat-quiz-container {
+                padding: 0 10px;
+                margin: 20px auto;
+            }
+
             .mq-container {
                 border-radius: 10px;
             }
@@ -545,113 +569,120 @@
                 height: 150px;
                 font-size: 2.5em;
             }
+
+            .mq-info-form {
+                padding: 20px;
+            }
         }
     </style>
-
-    <div class="mq-container">
-        <div class="mq-header">
-            <h1>Quiz d'Évaluation des Besoins</h1>
-            <p>Évaluez la maturité de votre entreprise en gestion de l'absentéisme</p>
-            <p class="mq-subtitle">Medicat Partner - Expert en prévention depuis 36 ans</p>
-        </div>
-
-        <div class="mq-content">
-            <!-- Section d'accueil -->
-            <div id="mqWelcome" class="mq-welcome">
-                <h2>Bienvenue dans votre diagnostic personnalisé</h2>
-                <p>Ce quiz vous permettra d'évaluer la situation actuelle de votre entreprise en matière de prévention de l'absentéisme et de qualité de vie au travail.</p>
-
-                <ul>
-                    <li>15 questions ciblées sur vos pratiques actuelles</li>
-                    <li>Un score de maturité personnalisé</li>
-                    <li>Des recommandations adaptées à vos besoins</li>
-                    <li>Une feuille de route pour améliorer votre performance</li>
-                </ul>
-
-                <div class="mq-info-form">
-                    <h3 style="margin: 0 0 20px 0; color: var(--mq-primary);">Informations sur votre entreprise</h3>
-                    <div class="mq-form-group">
-                        <label for="mqCompanyName">Nom de l'entreprise *</label>
-                        <input type="text" id="mqCompanyName" required placeholder="Votre entreprise">
-                    </div>
-                    <div class="mq-form-group">
-                        <label for="mqContactName">Votre nom *</label>
-                        <input type="text" id="mqContactName" required placeholder="Prénom Nom">
-                    </div>
-                    <div class="mq-form-group">
-                        <label for="mqContactEmail">Email professionnel *</label>
-                        <input type="email" id="mqContactEmail" required placeholder="prenom.nom@entreprise.fr">
-                    </div>
-                    <div class="mq-form-group">
-                        <label for="mqCompanySize">Taille de l'entreprise *</label>
-                        <select id="mqCompanySize" required>
-                            <option value="">Sélectionnez...</option>
-                            <option value="1-49">1 à 49 collaborateurs</option>
-                            <option value="50-249">50 à 249 collaborateurs</option>
-                            <option value="250-999">250 à 999 collaborateurs</option>
-                            <option value="1000+">1000+ collaborateurs</option>
-                        </select>
-                    </div>
-                    <div class="mq-form-group">
-                        <label for="mqSector">Secteur d'activité *</label>
-                        <input type="text" id="mqSector" required placeholder="Ex: Industrie, Services, Santé...">
-                    </div>
-                </div>
-
-                <button class="mq-btn mq-btn-primary" onclick="MedicatQuiz.start()" style="display: block; margin: 30px auto;">
-                    Commencer l'évaluation
-                </button>
+</head>
+<body>
+    <div id="medicat-quiz-container" class="medicat-quiz-wrapper">
+        <div class="mq-container">
+            <div class="mq-header">
+                <h1>Quiz d'Évaluation des Besoins</h1>
+                <p>Évaluez la maturité de votre entreprise en gestion de l'absentéisme</p>
+                <p class="mq-subtitle">Medicat Partner - Expert en prévention depuis 36 ans</p>
             </div>
 
-            <!-- Section du quiz -->
-            <div id="mqQuizSection" class="mq-hidden">
-                <div class="mq-progress-bar">
-                    <div class="mq-progress-fill" id="mqProgress"></div>
-                </div>
+            <div class="mq-content">
+                <!-- Section d'accueil -->
+                <div id="mqWelcome" class="mq-welcome">
+                    <h2>Bienvenue dans votre diagnostic personnalisé</h2>
+                    <p>Ce quiz vous permettra d'évaluer la situation actuelle de votre entreprise en matière de prévention de l'absentéisme et de qualité de vie au travail.</p>
 
-                <div id="mqQuestions"></div>
+                    <ul>
+                        <li>15 questions ciblées sur vos pratiques actuelles</li>
+                        <li>Un score de maturité personnalisé</li>
+                        <li>Des recommandations adaptées à vos besoins</li>
+                        <li>Une feuille de route pour améliorer votre performance</li>
+                    </ul>
 
-                <div class="mq-buttons">
-                    <button class="mq-btn mq-btn-secondary mq-hidden" id="mqPrevBtn" onclick="MedicatQuiz.prev()">
-                        Précédent
-                    </button>
-                    <button class="mq-btn mq-btn-primary" id="mqNextBtn" onclick="MedicatQuiz.next()">
-                        Suivant
-                    </button>
-                    <button class="mq-btn mq-btn-primary mq-hidden" id="mqSubmitBtn" onclick="MedicatQuiz.submit()">
-                        Voir mes résultats
-                    </button>
-                </div>
-            </div>
-
-            <!-- Section des résultats -->
-            <div id="mqResults" class="mq-results">
-                <h2 style="text-align: center; color: var(--mq-primary); font-size: 2em; margin: 0 0 20px 0;">
-                    Vos Résultats
-                </h2>
-
-                <div class="mq-score-circle" id="mqScoreCircle">
-                    <div>
-                        <span id="mqTotalScore">0</span><span style="font-size: 0.6em;">/100</span>
+                    <div class="mq-info-form">
+                        <h3 style="margin: 0 0 20px 0; color: var(--mq-primary);">Informations sur votre entreprise</h3>
+                        <div class="mq-form-group">
+                            <label for="mqCompanyName">Nom de l'entreprise *</label>
+                            <input type="text" id="mqCompanyName" required placeholder="Votre entreprise">
+                        </div>
+                        <div class="mq-form-group">
+                            <label for="mqContactName">Votre nom *</label>
+                            <input type="text" id="mqContactName" required placeholder="Prénom Nom">
+                        </div>
+                        <div class="mq-form-group">
+                            <label for="mqContactEmail">Email professionnel *</label>
+                            <input type="email" id="mqContactEmail" required placeholder="prenom.nom@entreprise.fr">
+                        </div>
+                        <div class="mq-form-group">
+                            <label for="mqCompanySize">Taille de l'entreprise *</label>
+                            <select id="mqCompanySize" required>
+                                <option value="">Sélectionnez...</option>
+                                <option value="1-49">1 à 49 collaborateurs</option>
+                                <option value="50-249">50 à 249 collaborateurs</option>
+                                <option value="250-999">250 à 999 collaborateurs</option>
+                                <option value="1000+">1000+ collaborateurs</option>
+                            </select>
+                        </div>
+                        <div class="mq-form-group">
+                            <label for="mqSector">Secteur d'activité *</label>
+                            <input type="text" id="mqSector" required placeholder="Ex: Industrie, Services, Santé...">
+                        </div>
                     </div>
-                    <div class="mq-score-label">Score global</div>
+
+                    <button class="mq-btn mq-btn-primary" onclick="MedicatQuiz.start()" style="display: block; margin: 30px auto;">
+                        Commencer l'évaluation
+                    </button>
                 </div>
 
-                <div class="mq-maturity-level" id="mqMaturityLevel"></div>
+                <!-- Section du quiz -->
+                <div id="mqQuizSection" class="mq-hidden">
+                    <div class="mq-progress-bar">
+                        <div class="mq-progress-fill" id="mqProgress"></div>
+                    </div>
 
-                <div class="mq-category-scores" id="mqCategoryScores"></div>
+                    <div id="mqQuestions"></div>
 
-                <div class="mq-recommendations" id="mqRecommendations"></div>
+                    <div class="mq-buttons">
+                        <button class="mq-btn mq-btn-secondary mq-hidden" id="mqPrevBtn" onclick="MedicatQuiz.prev()">
+                            Précédent
+                        </button>
+                        <button class="mq-btn mq-btn-primary" id="mqNextBtn" onclick="MedicatQuiz.next()">
+                            Suivant
+                        </button>
+                        <button class="mq-btn mq-btn-primary mq-hidden" id="mqSubmitBtn" onclick="MedicatQuiz.submit()">
+                            Voir mes résultats
+                        </button>
+                    </div>
+                </div>
 
-                <div class="mq-cta">
-                    <h3>Prêt à transformer votre entreprise ?</h3>
-                    <p>Nos experts sont à votre disposition pour vous accompagner dans votre démarche de prévention de l'absentéisme</p>
-                    <a href="https://www.medicat-partner.fr/contact" class="mq-cta-button">
-                        Contactez-nous
-                    </a>
-                    <p style="margin-top: 20px; font-size: 0.95em;">
-                        📧 Un rapport détaillé vous sera envoyé par email
-                    </p>
+                <!-- Section des résultats -->
+                <div id="mqResults" class="mq-results">
+                    <h2 style="text-align: center; color: var(--mq-primary); font-size: 2em; margin: 0 0 20px 0;">
+                        Vos Résultats
+                    </h2>
+
+                    <div class="mq-score-circle" id="mqScoreCircle">
+                        <div>
+                            <span id="mqTotalScore">0</span><span style="font-size: 0.6em;">/100</span>
+                        </div>
+                        <div class="mq-score-label">Score global</div>
+                    </div>
+
+                    <div class="mq-maturity-level" id="mqMaturityLevel"></div>
+
+                    <div class="mq-category-scores" id="mqCategoryScores"></div>
+
+                    <div class="mq-recommendations" id="mqRecommendations"></div>
+
+                    <div class="mq-cta">
+                        <h3>Prêt à transformer votre entreprise ?</h3>
+                        <p>Nos experts sont à votre disposition pour vous accompagner dans votre démarche de prévention de l'absentéisme</p>
+                        <a href="https://www.medicat-partner.fr/contact" class="mq-cta-button">
+                            Contactez-nous
+                        </a>
+                        <p style="margin-top: 20px; font-size: 0.95em;">
+                            📧 Un rapport détaillé vous sera envoyé par email
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -979,6 +1010,9 @@
                 document.getElementById('mqQuizSection').classList.add('mq-hidden');
                 document.getElementById('mqResults').classList.add('active');
 
+                // Scroll vers le haut des résultats
+                document.getElementById('mqResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
                 document.getElementById('mqTotalScore').textContent = score;
 
                 let level, levelClass, levelText;
@@ -1030,7 +1064,7 @@
 
                 generateRecommendations(score, categoryScores, categoryMaxScores);
 
-                console.log('Résultats:', { userInfo, score, categoryScores, level });
+                console.log('Résultats Quiz Medicat:', { userInfo, score, categoryScores, level });
             }
 
             function getScoreColor(score) {
@@ -1182,4 +1216,5 @@
             };
         })();
     </script>
-</div>
+</body>
+</html>

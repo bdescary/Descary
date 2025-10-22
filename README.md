@@ -38,6 +38,8 @@ Taux d'absentéisme = (Nombre d'heures d'absence / Nombre d'heures théoriques t
 
 ## Utilisation
 
+### Version Standalone (HTML)
+
 1. Ouvrez le fichier `calculateur-absenteisme.html` dans votre navigateur web
 2. Sélectionnez la période d'analyse (mensuel, trimestriel, annuel ou personnalisé)
 3. Renseignez :
@@ -46,6 +48,22 @@ Taux d'absentéisme = (Nombre d'heures d'absence / Nombre d'heures théoriques t
    - Le total des absences (en heures ou en jours)
 4. Optionnel : Activez le détail par type d'absence pour une analyse approfondie
 5. Cliquez sur "Calculer le taux d'absentéisme"
+
+### Version WordPress/Elementor Pro
+
+Pour intégrer le calculateur dans WordPress avec Elementor Pro :
+
+1. **Via Shortcode (Recommandé)**
+   - Installez le plugin fourni dans `/wordpress-elementor/`
+   - Utilisez le shortcode : `[calculateur_absenteisme]`
+   - Compatible avec Elementor Pro et l'éditeur classique
+
+2. **Via Widget HTML**
+   - Copiez le CSS, HTML et JavaScript
+   - Intégrez dans un widget HTML Elementor
+   - Voir le guide complet : `/wordpress-elementor/README-INSTALLATION.md`
+
+📖 **Guide d'installation complet** : Consultez `/wordpress-elementor/README-INSTALLATION.md` pour des instructions détaillées
 
 ## Contexte français
 
@@ -59,6 +77,21 @@ Le calculateur est adapté au contexte français avec :
 - HTML5
 - CSS3 (avec design moderne et responsive)
 - JavaScript vanilla (aucune dépendance externe)
+- Compatible WordPress & Elementor Pro
+
+## Structure du projet
+
+```
+Descary/
+├── calculateur-absenteisme.html    # Version standalone
+├── wordpress-elementor/            # Version WordPress/Elementor
+│   ├── calculateur-absenteisme.css
+│   ├── calculateur-absenteisme.js
+│   ├── calculateur-absenteisme-html.html
+│   ├── calculateur-absenteisme-shortcode.php
+│   └── README-INSTALLATION.md     # Guide d'installation détaillé
+└── README.md                       # Ce fichier
+```
 
 ## Compatibilité
 

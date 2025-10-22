@@ -2,6 +2,10 @@
 
 Calculateur de taux d'absentéisme pour entreprises françaises, conforme aux normes du droit du travail français.
 
+## 🆕 Version 3.0 disponible !
+
+**Design ultra-moderne** avec animations dynamiques et interface repensée. [Voir le guide V3](GUIDE-V3.md)
+
 ## ✨ Fonctionnalités
 
 - **Calcul automatique** du taux d'absentéisme selon la formule standard française
@@ -13,6 +17,10 @@ Calculateur de taux d'absentéisme pour entreprises françaises, conforme aux no
 - **Barre de progression** montrant votre position par rapport à votre secteur
 - **Interface responsive** adaptée aux mobiles et tablettes
 - **Compatible WordPress/Elementor** : version tout-en-un prête à l'emploi
+- **🆕 V3 : Design moderne** avec animations fluides et effets glassmorphism
+- **🆕 V3 : Palette de couleurs 2024-2025** (Indigo & Rose)
+- **🆕 V3 : Police Inter** pour un rendu professionnel
+- **🆕 V3 : Micro-animations** et feedback visuel avancé
 
 ## Formule de calcul
 
@@ -56,33 +64,40 @@ Taux d'absentéisme = (Nombre d'heures d'absence / Nombre d'heures théoriques t
 | 5-8% | À surveiller - Légèrement élevé |
 | > 8% | Préoccupant - Actions correctives recommandées |
 
-## Utilisation
+## 🚀 Utilisation
 
-### Version Standalone (HTML)
+### Version 3.0 - Ultra-Moderne (Recommandée) ⭐
 
-1. Ouvrez le fichier `calculateur-absenteisme.html` dans votre navigateur web
-2. Sélectionnez la période d'analyse (mensuel, trimestriel, annuel ou personnalisé)
-3. Renseignez :
-   - Le nombre de salariés
-   - Les heures hebdomadaires par salarié (35h par défaut)
-   - Le total des absences (en heures ou en jours)
-4. Optionnel : Activez le détail par type d'absence pour une analyse approfondie
-5. Cliquez sur "Calculer le taux d'absentéisme"
+**Design 2024-2025** avec animations dynamiques !
 
-### Version WordPress/Elementor (Recommandée)
-
-**🎯 Version tout-en-un** : Un seul fichier à copier-coller !
-
-1. Ouvrez `calculateur-absenteisme-elementor.html`
+1. Ouvrez `calculateur-absenteisme-v3.html`
 2. Copiez TOUT le contenu (Ctrl+A puis Ctrl+C)
 3. Dans Elementor, ajoutez un widget **HTML**
-4. Collez le contenu
-5. Publiez !
+4. Collez le contenu et publiez !
 
-📖 **Guide détaillé** : Consultez `GUIDE-ELEMENTOR.md`
+📖 **Guide complet V3** : [GUIDE-V3.md](GUIDE-V3.md)
 
-**Autres méthodes (avancées)** :
-- Via plugin WordPress : voir `/wordpress-elementor/`
+### Version 2.0 - Moderne
+
+Version sobre avec comparaison sectorielle.
+
+1. Ouvrez `calculateur-absenteisme-elementor.html`
+2. Copiez et collez dans Elementor
+3. Publiez !
+
+📖 **Guide V2** : [GUIDE-ELEMENTOR.md](GUIDE-ELEMENTOR.md)
+
+### Version 1.0 - Classique (Standalone)
+
+Version HTML simple pour navigateur.
+
+1. Ouvrez `calculateur-absenteisme.html` dans votre navigateur
+2. Remplissez le formulaire
+3. Calculez !
+
+### Méthodes avancées WordPress
+
+- Via plugin : voir `/wordpress-elementor/`
 - Installation modulaire : voir `/wordpress-elementor/README-INSTALLATION.md`
 
 ## Contexte français
@@ -99,21 +114,31 @@ Le calculateur est adapté au contexte français avec :
 - JavaScript vanilla (aucune dépendance externe)
 - Compatible WordPress & Elementor Pro
 
-## Structure du projet
+## 📁 Structure du projet
 
 ```
 Descary/
-├── calculateur-absenteisme.html              # Version standalone (navigateur)
-├── calculateur-absenteisme-elementor.html    # ⭐ Version Elementor tout-en-un
-├── GUIDE-ELEMENTOR.md                        # Guide d'installation Elementor
-├── wordpress-elementor/                      # Version WordPress/Elementor (avancée)
+├── calculateur-absenteisme-v3.html           # ⭐ V3.0 Design ultra-moderne (NOUVEAU)
+├── calculateur-absenteisme-elementor.html    # V2.0 Version Elementor
+├── calculateur-absenteisme.html              # V1.0 Version standalone
+├── GUIDE-V3.md                               # 🆕 Guide version 3.0
+├── GUIDE-ELEMENTOR.md                        # Guide version 2.0
+├── wordpress-elementor/                      # Version WordPress avancée
 │   ├── calculateur-absenteisme.css
 │   ├── calculateur-absenteisme.js
 │   ├── calculateur-absenteisme-html.html
 │   ├── calculateur-absenteisme-shortcode.php
-│   └── README-INSTALLATION.md               # Guide d'installation détaillé
+│   └── README-INSTALLATION.md
 └── README.md                                 # Ce fichier
 ```
+
+## 🎨 Quelle version choisir ?
+
+| Version | Design | Animations | Recommandé pour |
+|---------|--------|------------|-----------------|
+| **V3.0** 🏆 | Ultra-moderne | Avancées | Sites modernes, effet WOW |
+| V2.0 | Moderne | Basiques | Bon compromis |
+| V1.0 | Classique | Aucune | Maximum de compatibilité |
 
 ## Compatibilité
 

@@ -1,0 +1,1091 @@
+<!--
+  Calculateur de Taux d'Absentéisme V3.0 - Design Moderne
+  Version: 3.0 - Design contemporain avec animations dynamiques
+  Compatible: WordPress/Elementor - Copier-coller dans Widget HTML
+-->
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* Reset et variables modernes */
+.calc-v3-wrapper * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.calc-v3-wrapper {
+    --primary: #6366f1;
+    --primary-light: #818cf8;
+    --primary-dark: #4f46e5;
+    --secondary: #ec4899;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --dark: #1e293b;
+    --gray: #64748b;
+    --light-gray: #f1f5f9;
+    --white: #ffffff;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --radius: 16px;
+    --radius-sm: 8px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 40px 20px;
+    min-height: 100vh;
+}
+
+.calc-v3-container {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-xl);
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+/* Header moderne */
+.calc-v3-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: var(--white);
+    padding: 48px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.calc-v3-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: pulse 15s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.calc-v3-header h1 {
+    font-size: 42px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.calc-v3-subtitle {
+    font-size: 18px;
+    font-weight: 400;
+    opacity: 0.95;
+    position: relative;
+    z-index: 1;
+}
+
+/* Layout moderne */
+.calc-v3-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 40px;
+}
+
+@media (min-width: 1024px) {
+    .calc-v3-content {
+        grid-template-columns: 1.3fr 1fr;
+    }
+}
+
+/* Cards modernes */
+.calc-v3-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 28px;
+    border: 1px solid #e2e8f0;
+    transition: var(--transition);
+    margin-bottom: 24px;
+}
+
+.calc-v3-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+}
+
+.calc-v3-card-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.calc-v3-card-title::before {
+    content: '';
+    width: 4px;
+    height: 24px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 4px;
+}
+
+/* Input moderne */
+.calc-v3-form-group {
+    margin-bottom: 24px;
+}
+
+.calc-v3-wrapper label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--dark);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+}
+
+.calc-v3-wrapper input[type="number"],
+.calc-v3-wrapper select {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #e2e8f0;
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    transition: var(--transition);
+    background: var(--white);
+    color: var(--dark);
+    font-weight: 500;
+}
+
+.calc-v3-wrapper input[type="number"]:focus,
+.calc-v3-wrapper select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    transform: scale(1.01);
+}
+
+.calc-v3-input-hint {
+    font-size: 13px;
+    color: var(--gray);
+    margin-top: 8px;
+    font-weight: 400;
+}
+
+.calc-v3-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* Bouton moderne */
+.calc-v3-btn {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: var(--white) !important;
+    border: none;
+    padding: 18px 36px;
+    font-size: 17px;
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    width: 100%;
+    transition: var(--transition);
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.02em;
+}
+
+.calc-v3-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+}
+
+.calc-v3-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.5);
+}
+
+.calc-v3-btn:hover::before {
+    left: 100%;
+}
+
+.calc-v3-btn:active {
+    transform: translateY(-1px);
+}
+
+/* Résultats dynamiques */
+.calc-v3-results {
+    position: sticky;
+    top: 20px;
+}
+
+.calc-v3-results-inner {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: var(--transition);
+}
+
+.calc-v3-results-inner.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Carte résultat principal avec effet glassmorphism */
+.calc-v3-main-result {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: var(--white);
+    padding: 40px 32px;
+    border-radius: var(--radius);
+    text-align: center;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+}
+
+.calc-v3-main-result::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+    animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.calc-v3-main-result .label {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+}
+
+.calc-v3-main-result .value {
+    font-size: 72px;
+    font-weight: 900;
+    position: relative;
+    z-index: 1;
+    letter-spacing: -0.03em;
+    animation: countUp 1s ease-out;
+}
+
+@keyframes countUp {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Graphique circulaire moderne */
+.calc-v3-circular-chart {
+    width: 160px;
+    height: 160px;
+    margin: 20px auto;
+    position: relative;
+}
+
+.calc-v3-circle-bg {
+    fill: none;
+    stroke: rgba(255,255,255,0.2);
+    stroke-width: 8;
+}
+
+.calc-v3-circle {
+    fill: none;
+    stroke: var(--white);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 440;
+    stroke-dashoffset: 440;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    animation: fillCircle 1.5s ease-out forwards;
+}
+
+@keyframes fillCircle {
+    to { stroke-dashoffset: 0; }
+}
+
+/* Comparaison sectorielle moderne */
+.calc-v3-sector-comparison {
+    background: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%);
+    border: 2px solid #f0abfc;
+    padding: 24px;
+    border-radius: var(--radius);
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+}
+
+.calc-v3-sector-comparison h4 {
+    color: #a21caf;
+    margin-bottom: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.calc-v3-comparison-bar {
+    background: #e9d5ff;
+    height: 40px;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    margin: 16px 0;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.calc-v3-comparison-fill {
+    background: linear-gradient(90deg, var(--success), #34d399);
+    height: 100%;
+    border-radius: 20px;
+    transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 16px;
+    color: var(--white);
+    font-weight: 800;
+    font-size: 15px;
+    box-shadow: var(--shadow);
+    position: relative;
+}
+
+.calc-v3-comparison-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.calc-v3-comparison-fill.above-average {
+    background: linear-gradient(90deg, var(--warning), #fbbf24);
+}
+
+.calc-v3-sector-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.calc-v3-stat {
+    text-align: center;
+    padding: 16px;
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.calc-v3-stat:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.calc-v3-stat-label {
+    color: var(--gray);
+    display: block;
+    margin-bottom: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.calc-v3-stat-value {
+    color: var(--dark);
+    font-weight: 800;
+    font-size: 20px;
+}
+
+/* Item résultat */
+.calc-v3-result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    background: var(--light-gray);
+    border-radius: var(--radius-sm);
+    border-left: 4px solid var(--primary);
+    transition: var(--transition);
+}
+
+.calc-v3-result-item:hover {
+    background: #e2e8f0;
+    transform: translateX(4px);
+}
+
+.calc-v3-result-label {
+    color: var(--gray);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.calc-v3-result-value {
+    color: var(--dark);
+    font-weight: 800;
+    font-size: 18px;
+}
+
+/* Interprétation moderne */
+.calc-v3-interpretation {
+    padding: 20px 24px;
+    border-radius: var(--radius);
+    font-size: 15px;
+    line-height: 1.6;
+    font-weight: 500;
+    margin-top: 20px;
+    border-left: 4px solid;
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.calc-v3-interpretation.good {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border-color: var(--success);
+    color: #065f46;
+}
+
+.calc-v3-interpretation.warning {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border-color: var(--warning);
+    color: #92400e;
+}
+
+.calc-v3-interpretation.alert {
+    background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+    border-color: var(--danger);
+    color: #991b1b;
+}
+
+/* Info box moderne */
+.calc-v3-info-box {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border: 2px solid #93c5fd;
+    padding: 24px;
+    margin-bottom: 24px;
+    border-radius: var(--radius);
+    position: relative;
+}
+
+.calc-v3-info-box h3 {
+    color: #1e40af;
+    margin-bottom: 12px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.calc-v3-info-box p {
+    color: #1e3a8a;
+    font-size: 14px;
+    line-height: 1.7;
+    font-weight: 500;
+}
+
+/* Types d'absence */
+.calc-v3-absence-types {
+    margin-top: 24px;
+}
+
+.calc-v3-absence-type-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+    align-items: center;
+}
+
+.calc-v3-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.calc-v3-wrapper input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--primary);
+}
+
+.calc-v3-hidden {
+    display: none;
+}
+
+/* Responsive moderne */
+@media (max-width: 1024px) {
+    .calc-v3-content {
+        padding: 32px 24px;
+    }
+
+    .calc-v3-results {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .calc-v3-wrapper {
+        padding: 20px 16px;
+    }
+
+    .calc-v3-header {
+        padding: 32px 24px;
+    }
+
+    .calc-v3-header h1 {
+        font-size: 32px;
+    }
+
+    .calc-v3-subtitle {
+        font-size: 16px;
+    }
+
+    .calc-v3-content {
+        padding: 24px 16px;
+    }
+
+    .calc-v3-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .calc-v3-main-result .value {
+        font-size: 56px;
+    }
+
+    .calc-v3-sector-stats {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
+
+/* Animation au chargement */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.calc-v3-card {
+    animation: fadeInUp 0.6s ease-out backwards;
+}
+
+.calc-v3-card:nth-child(1) { animation-delay: 0.1s; }
+.calc-v3-card:nth-child(2) { animation-delay: 0.2s; }
+.calc-v3-card:nth-child(3) { animation-delay: 0.3s; }
+.calc-v3-card:nth-child(4) { animation-delay: 0.4s; }
+
+/* Badge moderne */
+.calc-v3-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.calc-v3-badge.new {
+    background: linear-gradient(135deg, #ec4899, #f472b6);
+    color: var(--white);
+}
+</style>
+
+<div class="calc-v3-wrapper">
+    <div class="calc-v3-container">
+        <div class="calc-v3-header">
+            <h1>📊 Calculateur d'Absentéisme</h1>
+            <p class="calc-v3-subtitle">Analyse moderne et dynamique pour entreprises françaises</p>
+        </div>
+
+        <div class="calc-v3-content">
+            <div class="calc-v3-left-column">
+                <form id="calcV3Form">
+                    <div class="calc-v3-card">
+                        <div class="calc-v3-card-title">
+                            🏢 Secteur d'activité
+                            <span class="calc-v3-badge new">Nouveau</span>
+                        </div>
+                        <div class="calc-v3-form-group">
+                            <label for="calcV3Sector">Sélectionnez votre secteur</label>
+                            <select id="calcV3Sector">
+                                <option value="">-- Choisir un secteur --</option>
+                                <option value="construction">🏗️ BTP / Construction</option>
+                                <option value="industrie">⚙️ Industrie / Production</option>
+                                <option value="commerce">🛒 Commerce / Distribution</option>
+                                <option value="services">💼 Services aux entreprises</option>
+                                <option value="sante">🏥 Santé / Social</option>
+                                <option value="transport">🚚 Transport / Logistique</option>
+                                <option value="hotellerie">🏨 Hôtellerie / Restauration</option>
+                                <option value="public">🏛️ Fonction publique</option>
+                                <option value="finance">💰 Finance / Assurance</option>
+                                <option value="agriculture">🌾 Agriculture</option>
+                                <option value="education">🎓 Éducation / Formation</option>
+                                <option value="autre">📊 Autre secteur</option>
+                            </select>
+                            <div class="calc-v3-input-hint">Comparez-vous à votre secteur</div>
+                        </div>
+                    </div>
+
+                    <div class="calc-v3-card">
+                        <div class="calc-v3-card-title">📅 Période d'analyse</div>
+                        <div class="calc-v3-grid">
+                            <div class="calc-v3-form-group">
+                                <label for="calcV3PeriodType">Type de période</label>
+                                <select id="calcV3PeriodType">
+                                    <option value="mensuel">Mensuel</option>
+                                    <option value="trimestriel">Trimestriel</option>
+                                    <option value="annuel">Annuel</option>
+                                    <option value="personnalise">Personnalisé</option>
+                                </select>
+                            </div>
+                            <div class="calc-v3-form-group" id="calcV3CustomPeriodGroup" style="display: none;">
+                                <label for="calcV3CustomDays">Nombre de jours</label>
+                                <input type="number" id="calcV3CustomDays" min="1" value="30">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="calc-v3-card">
+                        <div class="calc-v3-card-title">👥 Effectif & temps de travail</div>
+                        <div class="calc-v3-grid">
+                            <div class="calc-v3-form-group">
+                                <label for="calcV3Employees">Nombre de salariés</label>
+                                <input type="number" id="calcV3Employees" min="1" value="10" required>
+                                <div class="calc-v3-input-hint">Effectif moyen</div>
+                            </div>
+                            <div class="calc-v3-form-group">
+                                <label for="calcV3WeeklyHours">Heures hebdomadaires</label>
+                                <input type="number" id="calcV3WeeklyHours" min="1" max="48" value="35" step="0.5" required>
+                                <div class="calc-v3-input-hint">35h en France</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="calc-v3-card">
+                        <div class="calc-v3-card-title">⏱️ Absences</div>
+                        <div class="calc-v3-form-group">
+                            <label for="calcV3InputMode">Mode de saisie</label>
+                            <select id="calcV3InputMode">
+                                <option value="heures">En heures</option>
+                                <option value="jours">En jours</option>
+                            </select>
+                        </div>
+
+                        <div id="calcV3HeuresMode">
+                            <div class="calc-v3-form-group">
+                                <label for="calcV3AbsenceHours">Total heures d'absence</label>
+                                <input type="number" id="calcV3AbsenceHours" min="0" value="0" step="0.5">
+                            </div>
+                        </div>
+
+                        <div id="calcV3JoursMode" class="calc-v3-hidden">
+                            <div class="calc-v3-form-group">
+                                <label for="calcV3AbsenceDays">Total jours d'absence</label>
+                                <input type="number" id="calcV3AbsenceDays" min="0" value="0" step="0.5">
+                            </div>
+                        </div>
+
+                        <div class="calc-v3-absence-types">
+                            <label class="calc-v3-checkbox-label">
+                                <input type="checkbox" id="calcV3ShowDetails">
+                                Détail par type d'absence
+                            </label>
+
+                            <div id="calcV3DetailsSection" class="calc-v3-hidden" style="margin-top: 20px;">
+                                <div class="calc-v3-absence-type-row">
+                                    <label>Maladie ordinaire</label>
+                                    <input type="number" id="calcV3Maladie" min="0" value="0" step="0.5">
+                                </div>
+                                <div class="calc-v3-absence-type-row">
+                                    <label>Accident du travail / Maladie pro.</label>
+                                    <input type="number" id="calcV3Accident" min="0" value="0" step="0.5">
+                                </div>
+                                <div class="calc-v3-absence-type-row">
+                                    <label>Congés sans solde</label>
+                                    <input type="number" id="calcV3CongesSansSolde" min="0" value="0" step="0.5">
+                                </div>
+                                <div class="calc-v3-absence-type-row">
+                                    <label>Absences injustifiées</label>
+                                    <input type="number" id="calcV3Injustifiees" min="0" value="0" step="0.5">
+                                </div>
+                                <div class="calc-v3-absence-type-row">
+                                    <label>Autres</label>
+                                    <input type="number" id="calcV3Autres" min="0" value="0" step="0.5">
+                                </div>
+                                <div class="calc-v3-input-hint" style="margin-top: 12px;">
+                                    💡 Les congés payés ne sont pas comptabilisés
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="calc-v3-btn">✨ Calculer maintenant</button>
+                </form>
+            </div>
+
+            <div class="calc-v3-right-column">
+                <div class="calc-v3-results">
+                    <div class="calc-v3-info-box">
+                        <h3>📌 Formule de calcul</h3>
+                        <p>
+                            <strong>Taux = (Heures d'absence / Heures théoriques) × 100</strong><br>
+                            Mesure conforme aux standards français du droit du travail.
+                        </p>
+                    </div>
+
+                    <div id="calcV3Results" class="calc-v3-results-inner">
+                        <div class="calc-v3-main-result">
+                            <div class="label">Taux d'absentéisme</div>
+                            <div class="value" id="calcV3MainRate">0%</div>
+                        </div>
+
+                        <div id="calcV3SectorComparison" class="calc-v3-sector-comparison calc-v3-hidden">
+                            <h4>📊 Comparaison sectorielle</h4>
+                            <div class="calc-v3-comparison-bar">
+                                <div class="calc-v3-comparison-fill" id="calcV3ComparisonFill">0%</div>
+                            </div>
+                            <div class="calc-v3-sector-stats">
+                                <div class="calc-v3-stat">
+                                    <span class="calc-v3-stat-label">Votre taux</span>
+                                    <span class="calc-v3-stat-value" id="calcV3YourRate">0%</span>
+                                </div>
+                                <div class="calc-v3-stat">
+                                    <span class="calc-v3-stat-label">Moyenne</span>
+                                    <span class="calc-v3-stat-value" id="calcV3SectorAvg">0%</span>
+                                </div>
+                                <div class="calc-v3-stat">
+                                    <span class="calc-v3-stat-label">Écart</span>
+                                    <span class="calc-v3-stat-value" id="calcV3Difference">0%</span>
+                                </div>
+                            </div>
+                            <p id="calcV3ComparisonText" style="margin-top: 16px; font-size: 14px; color: #4b5563; font-weight: 500;"></p>
+                        </div>
+
+                        <div class="calc-v3-result-item">
+                            <span class="calc-v3-result-label">Heures théoriques</span>
+                            <span class="calc-v3-result-value" id="calcV3ThericalHours">0 h</span>
+                        </div>
+
+                        <div class="calc-v3-result-item">
+                            <span class="calc-v3-result-label">Heures d'absence</span>
+                            <span class="calc-v3-result-value" id="calcV3TotalAbsence">0 h</span>
+                        </div>
+
+                        <div class="calc-v3-result-item">
+                            <span class="calc-v3-result-label">Salariés</span>
+                            <span class="calc-v3-result-value" id="calcV3DisplayEmployees">0</span>
+                        </div>
+
+                        <div class="calc-v3-result-item">
+                            <span class="calc-v3-result-label">Période</span>
+                            <span class="calc-v3-result-value" id="calcV3DisplayPeriod">-</span>
+                        </div>
+
+                        <div id="calcV3DetailsResults" class="calc-v3-hidden" style="margin-top: 24px;">
+                            <h3 style="margin-bottom: 16px; color: var(--dark); font-size: 16px; font-weight: 700;">Détail par type</h3>
+                            <div id="calcV3DetailsContent"></div>
+                        </div>
+
+                        <div id="calcV3Interpretation" class="calc-v3-interpretation"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    'use strict';
+
+    const sectorAverages = {
+        'construction': { avg: 7.5, name: 'BTP / Construction' },
+        'industrie': { avg: 5.5, name: 'Industrie / Production' },
+        'commerce': { avg: 4.5, name: 'Commerce / Distribution' },
+        'services': { avg: 3.5, name: 'Services aux entreprises' },
+        'sante': { avg: 6.5, name: 'Santé / Social' },
+        'transport': { avg: 8.5, name: 'Transport / Logistique' },
+        'hotellerie': { avg: 6.8, name: 'Hôtellerie / Restauration' },
+        'public': { avg: 7.8, name: 'Fonction publique' },
+        'finance': { avg: 3.2, name: 'Finance / Assurance' },
+        'agriculture': { avg: 5.3, name: 'Agriculture' },
+        'education': { avg: 6.2, name: 'Éducation / Formation' },
+        'autre': { avg: 5.0, name: 'Moyenne nationale' }
+    };
+
+    function initCalculateur() {
+        const form = document.getElementById('calcV3Form');
+        if (!form) return;
+
+        // Gestion des modes
+        const periodType = document.getElementById('calcV3PeriodType');
+        if (periodType) {
+            periodType.addEventListener('change', function() {
+                const customGroup = document.getElementById('calcV3CustomPeriodGroup');
+                if (customGroup) {
+                    customGroup.style.display = this.value === 'personnalise' ? 'block' : 'none';
+                }
+            });
+        }
+
+        const inputMode = document.getElementById('calcV3InputMode');
+        if (inputMode) {
+            inputMode.addEventListener('change', function() {
+                const heuresMode = document.getElementById('calcV3HeuresMode');
+                const joursMode = document.getElementById('calcV3JoursMode');
+
+                if (this.value === 'heures') {
+                    heuresMode.classList.remove('calc-v3-hidden');
+                    joursMode.classList.add('calc-v3-hidden');
+                } else {
+                    heuresMode.classList.add('calc-v3-hidden');
+                    joursMode.classList.remove('calc-v3-hidden');
+                }
+            });
+        }
+
+        const showDetails = document.getElementById('calcV3ShowDetails');
+        if (showDetails) {
+            showDetails.addEventListener('change', function() {
+                const detailsSection = document.getElementById('calcV3DetailsSection');
+                if (detailsSection) {
+                    detailsSection.classList.toggle('calc-v3-hidden', !this.checked);
+                }
+            });
+        }
+
+        // Calcul
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const sector = document.getElementById('calcV3Sector').value;
+            const periodTypeVal = document.getElementById('calcV3PeriodType').value;
+            const employees = parseFloat(document.getElementById('calcV3Employees').value);
+            const weeklyHours = parseFloat(document.getElementById('calcV3WeeklyHours').value);
+            const inputModeVal = document.getElementById('calcV3InputMode').value;
+            const showDetailsVal = document.getElementById('calcV3ShowDetails').checked;
+
+            let weeks;
+            switch(periodTypeVal) {
+                case 'mensuel': weeks = 4.33; break;
+                case 'trimestriel': weeks = 13; break;
+                case 'annuel': weeks = 52; break;
+                case 'personnalise': weeks = parseFloat(document.getElementById('calcV3CustomDays').value) / 7; break;
+            }
+
+            const theoricalHours = employees * weeklyHours * weeks;
+
+            let absenceHours;
+            if (inputModeVal === 'heures') {
+                absenceHours = parseFloat(document.getElementById('calcV3AbsenceHours').value);
+            } else {
+                const absenceDays = parseFloat(document.getElementById('calcV3AbsenceDays').value);
+                absenceHours = absenceDays * (weeklyHours / 5);
+            }
+
+            let detailsHTML = '';
+            if (showDetailsVal) {
+                const maladie = parseFloat(document.getElementById('calcV3Maladie').value) || 0;
+                const accident = parseFloat(document.getElementById('calcV3Accident').value) || 0;
+                const congesSansSolde = parseFloat(document.getElementById('calcV3CongesSansSolde').value) || 0;
+                const injustifiees = parseFloat(document.getElementById('calcV3Injustifiees').value) || 0;
+                const autres = parseFloat(document.getElementById('calcV3Autres').value) || 0;
+
+                const total = maladie + accident + congesSansSolde + injustifiees + autres;
+
+                const details = [
+                    { label: 'Maladie ordinaire', value: maladie },
+                    { label: 'Accident du travail / Maladie pro.', value: accident },
+                    { label: 'Congés sans solde', value: congesSansSolde },
+                    { label: 'Absences injustifiées', value: injustifiees },
+                    { label: 'Autres', value: autres }
+                ];
+
+                details.forEach(item => {
+                    if (item.value > 0) {
+                        const percentage = total > 0 ? ((item.value / total) * 100).toFixed(1) : 0;
+                        const unit = inputModeVal === 'heures' ? 'h' : 'j';
+                        detailsHTML += `
+                            <div class="calc-v3-result-item">
+                                <span class="calc-v3-result-label">${item.label}</span>
+                                <span class="calc-v3-result-value">${item.value} ${unit} (${percentage}%)</span>
+                            </div>
+                        `;
+                    }
+                });
+            }
+
+            const rate = theoricalHours > 0 ? (absenceHours / theoricalHours) * 100 : 0;
+
+            document.getElementById('calcV3MainRate').textContent = rate.toFixed(2) + '%';
+            document.getElementById('calcV3ThericalHours').textContent = theoricalHours.toFixed(0) + ' h';
+            document.getElementById('calcV3TotalAbsence').textContent = absenceHours.toFixed(1) + ' h';
+            document.getElementById('calcV3DisplayEmployees').textContent = employees;
+
+            let periodLabel;
+            switch(periodTypeVal) {
+                case 'mensuel': periodLabel = 'Mensuel'; break;
+                case 'trimestriel': periodLabel = 'Trimestriel'; break;
+                case 'annuel': periodLabel = 'Annuel'; break;
+                case 'personnalise': periodLabel = document.getElementById('calcV3CustomDays').value + ' jours'; break;
+            }
+            document.getElementById('calcV3DisplayPeriod').textContent = periodLabel;
+
+            // Comparaison sectorielle
+            const sectorComparison = document.getElementById('calcV3SectorComparison');
+            if (sector && sectorAverages[sector]) {
+                sectorComparison.classList.remove('calc-v3-hidden');
+
+                const sectorData = sectorAverages[sector];
+                const sectorAvg = sectorData.avg;
+                const difference = rate - sectorAvg;
+
+                document.getElementById('calcV3YourRate').textContent = rate.toFixed(2) + '%';
+                document.getElementById('calcV3SectorAvg').textContent = sectorAvg.toFixed(1) + '%';
+
+                const diffSign = difference >= 0 ? '+' : '';
+                document.getElementById('calcV3Difference').textContent = diffSign + difference.toFixed(2) + '%';
+
+                const maxRate = Math.max(rate, sectorAvg) * 1.2;
+                const fillPercentage = (rate / maxRate) * 100;
+                const fill = document.getElementById('calcV3ComparisonFill');
+                fill.style.width = fillPercentage + '%';
+                fill.textContent = rate.toFixed(1) + '%';
+
+                if (rate > sectorAvg) {
+                    fill.classList.add('above-average');
+                } else {
+                    fill.classList.remove('above-average');
+                }
+
+                let comparisonText = '';
+                if (rate < sectorAvg - 1) {
+                    comparisonText = `🎉 Excellent ! Votre taux est ${Math.abs(difference).toFixed(1)}% inférieur à la moyenne du secteur "${sectorData.name}".`;
+                } else if (rate <= sectorAvg + 1) {
+                    comparisonText = `✅ Votre taux est dans la moyenne du secteur "${sectorData.name}".`;
+                } else {
+                    comparisonText = `⚠️ Attention : Votre taux est ${difference.toFixed(1)}% supérieur à la moyenne du secteur "${sectorData.name}".`;
+                }
+                document.getElementById('calcV3ComparisonText').textContent = comparisonText;
+            } else {
+                sectorComparison.classList.add('calc-v3-hidden');
+            }
+
+            // Détails
+            const detailsResults = document.getElementById('calcV3DetailsResults');
+            if (showDetailsVal && detailsHTML) {
+                detailsResults.classList.remove('calc-v3-hidden');
+                document.getElementById('calcV3DetailsContent').innerHTML = detailsHTML;
+            } else {
+                detailsResults.classList.add('calc-v3-hidden');
+            }
+
+            // Interprétation
+            const interpretation = document.getElementById('calcV3Interpretation');
+            let interpretationText = '';
+            let interpretationClass = '';
+
+            if (rate < 3) {
+                interpretationClass = 'good';
+                interpretationText = '✅ <strong>Taux excellent</strong> - Votre taux d\'absentéisme est très bas, ce qui indique une excellente santé organisationnelle.';
+            } else if (rate < 5) {
+                interpretationClass = 'good';
+                interpretationText = '✅ <strong>Taux bon</strong> - Votre taux d\'absentéisme est dans la moyenne française (environ 4-5%).';
+            } else if (rate < 8) {
+                interpretationClass = 'warning';
+                interpretationText = '⚠️ <strong>Taux à surveiller</strong> - Votre taux d\'absentéisme est légèrement élevé. Il peut être utile d\'identifier les causes principales.';
+            } else {
+                interpretationClass = 'alert';
+                interpretationText = '🔴 <strong>Taux élevé</strong> - Votre taux d\'absentéisme est préoccupant. Il est recommandé de mettre en place des actions correctives et d\'analyser les causes (conditions de travail, climat social, organisation, etc.).';
+            }
+
+            interpretation.className = 'calc-v3-interpretation ' + interpretationClass;
+            interpretation.innerHTML = interpretationText;
+
+            // Affichage résultats avec animation
+            const results = document.getElementById('calcV3Results');
+            results.classList.add('show');
+
+            // Scroll sur mobile
+            if (window.innerWidth < 1024) {
+                results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCalculateur);
+    } else {
+        initCalculateur();
+    }
+
+    if (window.elementorFrontend) {
+        window.elementorFrontend.hooks.addAction('frontend/element_ready/widget', initCalculateur);
+    }
+})();
+</script>

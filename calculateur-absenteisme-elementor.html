@@ -1,0 +1,855 @@
+<!--
+  Calculateur de Taux d'Absentéisme pour Elementor Pro
+  Version: 2.0 - Tout-en-un avec comparaison sectorielle
+  Compatible: WordPress/Elementor - Copier-coller dans Widget HTML
+-->
+
+<style>
+/* Calculateur de Taux d'Absentéisme - Styles complets */
+.calc-abs-wrapper * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.calc-abs-wrapper {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 30px 20px;
+    border-radius: 20px;
+    margin: 20px 0;
+}
+
+.calc-abs-container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 1400px;
+    width: 100%;
+    padding: 40px;
+    margin: 0 auto;
+}
+
+.calc-abs-main-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+
+@media (min-width: 1024px) {
+    .calc-abs-main-layout {
+        grid-template-columns: 1.2fr 1fr;
+        align-items: start;
+    }
+}
+
+.calc-abs-wrapper h1 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 28px;
+    text-align: center;
+}
+
+.calc-abs-subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 25px;
+    font-size: 14px;
+}
+
+.calc-abs-header {
+    margin-bottom: 25px;
+}
+
+@media (min-width: 1024px) {
+    .calc-abs-header {
+        grid-column: 1 / -1;
+    }
+}
+
+.calc-abs-info-box {
+    background: #e3f2fd;
+    border-left: 4px solid #2196F3;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.calc-abs-info-box h3 {
+    color: #1976D2;
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+.calc-abs-info-box p {
+    color: #555;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.calc-abs-section {
+    margin-bottom: 20px;
+}
+
+.calc-abs-left-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.calc-abs-right-column {
+    display: flex;
+    flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+    .calc-abs-right-column {
+        position: sticky;
+        top: 20px;
+        align-self: start;
+    }
+}
+
+.calc-abs-section-title {
+    background: #f5f5f5;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+}
+
+.calc-abs-form-group {
+    margin-bottom: 15px;
+}
+
+.calc-abs-wrapper label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.calc-abs-wrapper input[type="number"],
+.calc-abs-wrapper select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: border-color 0.3s;
+    background: white;
+}
+
+.calc-abs-wrapper input[type="number"]:focus,
+.calc-abs-wrapper select:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.calc-abs-input-hint {
+    font-size: 12px;
+    color: #888;
+    margin-top: 5px;
+}
+
+.calc-abs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.calc-abs-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white !important;
+    border: none;
+    padding: 15px 30px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 10px;
+}
+
+.calc-abs-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+}
+
+.calc-abs-btn:active {
+    transform: translateY(0);
+}
+
+.calc-abs-results {
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 12px;
+    display: none;
+}
+
+.calc-abs-results.show {
+    display: block;
+    animation: calcAbsSlideIn 0.4s ease-out;
+}
+
+@media (min-width: 1024px) {
+    .calc-abs-results {
+        margin-top: 0;
+    }
+}
+
+@keyframes calcAbsSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.calc-abs-result-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    margin-bottom: 8px;
+    background: white;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+    align-items: center;
+    gap: 10px;
+}
+
+.calc-abs-result-label {
+    color: #555;
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.calc-abs-result-value {
+    color: #333;
+    font-weight: 700;
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.calc-abs-main-result {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px 20px;
+    border-radius: 12px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.calc-abs-main-result .label {
+    font-size: 13px;
+    opacity: 0.9;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.calc-abs-main-result .value {
+    font-size: 48px;
+    font-weight: 700;
+}
+
+.calc-abs-interpretation {
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.calc-abs-interpretation.good {
+    background: #e8f5e9;
+    border-left: 4px solid #4caf50;
+    color: #2e7d32;
+}
+
+.calc-abs-interpretation.warning {
+    background: #fff3e0;
+    border-left: 4px solid #ff9800;
+    color: #e65100;
+}
+
+.calc-abs-interpretation.alert {
+    background: #ffebee;
+    border-left: 4px solid #f44336;
+    color: #c62828;
+}
+
+.calc-abs-sector-comparison {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f3e5f5;
+    border-left: 4px solid #9c27b0;
+    border-radius: 8px;
+}
+
+.calc-abs-sector-comparison h4 {
+    color: #6a1b9a;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.calc-abs-comparison-bar {
+    background: #e0e0e0;
+    height: 30px;
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.calc-abs-comparison-fill {
+    background: linear-gradient(90deg, #4caf50, #8bc34a);
+    height: 100%;
+    border-radius: 15px;
+    transition: width 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    color: white;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.calc-abs-comparison-fill.above-average {
+    background: linear-gradient(90deg, #ff9800, #ff5722);
+}
+
+.calc-abs-sector-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.calc-abs-stat {
+    text-align: center;
+}
+
+.calc-abs-stat-label {
+    color: #666;
+    display: block;
+    margin-bottom: 3px;
+}
+
+.calc-abs-stat-value {
+    color: #333;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.calc-abs-absence-types {
+    margin-top: 20px;
+}
+
+.calc-abs-absence-type-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.calc-abs-hidden {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .calc-abs-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .calc-abs-container {
+        padding: 25px 20px;
+    }
+
+    .calc-abs-wrapper h1 {
+        font-size: 24px;
+    }
+
+    .calc-abs-main-result .value {
+        font-size: 38px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .calc-abs-wrapper {
+        padding: 15px;
+    }
+
+    .calc-abs-container {
+        padding: 20px 15px;
+    }
+
+    .calc-abs-wrapper h1 {
+        font-size: 22px;
+    }
+
+    .calc-abs-main-result .value {
+        font-size: 32px !important;
+    }
+}
+</style>
+
+<div class="calc-abs-wrapper">
+    <div class="calc-abs-container">
+        <div class="calc-abs-header">
+            <h1>📊 Calculateur de Taux d'Absentéisme</h1>
+            <p class="calc-abs-subtitle">Conforme aux normes françaises du droit du travail</p>
+        </div>
+
+        <div class="calc-abs-main-layout">
+            <div class="calc-abs-left-column">
+                <form id="calcAbsForm">
+                    <div class="calc-abs-section">
+                        <div class="calc-abs-section-title">1. Secteur d'activité</div>
+                        <div class="calc-abs-form-group">
+                            <label for="calcAbsSector">Votre secteur d'activité</label>
+                            <select id="calcAbsSector">
+                                <option value="">-- Sélectionnez un secteur --</option>
+                                <option value="construction">BTP / Construction</option>
+                                <option value="industrie">Industrie / Production</option>
+                                <option value="commerce">Commerce / Distribution</option>
+                                <option value="services">Services aux entreprises</option>
+                                <option value="sante">Santé / Social</option>
+                                <option value="transport">Transport / Logistique</option>
+                                <option value="hotellerie">Hôtellerie / Restauration</option>
+                                <option value="public">Fonction publique</option>
+                                <option value="finance">Finance / Assurance</option>
+                                <option value="agriculture">Agriculture</option>
+                                <option value="education">Éducation / Formation</option>
+                                <option value="autre">Autre secteur</option>
+                            </select>
+                            <div class="calc-abs-input-hint">Pour comparer avec la moyenne nationale du secteur</div>
+                        </div>
+                    </div>
+
+                    <div class="calc-abs-section">
+                        <div class="calc-abs-section-title">2. Période d'analyse</div>
+                        <div class="calc-abs-grid">
+                            <div class="calc-abs-form-group">
+                                <label for="calcAbsPeriodType">Type de période</label>
+                                <select id="calcAbsPeriodType">
+                                    <option value="mensuel">Mensuel</option>
+                                    <option value="trimestriel">Trimestriel</option>
+                                    <option value="annuel">Annuel</option>
+                                    <option value="personnalise">Personnalisé</option>
+                                </select>
+                            </div>
+                            <div class="calc-abs-form-group" id="calcAbsCustomPeriodGroup" style="display: none;">
+                                <label for="calcAbsCustomDays">Nombre de jours de la période</label>
+                                <input type="number" id="calcAbsCustomDays" min="1" value="30">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="calc-abs-section">
+                        <div class="calc-abs-section-title">3. Effectif et temps de travail</div>
+                        <div class="calc-abs-grid">
+                            <div class="calc-abs-form-group">
+                                <label for="calcAbsEmployees">Nombre de salariés</label>
+                                <input type="number" id="calcAbsEmployees" min="1" value="10" required>
+                                <div class="calc-abs-input-hint">Effectif moyen sur la période</div>
+                            </div>
+                            <div class="calc-abs-form-group">
+                                <label for="calcAbsWeeklyHours">Heures hebdomadaires (par salarié)</label>
+                                <input type="number" id="calcAbsWeeklyHours" min="1" max="48" value="35" step="0.5" required>
+                                <div class="calc-abs-input-hint">Durée légale : 35h en France</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="calc-abs-section">
+                        <div class="calc-abs-section-title">4. Absences (en heures ou en jours)</div>
+                        <div class="calc-abs-form-group">
+                            <label for="calcAbsInputMode">Mode de saisie</label>
+                            <select id="calcAbsInputMode">
+                                <option value="heures">En heures</option>
+                                <option value="jours">En jours</option>
+                            </select>
+                        </div>
+
+                        <div id="calcAbsHeuresMode">
+                            <div class="calc-abs-form-group">
+                                <label for="calcAbsAbsenceHours">Total des heures d'absence</label>
+                                <input type="number" id="calcAbsAbsenceHours" min="0" value="0" step="0.5">
+                                <div class="calc-abs-input-hint">Somme de toutes les absences sur la période</div>
+                            </div>
+                        </div>
+
+                        <div id="calcAbsJoursMode" class="calc-abs-hidden">
+                            <div class="calc-abs-form-group">
+                                <label for="calcAbsAbsenceDays">Total des jours d'absence</label>
+                                <input type="number" id="calcAbsAbsenceDays" min="0" value="0" step="0.5">
+                                <div class="calc-abs-input-hint">Nombre de jours ouvrés d'absence</div>
+                            </div>
+                        </div>
+
+                        <div class="calc-abs-absence-types">
+                            <label>
+                                <input type="checkbox" id="calcAbsShowDetails">
+                                Afficher le détail par type d'absence
+                            </label>
+
+                            <div id="calcAbsDetailsSection" class="calc-abs-hidden" style="margin-top: 15px;">
+                                <div class="calc-abs-absence-type-row">
+                                    <label>Maladie ordinaire</label>
+                                    <input type="number" id="calcAbsMaladie" min="0" value="0" step="0.5">
+                                </div>
+                                <div class="calc-abs-absence-type-row">
+                                    <label>Accident du travail / Maladie professionnelle</label>
+                                    <input type="number" id="calcAbsAccident" min="0" value="0" step="0.5">
+                                </div>
+                                <div class="calc-abs-absence-type-row">
+                                    <label>Congés sans solde</label>
+                                    <input type="number" id="calcAbsCongesSansSolde" min="0" value="0" step="0.5">
+                                </div>
+                                <div class="calc-abs-absence-type-row">
+                                    <label>Absences injustifiées</label>
+                                    <input type="number" id="calcAbsInjustifiees" min="0" value="0" step="0.5">
+                                </div>
+                                <div class="calc-abs-absence-type-row">
+                                    <label>Autres absences</label>
+                                    <input type="number" id="calcAbsAutres" min="0" value="0" step="0.5">
+                                </div>
+                                <div class="calc-abs-input-hint" style="margin-top: 10px;">
+                                    Note: Les congés payés légaux ne sont généralement pas comptabilisés dans l'absentéisme
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="calc-abs-btn">Calculer le taux d'absentéisme</button>
+                </form>
+            </div>
+
+            <div class="calc-abs-right-column">
+                <div class="calc-abs-info-box">
+                    <h3>📌 Formule de calcul</h3>
+                    <p>
+                        <strong>Taux d'absentéisme = (Heures d'absence / Heures théoriques) × 100</strong><br>
+                        Mesure l'absentéisme dans votre entreprise selon les standards français (maladie, accidents du travail, congés sans solde, etc.).
+                    </p>
+                </div>
+
+                <div id="calcAbsResults" class="calc-abs-results">
+                    <div class="calc-abs-main-result">
+                        <div class="label">Taux d'absentéisme</div>
+                        <div class="value" id="calcAbsMainRate">0%</div>
+                    </div>
+
+                    <div id="calcAbsSectorComparison" class="calc-abs-sector-comparison calc-abs-hidden">
+                        <h4>📊 Comparaison sectorielle</h4>
+                        <div class="calc-abs-comparison-bar">
+                            <div class="calc-abs-comparison-fill" id="calcAbsComparisonFill">0%</div>
+                        </div>
+                        <div class="calc-abs-sector-stats">
+                            <div class="calc-abs-stat">
+                                <span class="calc-abs-stat-label">Votre taux</span>
+                                <span class="calc-abs-stat-value" id="calcAbsYourRate">0%</span>
+                            </div>
+                            <div class="calc-abs-stat">
+                                <span class="calc-abs-stat-label">Moyenne secteur</span>
+                                <span class="calc-abs-stat-value" id="calcAbsSectorAvg">0%</span>
+                            </div>
+                            <div class="calc-abs-stat">
+                                <span class="calc-abs-stat-label">Écart</span>
+                                <span class="calc-abs-stat-value" id="calcAbsDifference">0%</span>
+                            </div>
+                        </div>
+                        <p id="calcAbsComparisonText" style="margin-top: 10px; font-size: 13px; color: #555;"></p>
+                    </div>
+
+                    <div class="calc-abs-result-item">
+                        <span class="calc-abs-result-label">Heures théoriques travaillées</span>
+                        <span class="calc-abs-result-value" id="calcAbsThericalHours">0 h</span>
+                    </div>
+
+                    <div class="calc-abs-result-item">
+                        <span class="calc-abs-result-label">Heures d'absence totales</span>
+                        <span class="calc-abs-result-value" id="calcAbsTotalAbsence">0 h</span>
+                    </div>
+
+                    <div class="calc-abs-result-item">
+                        <span class="calc-abs-result-label">Nombre de salariés</span>
+                        <span class="calc-abs-result-value" id="calcAbsDisplayEmployees">0</span>
+                    </div>
+
+                    <div class="calc-abs-result-item">
+                        <span class="calc-abs-result-label">Période analysée</span>
+                        <span class="calc-abs-result-value" id="calcAbsDisplayPeriod">-</span>
+                    </div>
+
+                    <div id="calcAbsDetailsResults" class="calc-abs-hidden" style="margin-top: 20px;">
+                        <h3 style="margin-bottom: 15px; color: #333;">Détail par type d'absence</h3>
+                        <div id="calcAbsDetailsContent"></div>
+                    </div>
+
+                    <div id="calcAbsInterpretation" class="calc-abs-interpretation"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    'use strict';
+
+    // Moyennes nationales par secteur (France, 2024)
+    const sectorAverages = {
+        'construction': { avg: 7.5, name: 'BTP / Construction' },
+        'industrie': { avg: 5.5, name: 'Industrie / Production' },
+        'commerce': { avg: 4.5, name: 'Commerce / Distribution' },
+        'services': { avg: 3.5, name: 'Services aux entreprises' },
+        'sante': { avg: 6.5, name: 'Santé / Social' },
+        'transport': { avg: 8.5, name: 'Transport / Logistique' },
+        'hotellerie': { avg: 6.8, name: 'Hôtellerie / Restauration' },
+        'public': { avg: 7.8, name: 'Fonction publique' },
+        'finance': { avg: 3.2, name: 'Finance / Assurance' },
+        'agriculture': { avg: 5.3, name: 'Agriculture' },
+        'education': { avg: 6.2, name: 'Éducation / Formation' },
+        'autre': { avg: 5.0, name: 'Moyenne nationale' }
+    };
+
+    function initCalculateur() {
+        const form = document.getElementById('calcAbsForm');
+        if (!form) return;
+
+        // Gestion de l'affichage des modes
+        const periodType = document.getElementById('calcAbsPeriodType');
+        if (periodType) {
+            periodType.addEventListener('change', function() {
+                const customGroup = document.getElementById('calcAbsCustomPeriodGroup');
+                if (customGroup) {
+                    customGroup.style.display = this.value === 'personnalise' ? 'block' : 'none';
+                }
+            });
+        }
+
+        const inputMode = document.getElementById('calcAbsInputMode');
+        if (inputMode) {
+            inputMode.addEventListener('change', function() {
+                const heuresMode = document.getElementById('calcAbsHeuresMode');
+                const joursMode = document.getElementById('calcAbsJoursMode');
+
+                if (this.value === 'heures') {
+                    heuresMode.classList.remove('calc-abs-hidden');
+                    joursMode.classList.add('calc-abs-hidden');
+                } else {
+                    heuresMode.classList.add('calc-abs-hidden');
+                    joursMode.classList.remove('calc-abs-hidden');
+                }
+            });
+        }
+
+        const showDetails = document.getElementById('calcAbsShowDetails');
+        if (showDetails) {
+            showDetails.addEventListener('change', function() {
+                const detailsSection = document.getElementById('calcAbsDetailsSection');
+                if (detailsSection) {
+                    detailsSection.classList.toggle('calc-abs-hidden', !this.checked);
+                }
+            });
+        }
+
+        // Fonction de calcul
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Récupération des valeurs
+            const sector = document.getElementById('calcAbsSector').value;
+            const periodTypeVal = document.getElementById('calcAbsPeriodType').value;
+            const employees = parseFloat(document.getElementById('calcAbsEmployees').value);
+            const weeklyHours = parseFloat(document.getElementById('calcAbsWeeklyHours').value);
+            const inputModeVal = document.getElementById('calcAbsInputMode').value;
+            const showDetailsVal = document.getElementById('calcAbsShowDetails').checked;
+
+            // Calcul du nombre de semaines
+            let weeks;
+            switch(periodTypeVal) {
+                case 'mensuel':
+                    weeks = 4.33;
+                    break;
+                case 'trimestriel':
+                    weeks = 13;
+                    break;
+                case 'annuel':
+                    weeks = 52;
+                    break;
+                case 'personnalise':
+                    weeks = parseFloat(document.getElementById('calcAbsCustomDays').value) / 7;
+                    break;
+            }
+
+            // Heures théoriques
+            const theoricalHours = employees * weeklyHours * weeks;
+
+            // Heures d'absence
+            let absenceHours;
+            if (inputModeVal === 'heures') {
+                absenceHours = parseFloat(document.getElementById('calcAbsAbsenceHours').value);
+            } else {
+                const absenceDays = parseFloat(document.getElementById('calcAbsAbsenceDays').value);
+                const hoursPerDay = weeklyHours / 5;
+                absenceHours = absenceDays * hoursPerDay;
+            }
+
+            // Détails par type
+            let detailsHTML = '';
+            if (showDetailsVal) {
+                const maladie = parseFloat(document.getElementById('calcAbsMaladie').value) || 0;
+                const accident = parseFloat(document.getElementById('calcAbsAccident').value) || 0;
+                const congesSansSolde = parseFloat(document.getElementById('calcAbsCongesSansSolde').value) || 0;
+                const injustifiees = parseFloat(document.getElementById('calcAbsInjustifiees').value) || 0;
+                const autres = parseFloat(document.getElementById('calcAbsAutres').value) || 0;
+
+                const total = maladie + accident + congesSansSolde + injustifiees + autres;
+
+                const details = [
+                    { label: 'Maladie ordinaire', value: maladie },
+                    { label: 'Accident du travail / Maladie pro.', value: accident },
+                    { label: 'Congés sans solde', value: congesSansSolde },
+                    { label: 'Absences injustifiées', value: injustifiees },
+                    { label: 'Autres', value: autres }
+                ];
+
+                details.forEach(item => {
+                    if (item.value > 0) {
+                        const percentage = total > 0 ? ((item.value / total) * 100).toFixed(1) : 0;
+                        const unit = inputModeVal === 'heures' ? 'h' : 'j';
+                        detailsHTML += `
+                            <div class="calc-abs-result-item">
+                                <span class="calc-abs-result-label">${item.label}</span>
+                                <span class="calc-abs-result-value">${item.value} ${unit} (${percentage}%)</span>
+                            </div>
+                        `;
+                    }
+                });
+            }
+
+            // Calcul du taux
+            const rate = theoricalHours > 0 ? (absenceHours / theoricalHours) * 100 : 0;
+
+            // Affichage des résultats
+            document.getElementById('calcAbsMainRate').textContent = rate.toFixed(2) + '%';
+            document.getElementById('calcAbsThericalHours').textContent = theoricalHours.toFixed(0) + ' h';
+            document.getElementById('calcAbsTotalAbsence').textContent = absenceHours.toFixed(1) + ' h';
+            document.getElementById('calcAbsDisplayEmployees').textContent = employees;
+
+            let periodLabel;
+            switch(periodTypeVal) {
+                case 'mensuel': periodLabel = 'Mensuel'; break;
+                case 'trimestriel': periodLabel = 'Trimestriel'; break;
+                case 'annuel': periodLabel = 'Annuel'; break;
+                case 'personnalise': periodLabel = document.getElementById('calcAbsCustomDays').value + ' jours'; break;
+            }
+            document.getElementById('calcAbsDisplayPeriod').textContent = periodLabel;
+
+            // Comparaison sectorielle
+            const sectorComparison = document.getElementById('calcAbsSectorComparison');
+            if (sector && sectorAverages[sector]) {
+                sectorComparison.classList.remove('calc-abs-hidden');
+
+                const sectorData = sectorAverages[sector];
+                const sectorAvg = sectorData.avg;
+                const difference = rate - sectorAvg;
+
+                document.getElementById('calcAbsYourRate').textContent = rate.toFixed(2) + '%';
+                document.getElementById('calcAbsSectorAvg').textContent = sectorAvg.toFixed(1) + '%';
+
+                const diffSign = difference >= 0 ? '+' : '';
+                document.getElementById('calcAbsDifference').textContent = diffSign + difference.toFixed(2) + '%';
+
+                // Barre de comparaison
+                const maxRate = Math.max(rate, sectorAvg) * 1.2;
+                const fillPercentage = (rate / maxRate) * 100;
+                const fill = document.getElementById('calcAbsComparisonFill');
+                fill.style.width = fillPercentage + '%';
+                fill.textContent = rate.toFixed(1) + '%';
+
+                if (rate > sectorAvg) {
+                    fill.classList.add('above-average');
+                } else {
+                    fill.classList.remove('above-average');
+                }
+
+                // Texte de comparaison
+                let comparisonText = '';
+                if (rate < sectorAvg - 1) {
+                    comparisonText = `Excellent ! Votre taux est ${Math.abs(difference).toFixed(1)}% inférieur à la moyenne du secteur "${sectorData.name}".`;
+                } else if (rate <= sectorAvg + 1) {
+                    comparisonText = `Votre taux est dans la moyenne du secteur "${sectorData.name}".`;
+                } else {
+                    comparisonText = `Attention : Votre taux est ${difference.toFixed(1)}% supérieur à la moyenne du secteur "${sectorData.name}".`;
+                }
+                document.getElementById('calcAbsComparisonText').textContent = comparisonText;
+            } else {
+                sectorComparison.classList.add('calc-abs-hidden');
+            }
+
+            // Affichage des détails
+            const detailsResults = document.getElementById('calcAbsDetailsResults');
+            if (showDetailsVal && detailsHTML) {
+                detailsResults.classList.remove('calc-abs-hidden');
+                document.getElementById('calcAbsDetailsContent').innerHTML = detailsHTML;
+            } else {
+                detailsResults.classList.add('calc-abs-hidden');
+            }
+
+            // Interprétation
+            const interpretation = document.getElementById('calcAbsInterpretation');
+            let interpretationText = '';
+            let interpretationClass = '';
+
+            if (rate < 3) {
+                interpretationClass = 'good';
+                interpretationText = '✅ <strong>Taux excellent</strong> - Votre taux d\'absentéisme est très bas, ce qui indique une bonne santé organisationnelle.';
+            } else if (rate < 5) {
+                interpretationClass = 'good';
+                interpretationText = '✅ <strong>Taux bon</strong> - Votre taux d\'absentéisme est dans la moyenne française (environ 4-5%).';
+            } else if (rate < 8) {
+                interpretationClass = 'warning';
+                interpretationText = '⚠️ <strong>Taux à surveiller</strong> - Votre taux d\'absentéisme est légèrement élevé. Il peut être utile d\'identifier les causes principales.';
+            } else {
+                interpretationClass = 'alert';
+                interpretationText = '🔴 <strong>Taux élevé</strong> - Votre taux d\'absentéisme est préoccupant. Il est recommandé de mettre en place des actions correctives et d\'analyser les causes (conditions de travail, climat social, organisation, etc.).';
+            }
+
+            interpretation.className = 'calc-abs-interpretation ' + interpretationClass;
+            interpretation.innerHTML = interpretationText;
+
+            // Affichage des résultats
+            const results = document.getElementById('calcAbsResults');
+            results.classList.add('show');
+
+            // Scroll uniquement sur mobile
+            if (window.innerWidth < 1024) {
+                results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        });
+    }
+
+    // Initialisation
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCalculateur);
+    } else {
+        initCalculateur();
+    }
+
+    // Support pour Elementor Editor
+    if (window.elementorFrontend) {
+        window.elementorFrontend.hooks.addAction('frontend/element_ready/widget', initCalculateur);
+    }
+})();
+</script>

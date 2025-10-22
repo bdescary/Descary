@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur de Taux d'Absentéisme - France</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .result-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .result-box.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-value {
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .result-label {
+            text-align: center;
+            font-size: 1.2em;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .comparison {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .comparison-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .comparison-item:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .comparison-value {
+            font-weight: bold;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        .comparison-value.better {
+            background: #10b981;
+            color: white;
+        }
+
+        .comparison-value.worse {
+            background: #ef4444;
+            color: white;
+        }
+
+        .comparison-value.equal {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .sectors-reference {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .sectors-reference h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .sector-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .sector-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .sector-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .sector-rate {
+            background: #667eea;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .info-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .info-box h3 {
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            color: #78350f;
+            line-height: 1.6;
+        }
+
+        .sources {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .sources h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .sources ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .sources li {
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .sources li:before {
+            content: "📊 ";
+            margin-right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            .result-value {
+                font-size: 2.5em;
+            }
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+            color: #667eea;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            white-space: nowrap;
+            z-index: 1000;
+            font-size: 12px;
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Calculateur de Taux d'Absentéisme</h1>
+            <p>Outil de calcul et d'analyse pour les entreprises françaises</p>
+        </header>
+
+        <div class="main-content">
+            <div class="card">
+                <h2>Calculer votre taux d'absentéisme</h2>
+
+                <form id="absenceForm">
+                    <div class="form-group">
+                        <label for="sector">
+                            Secteur d'activité
+                            <span class="tooltip" data-tooltip="Sélectionnez votre secteur pour une comparaison pertinente">ℹ️</span>
+                        </label>
+                        <select id="sector" required>
+                            <option value="">-- Sélectionnez un secteur --</option>
+                            <option value="sante">Santé et action sociale</option>
+                            <option value="transport">Transport et logistique</option>
+                            <option value="industrie">Industrie</option>
+                            <option value="btp">BTP</option>
+                            <option value="commerce">Commerce</option>
+                            <option value="services">Services</option>
+                            <option value="horeca">Hôtellerie-restauration</option>
+                            <option value="finance">Finance et assurance</option>
+                            <option value="administration">Administration publique</option>
+                            <option value="autre">Autre secteur</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="totalEmployees">
+                            Nombre total d'employés
+                            <span class="tooltip" data-tooltip="Nombre moyen d'employés sur la période">ℹ️</span>
+                        </label>
+                        <input type="number" id="totalEmployees" min="1" required placeholder="Ex: 50">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="workDays">
+                            Jours ouvrés sur la période
+                            <span class="tooltip" data-tooltip="Nombre de jours travaillés théoriques (ex: 220 pour une année)">ℹ️</span>
+                        </label>
+                        <input type="number" id="workDays" min="1" value="220" required placeholder="Ex: 220">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="absenceDays">
+                            Nombre total de jours d'absence
+                            <span class="tooltip" data-tooltip="Total des jours d'absence pour tous les employés">ℹ️</span>
+                        </label>
+                        <input type="number" id="absenceDays" min="0" required placeholder="Ex: 550">
+                    </div>
+
+                    <button type="submit" class="btn">Calculer le taux d'absentéisme</button>
+                </form>
+
+                <div class="info-box">
+                    <h3>💡 Formule de calcul</h3>
+                    <p><strong>Taux d'absentéisme = (Nombre de jours d'absence / (Nombre d'employés × Jours ouvrés)) × 100</strong></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Résultats de l'analyse</h2>
+
+                <div id="resultBox" class="result-box">
+                    <div class="result-label">Votre taux d'absentéisme</div>
+                    <div class="result-value" id="resultValue">0%</div>
+
+                    <div class="comparison">
+                        <div class="comparison-item">
+                            <span class="comparison-label">Moyenne nationale</span>
+                            <span class="comparison-value" id="nationalComparison">5.5%</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comparison-label">Moyenne de votre secteur</span>
+                            <span class="comparison-value" id="sectorComparison">-</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comparison-label">Différence vs secteur</span>
+                            <span class="comparison-value" id="difference">-</span>
+                        </div>
+                    </div>
+
+                    <div class="info-box" id="interpretation" style="display:none;">
+                        <h3>📈 Interprétation</h3>
+                        <p id="interpretationText"></p>
+                    </div>
+                </div>
+
+                <div id="placeholderMessage" style="text-align: center; padding: 50px 20px; color: #999;">
+                    <p style="font-size: 3em;">📋</p>
+                    <p style="font-size: 1.2em;">Remplissez le formulaire pour voir vos résultats</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="sectors-reference">
+            <h2>📊 Taux d'absentéisme moyen par secteur en France (2024)</h2>
+            <div id="sectorsContainer"></div>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <h3>ℹ️ À propos de ces données</h3>
+                <p>Les taux présentés sont des moyennes nationales basées sur les dernières études disponibles. Le taux d'absentéisme peut varier selon la taille de l'entreprise, la région, et d'autres facteurs.</p>
+            </div>
+        </div>
+
+        <div class="sources">
+            <h3>📚 Sources des données</h3>
+            <ul>
+                <li><strong>Assurance Maladie</strong> - Statistiques sur les arrêts de travail en France</li>
+                <li><strong>Malakoff Humanis</strong> - Baromètre Absentéisme et Engagement 2024</li>
+                <li><strong>Ayming</strong> - Baromètre de l'Absentéisme et de l'Engagement</li>
+                <li><strong>DARES (Ministère du Travail)</strong> - Direction de l'Animation de la Recherche, des Études et des Statistiques</li>
+                <li><strong>AG2R La Mondiale</strong> - Études sur l'absentéisme en entreprise</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Données par secteur (source: études récentes absentéisme France 2023-2024)
+        const sectorData = {
+            sante: { name: "Santé et action sociale", rate: 7.8 },
+            transport: { name: "Transport et logistique", rate: 7.2 },
+            industrie: { name: "Industrie", rate: 6.5 },
+            btp: { name: "BTP", rate: 6.8 },
+            commerce: { name: "Commerce", rate: 5.5 },
+            services: { name: "Services", rate: 4.8 },
+            horeca: { name: "Hôtellerie-restauration", rate: 6.2 },
+            finance: { name: "Finance et assurance", rate: 3.9 },
+            administration: { name: "Administration publique", rate: 8.5 },
+            autre: { name: "Autre secteur", rate: 5.5 }
+        };
+
+        const nationalAverage = 5.5;
+
+        // Afficher les secteurs
+        function displaySectors() {
+            const container = document.getElementById('sectorsContainer');
+            const sectors = Object.values(sectorData).filter(s => s.name !== "Autre secteur");
+
+            // Trier par taux décroissant
+            sectors.sort((a, b) => b.rate - a.rate);
+
+            sectors.forEach(sector => {
+                const div = document.createElement('div');
+                div.className = 'sector-item';
+                div.innerHTML = `
+                    <span class="sector-name">${sector.name}</span>
+                    <span class="sector-rate">${sector.rate}%</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Calculer le taux d'absentéisme
+        function calculateAbsenteeism(totalEmployees, workDays, absenceDays) {
+            const totalWorkDays = totalEmployees * workDays;
+            const rate = (absenceDays / totalWorkDays) * 100;
+            return Math.round(rate * 100) / 100;
+        }
+
+        // Obtenir la classe de comparaison
+        function getComparisonClass(userRate, referenceRate) {
+            const difference = userRate - referenceRate;
+            if (Math.abs(difference) < 0.5) return 'equal';
+            return difference < 0 ? 'better' : 'worse';
+        }
+
+        // Générer l'interprétation
+        function generateInterpretation(userRate, sectorRate) {
+            const difference = userRate - sectorRate;
+            const absDifference = Math.abs(difference);
+
+            if (absDifference < 0.5) {
+                return `Votre taux d'absentéisme (${userRate}%) est conforme à la moyenne de votre secteur (${sectorRate}%). Continuez à maintenir vos bonnes pratiques de prévention.`;
+            } else if (difference < 0) {
+                return `Excellent ! Votre taux d'absentéisme (${userRate}%) est inférieur de ${absDifference.toFixed(1)} points à la moyenne de votre secteur (${sectorRate}%). Vos actions de prévention et de bien-être sont efficaces.`;
+            } else {
+                return `Votre taux d'absentéisme (${userRate}%) est supérieur de ${absDifference.toFixed(1)} points à la moyenne de votre secteur (${sectorRate}%). Il peut être pertinent d'analyser les causes et de mettre en place des actions de prévention.`;
+            }
+        }
+
+        // Gérer la soumission du formulaire
+        document.getElementById('absenceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const sector = document.getElementById('sector').value;
+            const totalEmployees = parseInt(document.getElementById('totalEmployees').value);
+            const workDays = parseInt(document.getElementById('workDays').value);
+            const absenceDays = parseInt(document.getElementById('absenceDays').value);
+
+            // Calculer le taux
+            const userRate = calculateAbsenteeism(totalEmployees, workDays, absenceDays);
+            const sectorRate = sectorData[sector].rate;
+
+            // Afficher les résultats
+            document.getElementById('resultValue').textContent = userRate + '%';
+
+            // Comparaisons
+            const nationalComp = document.getElementById('nationalComparison');
+            nationalComp.textContent = nationalAverage + '%';
+            nationalComp.className = 'comparison-value ' + getComparisonClass(userRate, nationalAverage);
+
+            const sectorComp = document.getElementById('sectorComparison');
+            sectorComp.textContent = sectorRate + '%';
+            sectorComp.className = 'comparison-value ' + getComparisonClass(userRate, sectorRate);
+
+            const diff = document.getElementById('difference');
+            const diffValue = userRate - sectorRate;
+            diff.textContent = (diffValue > 0 ? '+' : '') + diffValue.toFixed(1) + ' pts';
+            diff.className = 'comparison-value ' + getComparisonClass(userRate, sectorRate);
+
+            // Interprétation
+            document.getElementById('interpretationText').textContent = generateInterpretation(userRate, sectorRate);
+            document.getElementById('interpretation').style.display = 'block';
+
+            // Afficher la boîte de résultats
+            document.getElementById('placeholderMessage').style.display = 'none';
+            document.getElementById('resultBox').classList.add('show');
+
+            // Scroll vers les résultats sur mobile
+            if (window.innerWidth <= 768) {
+                document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        // Initialiser l'affichage des secteurs au chargement
+        displaySectors();
+    </script>
+</body>
+</html>

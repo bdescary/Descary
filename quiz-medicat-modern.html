@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Quiz d'Évaluation - Medicat Partner</title>
+
+    <!-- Google Fonts - Typographie moderne -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ========================================
+           VARIABLES CSS - DESIGN SYSTEM MEDICAT
+           ======================================== */
+        :root {
+            /* Couleurs Principales - Palette Medicat Partner */
+            --primary-900: #0f2942;
+            --primary-800: #1a365d;
+            --primary-700: #2c5282;
+            --primary-600: #2b6cb0;
+            --primary-500: #3182ce;
+            --primary-400: #4299e1;
+            --primary-300: #63b3ed;
+
+            /* Couleurs Secondaires - Santé & Bien-être */
+            --secondary-600: #38a169;
+            --secondary-500: #48bb78;
+            --secondary-400: #68d391;
+
+            /* Couleurs d'Accent - Énergie & Action */
+            --accent-600: #dd6b20;
+            --accent-500: #ed8936;
+            --accent-400: #f6ad55;
+
+            /* Couleurs de Statut */
+            --success: #38a169;
+            --warning: #ed8936;
+            --danger: #e53e3e;
+            --info: #4299e1;
+
+            /* Couleurs Neutres */
+            --gray-900: #1a202c;
+            --gray-800: #2d3748;
+            --gray-700: #4a5568;
+            --gray-600: #718096;
+            --gray-500: #a0aec0;
+            --gray-400: #cbd5e0;
+            --gray-300: #e2e8f0;
+            --gray-200: #edf2f7;
+            --gray-100: #f7fafc;
+            --white: #ffffff;
+
+            /* Typographie */
+            --font-heading: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+            /* Espacements */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 0.75rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            --spacing-3xl: 4rem;
+
+            /* Border Radius */
+            --radius-sm: 0.5rem;
+            --radius-md: 0.75rem;
+            --radius-lg: 1rem;
+            --radius-xl: 1.5rem;
+            --radius-2xl: 2rem;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+            /* Transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ========================================
+           RESET & BASE STYLES
+           ======================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 20%, #f093fb 100%);
+            min-height: 100vh;
+            color: var(--gray-800);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ========================================
+           CONTAINER PRINCIPAL
+           ======================================== */
+        .mq-wrapper {
+            max-width: 1000px;
+            margin: var(--spacing-2xl) auto;
+            padding: 0 var(--spacing-lg);
+        }
+
+        .mq-container {
+            background: var(--white);
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-2xl);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        /* ========================================
+           HEADER - Design Moderne
+           ======================================== */
+        .mq-header {
+            background: linear-gradient(135deg, var(--primary-900) 0%, var(--primary-700) 50%, var(--primary-600) 100%);
+            color: var(--white);
+            padding: var(--spacing-3xl) var(--spacing-2xl);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mq-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .mq-header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .mq-header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .mq-header h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: var(--spacing-md);
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .mq-header-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+            font-weight: 400;
+            opacity: 0.95;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .mq-header-tagline {
+            font-size: 1rem;
+            opacity: 0.85;
+            font-weight: 500;
+            color: var(--accent-400);
+        }
+
+        /* ========================================
+           CONTENT AREA
+           ======================================== */
+        .mq-content {
+            padding: var(--spacing-3xl) var(--spacing-2xl);
+        }
+
+        /* ========================================
+           WELCOME SECTION - Design Moderne
+           ======================================== */
+        .mq-welcome {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .mq-welcome h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(1.75rem, 4vw, 2.25rem);
+            font-weight: 700;
+            color: var(--primary-800);
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+            letter-spacing: -0.01em;
+        }
+
+        .mq-welcome-intro {
+            font-size: 1.125rem;
+            color: var(--gray-700);
+            text-align: center;
+            line-height: 1.7;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .mq-features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .mq-feature-card {
+            background: linear-gradient(135deg, var(--gray-100) 0%, var(--white) 100%);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--gray-200);
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mq-feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary-500), var(--secondary-500));
+            transform: scaleY(0);
+            transition: transform var(--transition-base);
+        }
+
+        .mq-feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-300);
+        }
+
+        .mq-feature-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .mq-feature-icon {
+            font-size: 2rem;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .mq-feature-text {
+            color: var(--gray-700);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* ========================================
+           FORM - Design Moderne
+           ======================================== */
+        .mq-form {
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 100%);
+            padding: var(--spacing-2xl);
+            border-radius: var(--radius-xl);
+            margin: var(--spacing-2xl) 0;
+            border: 1px solid var(--gray-200);
+        }
+
+        .mq-form h3 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--primary-800);
+            margin-bottom: var(--spacing-xl);
+            text-align: center;
+        }
+
+        .mq-form-grid {
+            display: grid;
+            gap: var(--spacing-lg);
+        }
+
+        .mq-form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mq-form-label {
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: var(--spacing-sm);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .mq-form-input,
+        .mq-form-select {
+            padding: var(--spacing-md) var(--spacing-lg);
+            border: 2px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-family: var(--font-body);
+            transition: all var(--transition-fast);
+            background: var(--white);
+        }
+
+        .mq-form-input:focus,
+        .mq-form-select:focus {
+            outline: none;
+            border-color: var(--primary-500);
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .mq-form-input::placeholder {
+            color: var(--gray-500);
+        }
+
+        /* ========================================
+           PROGRESS BAR - Design Moderne
+           ======================================== */
+        .mq-progress-wrapper {
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .mq-progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-sm);
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-600);
+        }
+
+        .mq-progress-bar {
+            height: 12px;
+            background: var(--gray-200);
+            border-radius: 100px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+        }
+
+        .mq-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-600), var(--primary-400), var(--secondary-500));
+            background-size: 200% 100%;
+            border-radius: 100px;
+            transition: width var(--transition-slow);
+            position: relative;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .mq-progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shine 2s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* ========================================
+           QUESTIONS - Design Moderne
+           ======================================== */
+        .mq-question {
+            display: none;
+            animation: fadeInUp 0.4s ease-out;
+        }
+
+        .mq-question.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .mq-question-header {
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .mq-question-number {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+            color: var(--white);
+            padding: var(--spacing-xs) var(--spacing-lg);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .mq-question-text {
+            font-family: var(--font-heading);
+            font-size: clamp(1.3rem, 3vw, 1.6rem);
+            font-weight: 700;
+            color: var(--gray-900);
+            line-height: 1.4;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .mq-question-category {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            background: linear-gradient(135deg, var(--secondary-400), var(--secondary-500));
+            color: var(--white);
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .mq-question-category::before {
+            content: '●';
+            font-size: 0.6rem;
+        }
+
+        /* ========================================
+           OPTIONS - Design Moderne avec Cards
+           ======================================== */
+        .mq-options {
+            display: grid;
+            gap: var(--spacing-md);
+            margin: var(--spacing-xl) 0;
+        }
+
+        .mq-option {
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .mq-option::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius-lg);
+            padding: 2px;
+            background: linear-gradient(135deg, var(--primary-500), var(--secondary-500));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity var(--transition-base);
+        }
+
+        .mq-option:hover {
+            transform: translateX(8px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-300);
+        }
+
+        .mq-option.selected {
+            background: linear-gradient(135deg, rgba(49, 130, 206, 0.08), rgba(72, 187, 120, 0.08));
+            border-color: var(--primary-500);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .mq-option.selected::before {
+            opacity: 1;
+        }
+
+        .mq-option-radio {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--gray-400);
+            border-radius: 50%;
+            position: relative;
+            transition: all var(--transition-fast);
+        }
+
+        .mq-option:hover .mq-option-radio {
+            border-color: var(--primary-500);
+        }
+
+        .mq-option.selected .mq-option-radio {
+            border-color: var(--primary-600);
+            background: var(--primary-600);
+        }
+
+        .mq-option.selected .mq-option-radio::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--white);
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .mq-option-label {
+            flex: 1;
+            font-size: 1.05rem;
+            color: var(--gray-800);
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .mq-option.selected .mq-option-label {
+            color: var(--gray-900);
+            font-weight: 600;
+        }
+
+        /* ========================================
+           BUTTONS - Design Moderne
+           ======================================== */
+        .mq-buttons {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-2xl);
+        }
+
+        .mq-btn {
+            padding: var(--spacing-md) var(--spacing-2xl);
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mq-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .mq-btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .mq-btn-primary {
+            background: linear-gradient(135deg, var(--primary-600), var(--primary-500));
+            color: var(--white);
+            flex: 1;
+            box-shadow: var(--shadow-md);
+        }
+
+        .mq-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .mq-btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .mq-btn-primary:disabled {
+            background: var(--gray-400);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .mq-btn-secondary {
+            background: var(--white);
+            color: var(--primary-600);
+            border: 2px solid var(--primary-600);
+        }
+
+        .mq-btn-secondary:hover {
+            background: var(--primary-50);
+            transform: translateY(-2px);
+        }
+
+        /* ========================================
+           RESULTS - Design Moderne
+           ======================================== */
+        .mq-results {
+            display: none;
+        }
+
+        .mq-results.active {
+            display: block;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .mq-results-header {
+            text-align: center;
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        .mq-results-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 4vw, 2.5rem);
+            font-weight: 800;
+            color: var(--primary-900);
+            margin-bottom: var(--spacing-md);
+        }
+
+        /* Score Circle - Design Premium */
+        .mq-score-circle {
+            width: 240px;
+            height: 240px;
+            margin: var(--spacing-2xl) auto;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-heading);
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--white);
+            box-shadow: var(--shadow-2xl);
+            position: relative;
+            animation: scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .mq-score-circle::before {
+            content: '';
+            position: absolute;
+            inset: -10px;
+            border-radius: 50%;
+            background: inherit;
+            filter: blur(20px);
+            opacity: 0.4;
+            z-index: -1;
+        }
+
+        .mq-score-value {
+            display: flex;
+            align-items: baseline;
+        }
+
+        .mq-score-max {
+            font-size: 2rem;
+            opacity: 0.8;
+        }
+
+        .mq-score-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: var(--spacing-sm);
+            opacity: 0.9;
+        }
+
+        /* Maturity Level Badge */
+        .mq-maturity-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md) var(--spacing-xl);
+            border-radius: 100px;
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: var(--spacing-xl) auto;
+            box-shadow: var(--shadow-lg);
+            animation: slideIn 0.6s ease-out 0.3s both;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .mq-level-expert {
+            background: linear-gradient(135deg, #4299e1, #3182ce);
+            color: var(--white);
+        }
+
+        .mq-level-avance {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: var(--white);
+        }
+
+        .mq-level-intermediaire {
+            background: linear-gradient(135deg, #ed8936, #dd6b20);
+            color: var(--white);
+        }
+
+        .mq-level-debutant {
+            background: linear-gradient(135deg, #fc8181, #f56565);
+            color: var(--white);
+        }
+
+        /* Category Scores */
+        .mq-category-scores {
+            margin: var(--spacing-3xl) 0;
+        }
+
+        .mq-category-scores h3 {
+            font-family: var(--font-heading);
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary-800);
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .mq-category-item {
+            margin-bottom: var(--spacing-xl);
+            animation: slideIn 0.6s ease-out both;
+        }
+
+        .mq-category-item:nth-child(1) { animation-delay: 0.1s; }
+        .mq-category-item:nth-child(2) { animation-delay: 0.2s; }
+        .mq-category-item:nth-child(3) { animation-delay: 0.3s; }
+        .mq-category-item:nth-child(4) { animation-delay: 0.4s; }
+        .mq-category-item:nth-child(5) { animation-delay: 0.5s; }
+        .mq-category-item:nth-child(6) { animation-delay: 0.6s; }
+
+        .mq-category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .mq-category-name {
+            font-weight: 700;
+            color: var(--gray-800);
+            font-size: 1.05rem;
+        }
+
+        .mq-category-score {
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--primary-600);
+        }
+
+        .mq-category-bar-wrapper {
+            height: 36px;
+            background: var(--gray-200);
+            border-radius: 100px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+            position: relative;
+        }
+
+        .mq-category-bar-fill {
+            height: 100%;
+            border-radius: 100px;
+            transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: var(--spacing-md);
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--white);
+        }
+
+        /* Recommendations */
+        .mq-recommendations {
+            margin: var(--spacing-3xl) 0;
+        }
+
+        .mq-recommendations h3 {
+            font-family: var(--font-heading);
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary-800);
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .mq-recommendation {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+            border-left: 5px solid var(--primary-500);
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-base);
+            animation: slideIn 0.6s ease-out both;
+        }
+
+        .mq-recommendation:hover {
+            transform: translateX(8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .mq-recommendation h4 {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-800);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .mq-recommendation-text {
+            color: var(--gray-700);
+            line-height: 1.7;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .mq-recommendation-service {
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .mq-priority-badge {
+            display: inline-block;
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .mq-priority-high {
+            background: rgba(229, 62, 62, 0.1);
+            color: var(--danger);
+        }
+
+        .mq-priority-medium {
+            background: rgba(237, 137, 54, 0.1);
+            color: var(--warning);
+        }
+
+        .mq-priority-low {
+            background: rgba(66, 153, 225, 0.1);
+            color: var(--info);
+        }
+
+        /* CTA Section */
+        .mq-cta {
+            background: linear-gradient(135deg, var(--primary-900), var(--primary-700));
+            color: var(--white);
+            padding: var(--spacing-3xl);
+            border-radius: var(--radius-2xl);
+            text-align: center;
+            margin-top: var(--spacing-3xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mq-cta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .mq-cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .mq-cta h3 {
+            font-family: var(--font-heading);
+            font-size: clamp(1.75rem, 4vw, 2.25rem);
+            font-weight: 800;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .mq-cta-text {
+            font-size: 1.125rem;
+            opacity: 0.95;
+            margin-bottom: var(--spacing-2xl);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .mq-cta-button {
+            display: inline-block;
+            background: var(--white);
+            color: var(--primary-700);
+            padding: var(--spacing-md) var(--spacing-2xl);
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .mq-cta-button:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .mq-cta-note {
+            margin-top: var(--spacing-xl);
+            font-size: 0.95rem;
+            opacity: 0.85;
+        }
+
+        /* ========================================
+           UTILITY CLASSES
+           ======================================== */
+        .mq-hidden {
+            display: none !important;
+        }
+
+        .mq-text-center {
+            text-align: center;
+        }
+
+        /* ========================================
+           RESPONSIVE
+           ======================================== */
+        @media (max-width: 768px) {
+            .mq-wrapper {
+                margin: var(--spacing-lg) auto;
+                padding: 0 var(--spacing-md);
+            }
+
+            .mq-header {
+                padding: var(--spacing-2xl) var(--spacing-lg);
+            }
+
+            .mq-content {
+                padding: var(--spacing-2xl) var(--spacing-lg);
+            }
+
+            .mq-form {
+                padding: var(--spacing-xl);
+            }
+
+            .mq-features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mq-buttons {
+                flex-direction: column;
+            }
+
+            .mq-btn {
+                width: 100%;
+            }
+
+            .mq-score-circle {
+                width: 180px;
+                height: 180px;
+                font-size: 3rem;
+            }
+
+            .mq-cta {
+                padding: var(--spacing-2xl) var(--spacing-lg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mq-wrapper">
+        <div class="mq-container">
+            <!-- HEADER -->
+            <header class="mq-header">
+                <div class="mq-header-content">
+                    <h1>Quiz d'Évaluation des Besoins</h1>
+                    <p class="mq-header-subtitle">Évaluez la maturité de votre entreprise en gestion de l'absentéisme</p>
+                    <p class="mq-header-tagline">Medicat Partner • Expert en prévention depuis 36 ans</p>
+                </div>
+            </header>
+
+            <!-- CONTENT -->
+            <main class="mq-content">
+                <!-- WELCOME SECTION -->
+                <section id="mqWelcome" class="mq-welcome">
+                    <h2>Votre diagnostic personnalisé</h2>
+                    <p class="mq-welcome-intro">
+                        Ce quiz vous permettra d'évaluer la situation actuelle de votre entreprise en matière
+                        de prévention de l'absentéisme et de qualité de vie au travail.
+                    </p>
+
+                    <div class="mq-features-grid">
+                        <div class="mq-feature-card">
+                            <div class="mq-feature-icon">📊</div>
+                            <div class="mq-feature-text">15 questions ciblées sur vos pratiques actuelles</div>
+                        </div>
+                        <div class="mq-feature-card">
+                            <div class="mq-feature-icon">🎯</div>
+                            <div class="mq-feature-text">Un score de maturité personnalisé</div>
+                        </div>
+                        <div class="mq-feature-card">
+                            <div class="mq-feature-icon">💡</div>
+                            <div class="mq-feature-text">Des recommandations adaptées à vos besoins</div>
+                        </div>
+                        <div class="mq-feature-card">
+                            <div class="mq-feature-icon">🚀</div>
+                            <div class="mq-feature-text">Une feuille de route pour améliorer votre performance</div>
+                        </div>
+                    </div>
+
+                    <!-- FORM -->
+                    <div class="mq-form">
+                        <h3>Informations sur votre entreprise</h3>
+                        <div class="mq-form-grid">
+                            <div class="mq-form-group">
+                                <label class="mq-form-label" for="mqCompanyName">Nom de l'entreprise *</label>
+                                <input type="text" id="mqCompanyName" class="mq-form-input" required
+                                       placeholder="Votre entreprise">
+                            </div>
+                            <div class="mq-form-group">
+                                <label class="mq-form-label" for="mqContactName">Votre nom *</label>
+                                <input type="text" id="mqContactName" class="mq-form-input" required
+                                       placeholder="Prénom Nom">
+                            </div>
+                            <div class="mq-form-group">
+                                <label class="mq-form-label" for="mqContactEmail">Email professionnel *</label>
+                                <input type="email" id="mqContactEmail" class="mq-form-input" required
+                                       placeholder="prenom.nom@entreprise.fr">
+                            </div>
+                            <div class="mq-form-group">
+                                <label class="mq-form-label" for="mqCompanySize">Taille de l'entreprise *</label>
+                                <select id="mqCompanySize" class="mq-form-select" required>
+                                    <option value="">Sélectionnez...</option>
+                                    <option value="1-49">1 à 49 collaborateurs</option>
+                                    <option value="50-249">50 à 249 collaborateurs</option>
+                                    <option value="250-999">250 à 999 collaborateurs</option>
+                                    <option value="1000+">1000+ collaborateurs</option>
+                                </select>
+                            </div>
+                            <div class="mq-form-group">
+                                <label class="mq-form-label" for="mqSector">Secteur d'activité *</label>
+                                <input type="text" id="mqSector" class="mq-form-input" required
+                                       placeholder="Ex: Industrie, Services, Santé...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="mq-btn mq-btn-primary" onclick="MedicatQuiz.start()"
+                            style="display: block; margin: var(--spacing-2xl) auto;">
+                        Commencer l'évaluation
+                    </button>
+                </section>
+
+                <!-- QUIZ SECTION -->
+                <section id="mqQuizSection" class="mq-hidden">
+                    <!-- Progress Bar -->
+                    <div class="mq-progress-wrapper">
+                        <div class="mq-progress-label">
+                            <span>Progression</span>
+                            <span id="mqProgressText">0%</span>
+                        </div>
+                        <div class="mq-progress-bar">
+                            <div class="mq-progress-fill" id="mqProgressFill"></div>
+                        </div>
+                    </div>
+
+                    <!-- Questions Container -->
+                    <div id="mqQuestionsContainer"></div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="mq-buttons">
+                        <button class="mq-btn mq-btn-secondary mq-hidden" id="mqPrevBtn"
+                                onclick="MedicatQuiz.prev()">
+                            ← Précédent
+                        </button>
+                        <button class="mq-btn mq-btn-primary" id="mqNextBtn"
+                                onclick="MedicatQuiz.next()">
+                            Suivant →
+                        </button>
+                        <button class="mq-btn mq-btn-primary mq-hidden" id="mqSubmitBtn"
+                                onclick="MedicatQuiz.submit()">
+                            Voir mes résultats →
+                        </button>
+                    </div>
+                </section>
+
+                <!-- RESULTS SECTION -->
+                <section id="mqResults" class="mq-results">
+                    <div class="mq-results-header">
+                        <h2 class="mq-results-title">Vos Résultats</h2>
+                        <div class="mq-score-circle" id="mqScoreCircle">
+                            <div class="mq-score-value">
+                                <span id="mqTotalScore">0</span>
+                                <span class="mq-score-max">/100</span>
+                            </div>
+                            <div class="mq-score-label">Score Global</div>
+                        </div>
+                        <div class="mq-text-center">
+                            <div class="mq-maturity-badge" id="mqMaturityBadge"></div>
+                        </div>
+                    </div>
+
+                    <div class="mq-category-scores">
+                        <h3>Analyse par domaine</h3>
+                        <div id="mqCategoryScoresContainer"></div>
+                    </div>
+
+                    <div class="mq-recommendations">
+                        <h3>Nos recommandations personnalisées</h3>
+                        <div id="mqRecommendationsContainer"></div>
+                    </div>
+
+                    <div class="mq-cta">
+                        <div class="mq-cta-content">
+                            <h3>Prêt à transformer votre entreprise ?</h3>
+                            <p class="mq-cta-text">
+                                Nos experts sont à votre disposition pour vous accompagner dans votre démarche
+                                de prévention de l'absentéisme
+                            </p>
+                            <a href="https://www.medicat-partner.fr/contact" class="mq-cta-button">
+                                Contactez-nous
+                            </a>
+                            <p class="mq-cta-note">
+                                📧 Un rapport détaillé vous sera envoyé par email
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Namespace pour éviter les conflits
+        var MedicatQuiz = (function() {
+            'use strict';
+
+            // Configuration du quiz
+            const quizData = {
+                categories: {
+                    absenteisme: "Mesure de l'absentéisme",
+                    qvct: "Qualité de Vie au Travail",
+                    management: "Management & Leadership",
+                    prevention: "Prévention des risques",
+                    engagement: "Engagement des collaborateurs"
+                },
+                questions: [
+                    {
+                        id: 1,
+                        category: "absenteisme",
+                        text: "Quel est le taux d'absentéisme actuel dans votre entreprise ?",
+                        options: [
+                            { text: "Moins de 3%", points: 25 },
+                            { text: "Entre 3% et 5%", points: 18 },
+                            { text: "Entre 5% et 7%", points: 10 },
+                            { text: "Plus de 7% ou je ne sais pas", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        category: "absenteisme",
+                        text: "Suivez-vous les indicateurs d'absentéisme de manière régulière et structurée ?",
+                        options: [
+                            { text: "Oui, avec des tableaux de bord mensuels détaillés", points: 25 },
+                            { text: "Oui, mais de manière trimestrielle", points: 18 },
+                            { text: "Occasionnellement, sans réelle structure", points: 8 },
+                            { text: "Non, nous n'avons pas de suivi formalisé", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 3,
+                        category: "absenteisme",
+                        text: "Analysez-vous les causes de l'absentéisme dans votre entreprise ?",
+                        options: [
+                            { text: "Oui, avec des analyses approfondies et des plans d'action", points: 25 },
+                            { text: "Oui, mais de manière superficielle", points: 15 },
+                            { text: "Rarement", points: 5 },
+                            { text: "Non", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 4,
+                        category: "qvct",
+                        text: "Avez-vous mis en place une politique de Qualité de Vie et des Conditions de Travail (QVCT) ?",
+                        options: [
+                            { text: "Oui, formalisée avec un plan d'action et un budget dédié", points: 25 },
+                            { text: "Oui, mais de manière informelle", points: 15 },
+                            { text: "En cours de réflexion", points: 8 },
+                            { text: "Non, pas encore", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 5,
+                        category: "qvct",
+                        text: "Comment évaluez-vous la satisfaction et le bien-être de vos collaborateurs ?",
+                        options: [
+                            { text: "Enquêtes régulières avec suivi des actions", points: 25 },
+                            { text: "Enquêtes annuelles sans suivi structuré", points: 15 },
+                            { text: "Informellement, lors d'entretiens", points: 8 },
+                            { text: "Nous ne l'évaluons pas", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 6,
+                        category: "qvct",
+                        text: "Proposez-vous des aménagements pour favoriser l'équilibre vie professionnelle/vie personnelle ?",
+                        options: [
+                            { text: "Oui, multiples options (télétravail, horaires flexibles, etc.)", points: 25 },
+                            { text: "Oui, quelques options", points: 15 },
+                            { text: "Très limité", points: 5 },
+                            { text: "Non", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 7,
+                        category: "management",
+                        text: "Vos managers sont-ils formés au leadership et à la gestion d'équipe ?",
+                        options: [
+                            { text: "Oui, formations régulières et accompagnement personnalisé", points: 25 },
+                            { text: "Oui, formation initiale lors de la prise de poste", points: 15 },
+                            { text: "Formation ponctuelle uniquement", points: 8 },
+                            { text: "Non, pas de formation spécifique", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 8,
+                        category: "management",
+                        text: "Les managers sont-ils sensibilisés à la détection des signaux faibles (RPS, démotivation...) ?",
+                        options: [
+                            { text: "Oui, avec des outils et protocoles clairs", points: 25 },
+                            { text: "Oui, mais sans outils formalisés", points: 15 },
+                            { text: "Sensibilisation minimale", points: 5 },
+                            { text: "Non", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 9,
+                        category: "management",
+                        text: "Existe-t-il des parcours de carrière diversifiés au-delà du management ?",
+                        options: [
+                            { text: "Oui, plusieurs parcours clairement définis (expert, projet, etc.)", points: 25 },
+                            { text: "Oui, mais peu formalisés", points: 15 },
+                            { text: "En cours de réflexion", points: 8 },
+                            { text: "Non, le management est la seule évolution", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 10,
+                        category: "prevention",
+                        text: "Avez-vous évalué les risques professionnels (Document Unique) récemment ?",
+                        options: [
+                            { text: "Oui, mise à jour annuelle avec plans d'action", points: 25 },
+                            { text: "Oui, mais pas de mise à jour régulière", points: 12 },
+                            { text: "Document obsolète", points: 5 },
+                            { text: "Non ou inexistant", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 11,
+                        category: "prevention",
+                        text: "Des actions de prévention des Risques Psycho-Sociaux (RPS) sont-elles en place ?",
+                        options: [
+                            { text: "Oui, programme structuré avec suivi", points: 25 },
+                            { text: "Quelques actions ponctuelles", points: 15 },
+                            { text: "Sensibilisation uniquement", points: 5 },
+                            { text: "Non", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 12,
+                        category: "prevention",
+                        text: "Accompagnez-vous les salariés lors de leur retour après un arrêt long ?",
+                        options: [
+                            { text: "Oui, protocole formalisé avec entretien et aménagement", points: 25 },
+                            { text: "Oui, entretien informel", points: 15 },
+                            { text: "Rarement", points: 5 },
+                            { text: "Non", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 13,
+                        category: "engagement",
+                        text: "Comment évaluez-vous l'engagement de vos collaborateurs ?",
+                        options: [
+                            { text: "Très engagés, fort sentiment d'appartenance", points: 25 },
+                            { text: "Plutôt engagés", points: 18 },
+                            { text: "Engagement moyen", points: 10 },
+                            { text: "Faible engagement", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 14,
+                        category: "engagement",
+                        text: "Quel est votre taux de turnover annuel ?",
+                        options: [
+                            { text: "Moins de 5%", points: 25 },
+                            { text: "Entre 5% et 10%", points: 18 },
+                            { text: "Entre 10% et 15%", points: 10 },
+                            { text: "Plus de 15%", points: 0 }
+                        ]
+                    },
+                    {
+                        id: 15,
+                        category: "engagement",
+                        text: "Les collaborateurs peuvent-ils exprimer leurs besoins et attentes librement ?",
+                        options: [
+                            { text: "Oui, culture de transparence et canaux multiples", points: 25 },
+                            { text: "Oui, mais de manière limitée", points: 15 },
+                            { text: "Communication descendante principalement", points: 5 },
+                            { text: "Non, peu d'opportunités d'expression", points: 0 }
+                        ]
+                    }
+                ]
+            };
+
+            let currentQuestion = 0;
+            let answers = [];
+            let userInfo = {};
+
+            // Démarrer le quiz
+            function start() {
+                const companyName = document.getElementById('mqCompanyName').value.trim();
+                const contactName = document.getElementById('mqContactName').value.trim();
+                const contactEmail = document.getElementById('mqContactEmail').value.trim();
+                const companySize = document.getElementById('mqCompanySize').value;
+                const sector = document.getElementById('mqSector').value.trim();
+
+                if (!companyName || !contactName || !contactEmail || !companySize || !sector) {
+                    alert('⚠️ Veuillez remplir tous les champs obligatoires');
+                    return;
+                }
+
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(contactEmail)) {
+                    alert('⚠️ Veuillez entrer une adresse email valide');
+                    return;
+                }
+
+                userInfo = { companyName, contactName, contactEmail, companySize, sector };
+
+                document.getElementById('mqWelcome').classList.add('mq-hidden');
+                document.getElementById('mqQuizSection').classList.remove('mq-hidden');
+
+                renderQuestion();
+                updateProgress();
+            }
+
+            // Afficher une question
+            function renderQuestion() {
+                const container = document.getElementById('mqQuestionsContainer');
+                const question = quizData.questions[currentQuestion];
+
+                container.innerHTML = `
+                    <div class="mq-question active">
+                        <div class="mq-question-header">
+                            <div class="mq-question-number">
+                                Question ${currentQuestion + 1} / ${quizData.questions.length}
+                            </div>
+                            <h3 class="mq-question-text">${question.text}</h3>
+                            <span class="mq-question-category">${quizData.categories[question.category]}</span>
+                        </div>
+                        <div class="mq-options">
+                            ${question.options.map((option, index) => `
+                                <div class="mq-option ${answers[currentQuestion] === index ? 'selected' : ''}"
+                                     onclick="MedicatQuiz.selectOption(${index})">
+                                    <div class="mq-option-radio"></div>
+                                    <div class="mq-option-label">${option.text}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+
+                // Mettre à jour les boutons
+                document.getElementById('mqPrevBtn').classList.toggle('mq-hidden', currentQuestion === 0);
+                document.getElementById('mqNextBtn').classList.toggle('mq-hidden', currentQuestion === quizData.questions.length - 1);
+                document.getElementById('mqSubmitBtn').classList.toggle('mq-hidden', currentQuestion !== quizData.questions.length - 1);
+
+                updateProgress();
+            }
+
+            // Sélectionner une option
+            function selectOption(optionIndex) {
+                answers[currentQuestion] = optionIndex;
+                renderQuestion();
+            }
+
+            // Question précédente
+            function prev() {
+                if (currentQuestion > 0) {
+                    currentQuestion--;
+                    renderQuestion();
+                }
+            }
+
+            // Question suivante
+            function next() {
+                if (answers[currentQuestion] === undefined) {
+                    alert('⚠️ Veuillez sélectionner une réponse avant de continuer');
+                    return;
+                }
+
+                if (currentQuestion < quizData.questions.length - 1) {
+                    currentQuestion++;
+                    renderQuestion();
+                }
+            }
+
+            // Mettre à jour la barre de progression
+            function updateProgress() {
+                const progress = ((currentQuestion + 1) / quizData.questions.length) * 100;
+                document.getElementById('mqProgressFill').style.width = progress + '%';
+                document.getElementById('mqProgressText').textContent = Math.round(progress) + '%';
+            }
+
+            // Soumettre le quiz
+            function submit() {
+                if (answers[currentQuestion] === undefined) {
+                    alert('⚠️ Veuillez répondre à la dernière question');
+                    return;
+                }
+
+                if (answers.length !== quizData.questions.length) {
+                    alert('⚠️ Veuillez répondre à toutes les questions');
+                    return;
+                }
+
+                calculateResults();
+            }
+
+            // Calculer les résultats
+            function calculateResults() {
+                const categoryScores = {};
+                const categoryMaxScores = {};
+
+                quizData.questions.forEach((question, index) => {
+                    const category = question.category;
+                    const answer = answers[index];
+                    const points = question.options[answer].points;
+
+                    if (!categoryScores[category]) {
+                        categoryScores[category] = 0;
+                        categoryMaxScores[category] = 0;
+                    }
+
+                    categoryScores[category] += points;
+                    categoryMaxScores[category] += 25;
+                });
+
+                const totalScore = Object.values(categoryScores).reduce((a, b) => a + b, 0);
+                const maxScore = Object.values(categoryMaxScores).reduce((a, b) => a + b, 0);
+                const scorePercentage = Math.round((totalScore / maxScore) * 100);
+
+                displayResults(scorePercentage, categoryScores, categoryMaxScores);
+            }
+
+            // Afficher les résultats
+            function displayResults(score, categoryScores, categoryMaxScores) {
+                document.getElementById('mqQuizSection').classList.add('mq-hidden');
+                document.getElementById('mqResults').classList.add('active');
+
+                // Scroll vers les résultats
+                setTimeout(() => {
+                    document.getElementById('mqResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+
+                // Afficher le score
+                document.getElementById('mqTotalScore').textContent = score;
+
+                // Déterminer le niveau
+                let level, levelClass, levelIcon, levelText;
+                if (score >= 80) {
+                    level = "Expert";
+                    levelClass = "mq-level-expert";
+                    levelIcon = "🌟";
+                    levelText = "Niveau Expert - Excellence en gestion de l'absentéisme !";
+                } else if (score >= 60) {
+                    level = "Avancé";
+                    levelClass = "mq-level-avance";
+                    levelIcon = "✅";
+                    levelText = "Niveau Avancé - Bonnes pratiques en place";
+                } else if (score >= 40) {
+                    level = "Intermédiaire";
+                    levelClass = "mq-level-intermediaire";
+                    levelIcon = "⚠️";
+                    levelText = "Niveau Intermédiaire - Démarche entamée";
+                } else {
+                    level = "Débutant";
+                    levelClass = "mq-level-debutant";
+                    levelIcon = "🚀";
+                    levelText = "Niveau Débutant - Fort potentiel d'amélioration";
+                }
+
+                // Appliquer la couleur au cercle
+                document.getElementById('mqScoreCircle').style.background = getScoreGradient(score);
+
+                // Badge de maturité
+                document.getElementById('mqMaturityBadge').className = `mq-maturity-badge ${levelClass}`;
+                document.getElementById('mqMaturityBadge').innerHTML = `${levelIcon} ${levelText}`;
+
+                // Scores par catégorie
+                displayCategoryScores(categoryScores, categoryMaxScores);
+
+                // Recommandations
+                generateRecommendations(score, categoryScores, categoryMaxScores);
+
+                console.log('Quiz Medicat - Résultats:', { userInfo, score, categoryScores, level });
+            }
+
+            // Gradient du score
+            function getScoreGradient(score) {
+                if (score >= 80) return 'linear-gradient(135deg, #4299e1, #3182ce)';
+                if (score >= 60) return 'linear-gradient(135deg, #48bb78, #38a169)';
+                if (score >= 40) return 'linear-gradient(135deg, #ed8936, #dd6b20)';
+                return 'linear-gradient(135deg, #fc8181, #f56565)';
+            }
+
+            // Afficher les scores par catégorie
+            function displayCategoryScores(categoryScores, categoryMaxScores) {
+                const container = document.getElementById('mqCategoryScoresContainer');
+                container.innerHTML = '';
+
+                for (const [categoryKey, categoryScore] of Object.entries(categoryScores)) {
+                    const maxScore = categoryMaxScores[categoryKey];
+                    const percentage = Math.round((categoryScore / maxScore) * 100);
+                    const categoryName = quizData.categories[categoryKey];
+
+                    container.innerHTML += `
+                        <div class="mq-category-item">
+                            <div class="mq-category-header">
+                                <span class="mq-category-name">${categoryName}</span>
+                                <span class="mq-category-score">${percentage}%</span>
+                            </div>
+                            <div class="mq-category-bar-wrapper">
+                                <div class="mq-category-bar-fill" style="width: ${percentage}%; background: ${getScoreGradient(percentage)};">
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            // Générer les recommandations
+            function generateRecommendations(totalScore, categoryScores, categoryMaxScores) {
+                const recommendations = [];
+
+                for (const [categoryKey, categoryScore] of Object.entries(categoryScores)) {
+                    const maxScore = categoryMaxScores[categoryKey];
+                    const percentage = (categoryScore / maxScore) * 100;
+                    const categoryName = quizData.categories[categoryKey];
+
+                    if (percentage < 40) {
+                        recommendations.push(getRecommendation(categoryKey, 'high', categoryName));
+                    } else if (percentage < 70) {
+                        recommendations.push(getRecommendation(categoryKey, 'medium', categoryName));
+                    }
+                }
+
+                if (totalScore < 50) {
+                    recommendations.unshift({
+                        title: "🎯 Diagnostic approfondi recommandé",
+                        description: "Nous vous recommandons un audit complet pour identifier les leviers prioritaires. Nos experts peuvent vous accompagner.",
+                        service: "Audit & Diagnostic",
+                        priority: "high"
+                    });
+                }
+
+                displayRecommendations(recommendations);
+            }
+
+            // Obtenir une recommandation
+            function getRecommendation(category, priority, categoryName) {
+                const recs = {
+                    absenteisme: {
+                        high: {
+                            title: "📊 Pilotage de l'absentéisme",
+                            description: `Structurez le suivi avec des tableaux de bord personnalisés et KPIs.`,
+                            service: "Solution de pilotage"
+                        },
+                        medium: {
+                            title: "📈 Optimisation du pilotage",
+                            description: `Analyses prédictives et plans d'action ciblés.`,
+                            service: "Analyse approfondie"
+                        }
+                    },
+                    qvct: {
+                        high: {
+                            title: "🌟 Politique QVCT",
+                            description: `Définition et déploiement d'une stratégie QVCT adaptée.`,
+                            service: "Accompagnement QVCT"
+                        },
+                        medium: {
+                            title: "💪 Renforcement QVCT",
+                            description: `Formalisation et mesure d'impact sur la performance.`,
+                            service: "Optimisation QVCT"
+                        }
+                    },
+                    management: {
+                        high: {
+                            title: "👥 Formation des managers",
+                            description: `Formations sur-mesure pour un management bienveillant.`,
+                            service: "Formation managers"
+                        },
+                        medium: {
+                            title: "🎓 Développement managérial",
+                            description: `Accompagnement continu et outils pratiques.`,
+                            service: "Coaching managérial"
+                        }
+                    },
+                    prevention: {
+                        high: {
+                            title: "🛡️ Politique de prévention",
+                            description: `Évaluation des risques et mise en place d'actions.`,
+                            service: "Programme de prévention"
+                        },
+                        medium: {
+                            title: "💚 Prévention RPS",
+                            description: `Focus sur le bien-être mental des collaborateurs.`,
+                            service: "Prévention RPS"
+                        }
+                    },
+                    engagement: {
+                        high: {
+                            title: "🚀 Engagement collaborateur",
+                            description: `Culture attractive et fidélisation des talents.`,
+                            service: "Programme d'engagement"
+                        },
+                        medium: {
+                            title: "🤝 Optimisation fidélisation",
+                            description: `Enquêtes et parcours personnalisés.`,
+                            service: "Stratégie de fidélisation"
+                        }
+                    }
+                };
+
+                const rec = recs[category][priority];
+                return {
+                    title: rec.title,
+                    description: rec.description,
+                    service: rec.service,
+                    priority: priority
+                };
+            }
+
+            // Afficher les recommandations
+            function displayRecommendations(recommendations) {
+                const container = document.getElementById('mqRecommendationsContainer');
+
+                if (recommendations.length === 0) {
+                    container.innerHTML = `
+                        <div class="mq-recommendation">
+                            <h4>🌟 Excellente performance !</h4>
+                            <p class="mq-recommendation-text">
+                                Votre entreprise démontre une maturité exemplaire. Continuez sur cette voie !
+                            </p>
+                            <span class="mq-priority-badge mq-priority-low">Maintien de l'excellence</span>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = recommendations.map((rec, index) => {
+                    const priorityClass = rec.priority === 'high' ? 'mq-priority-high' :
+                                        rec.priority === 'medium' ? 'mq-priority-medium' : 'mq-priority-low';
+                    const priorityText = rec.priority === 'high' ? '🔴 Priorité Haute' :
+                                       rec.priority === 'medium' ? '🟠 Priorité Moyenne' : '🟢 Priorité Basse';
+
+                    return `
+                        <div class="mq-recommendation" style="animation-delay: ${index * 0.1}s;">
+                            <h4>${rec.title}</h4>
+                            <p class="mq-recommendation-text">${rec.description}</p>
+                            <p class="mq-recommendation-service"><strong>Service recommandé:</strong> ${rec.service}</p>
+                            <span class="mq-priority-badge ${priorityClass}">${priorityText}</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // API publique
+            return {
+                start,
+                selectOption,
+                prev,
+                next,
+                submit
+            };
+        })();
+    </script>
+</body>
+</html>

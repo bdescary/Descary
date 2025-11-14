@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MPV2 - Calculateur d'Absentéisme</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0066cc;
+            --primary-dark: #004a99;
+            --primary-light: #3385d6;
+            --accent: #00a651;
+            --accent-light: #e8f5e9;
+            --warning: #ff8c00;
+            --warning-light: #fff3e0;
+            --danger: #dc3545;
+            --danger-light: #ffebee;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-tertiary: #94a3b8;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="none"/><circle cx="10" cy="10" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+            opacity: 0.3;
+        }
+
+        header .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-light);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-xl);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            margin-bottom: 32px;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .card-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            letter-spacing: 0.01em;
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.1);
+        }
+
+        input[type="number"]:hover,
+        select:hover {
+            border-color: var(--primary-light);
+        }
+
+        /* Button */
+        .btn-primary {
+            width: 100%;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--accent) 0%, #008f46 100%);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            letter-spacing: 0.02em;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* Result Card */
+        .result-container {
+            display: none;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-hero {
+            text-align: center;
+            padding: 48px 32px;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, white 100%);
+            border-radius: var(--radius-lg);
+            margin-bottom: 32px;
+            border: 2px solid var(--border-light);
+        }
+
+        .result-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .result-value {
+            font-size: 5rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-value.success {
+            background: linear-gradient(135deg, var(--accent) 0%, #00c96d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .result-value.warning {
+            background: linear-gradient(135deg, var(--warning) 0%, #ffab40 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .result-value.danger {
+            background: linear-gradient(135deg, var(--danger) 0%, #f44336 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .badge-success {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .badge-warning {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+
+        /* Comparison Grid */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .comparison-item {
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-light);
+        }
+
+        .comparison-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .comparison-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Info Box */
+        .info-box {
+            padding: 24px;
+            background: linear-gradient(135deg, #eff6ff 0%, #e0f2fe 100%);
+            border-radius: var(--radius);
+            border-left: 4px solid var(--primary);
+        }
+
+        .info-box h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-box li {
+            padding-left: 24px;
+            margin-bottom: 10px;
+            position: relative;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .info-box li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+
+        .stat-card {
+            background: var(--bg-primary);
+            padding: 32px 24px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 1.5rem;
+        }
+
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .stat-sublabel {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            margin-top: 4px;
+        }
+
+        /* Sector Table */
+        .sector-table-container {
+            grid-column: 1 / -1;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-primary);
+        }
+
+        thead {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+        }
+
+        th {
+            padding: 20px 24px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: white;
+        }
+
+        td {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 0.95rem;
+        }
+
+        tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .sector-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .sector-rate {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 100px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--primary) 100%);
+            border-radius: 100px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 48px 32px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+            margin-top: 60px;
+        }
+
+        .footer-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .footer-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .sources {
+            padding-top: 32px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .sources-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .sources-list {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 2;
+        }
+
+        /* Loader */
+        .loader {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loader-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Placeholder */
+        .placeholder {
+            text-align: center;
+            padding: 80px 40px;
+        }
+
+        .placeholder-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            opacity: 0.2;
+        }
+
+        .placeholder-text {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 16px;
+            }
+
+            header {
+                padding: 40px 24px;
+                margin-bottom: 40px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .card {
+                padding: 28px 24px;
+            }
+
+            .result-value {
+                font-size: 3.5rem;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            th, td {
+                padding: 16px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="content">
+                <h1>MPV2</h1>
+                <p class="subtitle">Calculateur de taux d'absentéisme pour les entreprises françaises</p>
+            </div>
+        </header>
+
+        <div class="main-grid">
+            <!-- Form Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Calculer votre taux</h2>
+                    <p class="card-description">Renseignez vos données pour obtenir une analyse détaillée</p>
+                </div>
+
+                <form id="absenteeismForm">
+                    <div class="form-group">
+                        <label for="totalDays">Jours ouvrés dans la période</label>
+                        <input type="number" id="totalDays" value="365" min="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="employees">Nombre d'employés</label>
+                        <input type="number" id="employees" min="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="absentDays">Jours d'absence totaux</label>
+                        <input type="number" id="absentDays" min="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sector">Secteur d'activité</label>
+                        <select id="sector" required>
+                            <option value="">Sélectionnez votre secteur</option>
+                            <option value="sante">Santé / Action sociale</option>
+                            <option value="hebergement">Hébergement et restauration</option>
+                            <option value="commerce">Commerce</option>
+                            <option value="transport">Transport et logistique</option>
+                            <option value="industrie">Industrie manufacturière</option>
+                            <option value="construction">Construction</option>
+                            <option value="services">Services aux entreprises</option>
+                            <option value="administration">Administration publique</option>
+                            <option value="autres">Autres secteurs</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Catégorie socioprofessionnelle</label>
+                        <select id="category" required>
+                            <option value="">Sélectionnez la catégorie</option>
+                            <option value="cadres">Cadres</option>
+                            <option value="intermediaires">Professions intermédiaires</option>
+                            <option value="employes">Employés administratifs</option>
+                            <option value="ouvriers">Ouvriers</option>
+                            <option value="mixte">Catégories mixtes</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Calculer</button>
+                </form>
+            </div>
+
+            <!-- Result Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Résultat de l'analyse</h2>
+                    <p class="card-description">Comparaison avec les moyennes nationales</p>
+                </div>
+
+                <div id="resultContainer" class="result-container">
+                    <div class="result-hero">
+                        <div class="result-label">Votre taux d'absentéisme</div>
+                        <div class="result-value" id="resultValue">0%</div>
+                        <div id="resultBadge"></div>
+                    </div>
+
+                    <div class="comparison-grid">
+                        <div class="comparison-item">
+                            <div class="comparison-label">Votre taux</div>
+                            <div class="comparison-value" id="yourRate">0%</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-label">Moyenne nationale</div>
+                            <div class="comparison-value">4,41%</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-label">Votre secteur</div>
+                            <div class="comparison-value" id="sectorRate">-</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-label">Votre catégorie</div>
+                            <div class="comparison-value" id="categoryRate">-</div>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <h3>💡 Recommandations</h3>
+                        <ul id="recommendations"></ul>
+                    </div>
+                </div>
+
+                <div id="loader" class="loader">
+                    <div class="spinner"></div>
+                    <div class="loader-text">Analyse en cours...</div>
+                </div>
+
+                <div id="placeholder" class="placeholder">
+                    <div class="placeholder-icon">📊</div>
+                    <p class="placeholder-text">Remplissez le formulaire pour calculer votre taux d'absentéisme</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📈</div>
+                <div class="stat-value">4,41%</div>
+                <div class="stat-label">Moyenne France</div>
+                <div class="stat-sublabel">Données 2024</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⏱️</div>
+                <div class="stat-value">21,5j</div>
+                <div class="stat-label">Durée moyenne</div>
+                <div class="stat-sublabel">Par arrêt</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🏥</div>
+                <div class="stat-value">8,30%</div>
+                <div class="stat-label">Secteur Santé</div>
+                <div class="stat-sublabel">Le plus touché</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">👷</div>
+                <div class="stat-value">7,77%</div>
+                <div class="stat-label">Ouvriers</div>
+                <div class="stat-sublabel">Catégorie la plus touchée</div>
+            </div>
+        </div>
+
+        <!-- Sector Table -->
+        <div class="card sector-table-container">
+            <div class="card-header">
+                <h2 class="card-title">Taux par secteur d'activité</h2>
+                <p class="card-description">Données officielles 2024</p>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Secteur d'activité</th>
+                            <th>Taux</th>
+                            <th style="width: 40%;">Distribution</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sectorTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-title">MPV2 - Calculateur d'Absentéisme</div>
+            <div class="footer-subtitle">Outil développé pour Medicat Partner</div>
+
+            <div class="sources">
+                <div class="sources-title">Sources des données</div>
+                <div class="sources-list">
+                    Observatoire APICIL 2024 • Baromètre Diot-Siaci 2024-2025<br>
+                    Étude WTW • Baromètre Ayming & AG2R LA MONDIALE
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Data
+        const sectorData = {
+            'sante': { name: 'Santé / Action sociale', rate: 8.30 },
+            'hebergement': { name: 'Hébergement et restauration', rate: 7.39 },
+            'commerce': { name: 'Commerce', rate: 6.23 },
+            'transport': { name: 'Transport et logistique', rate: 5.40 },
+            'administration': { name: 'Administration publique', rate: 5.20 },
+            'industrie': { name: 'Industrie manufacturière', rate: 4.80 },
+            'construction': { name: 'Construction', rate: 4.50 },
+            'services': { name: 'Services aux entreprises', rate: 3.90 },
+            'autres': { name: 'Autres secteurs', rate: 4.41 }
+        };
+
+        const categoryData = {
+            'cadres': { name: 'Cadres', rate: 2.29 },
+            'intermediaires': { name: 'Professions intermédiaires', rate: 4.70 },
+            'employes': { name: 'Employés administratifs', rate: 6.15 },
+            'ouvriers': { name: 'Ouvriers', rate: 7.77 },
+            'mixte': { name: 'Catégories mixtes', rate: 4.41 }
+        };
+
+        const nationalAverage = 4.41;
+
+        // Populate sector table
+        function populateSectorTable() {
+            const tbody = document.getElementById('sectorTableBody');
+            const sortedSectors = Object.entries(sectorData).sort((a, b) => b[1].rate - a[1].rate);
+
+            sortedSectors.forEach(([key, data]) => {
+                const row = document.createElement('tr');
+                const barWidth = (data.rate / 10) * 100;
+
+                row.innerHTML = `
+                    <td class="sector-name">${data.name}</td>
+                    <td class="sector-rate">${data.rate}%</td>
+                    <td>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%; --final-width: ${barWidth}%"></div>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Animate bars
+            setTimeout(() => {
+                document.querySelectorAll('.progress-fill').forEach(bar => {
+                    bar.style.width = bar.style.getPropertyValue('--final-width');
+                });
+            }, 100);
+        }
+
+        // Calculate rate
+        function calculateAbsenteeismRate(totalDays, employees, absentDays) {
+            return (absentDays / (totalDays * employees)) * 100;
+        }
+
+        // Get interpretation
+        function getInterpretation(rate) {
+            if (rate < nationalAverage * 0.7) {
+                return {
+                    badge: '<span class="badge badge-success">Excellent</span>',
+                    className: 'success'
+                };
+            } else if (rate < nationalAverage) {
+                return {
+                    badge: '<span class="badge badge-success">Bien</span>',
+                    className: 'success'
+                };
+            } else if (rate < nationalAverage * 1.3) {
+                return {
+                    badge: '<span class="badge badge-warning">À surveiller</span>',
+                    className: 'warning'
+                };
+            } else {
+                return {
+                    badge: '<span class="badge badge-danger">Élevé</span>',
+                    className: 'danger'
+                };
+            }
+        }
+
+        // Get recommendations
+        function getRecommendations(rate, sectorRate, categoryRate) {
+            const recs = [];
+
+            if (rate > nationalAverage) {
+                recs.push('Analysez les causes principales d\'absence');
+                recs.push('Mettez en place des actions de prévention');
+            }
+
+            if (rate > sectorRate * 1.2) {
+                recs.push('Comparez vos pratiques avec les leaders du secteur');
+            }
+
+            if (rate > categoryRate * 1.2) {
+                recs.push('Examinez les conditions de travail spécifiques');
+            }
+
+            if (rate > 6) {
+                recs.push('Envisagez un audit approfondi');
+                recs.push('Consultez un spécialiste en santé au travail');
+            }
+
+            if (rate < nationalAverage) {
+                recs.push('Maintenez vos bonnes pratiques actuelles');
+                recs.push('Continuez la surveillance régulière');
+            }
+
+            recs.push('Formez vos managers à la détection précoce');
+            recs.push('Développez une politique QVT efficace');
+
+            return recs;
+        }
+
+        // Form submission
+        document.getElementById('absenteeismForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const totalDays = parseFloat(document.getElementById('totalDays').value);
+            const employees = parseFloat(document.getElementById('employees').value);
+            const absentDays = parseFloat(document.getElementById('absentDays').value);
+            const sector = document.getElementById('sector').value;
+            const category = document.getElementById('category').value;
+
+            // Show loader
+            document.getElementById('placeholder').style.display = 'none';
+            document.getElementById('resultContainer').style.display = 'none';
+            document.getElementById('loader').style.display = 'block';
+
+            setTimeout(() => {
+                const rate = calculateAbsenteeismRate(totalDays, employees, absentDays);
+                const sectorRate = sectorData[sector].rate;
+                const categoryRate = categoryData[category].rate;
+                const { badge, className } = getInterpretation(rate);
+
+                // Update result
+                const resultValue = document.getElementById('resultValue');
+                resultValue.textContent = rate.toFixed(2) + '%';
+                resultValue.className = 'result-value ' + className;
+
+                document.getElementById('resultBadge').innerHTML = badge;
+                document.getElementById('yourRate').textContent = rate.toFixed(2) + '%';
+                document.getElementById('sectorRate').textContent = sectorRate.toFixed(2) + '%';
+                document.getElementById('categoryRate').textContent = categoryRate.toFixed(2) + '%';
+
+                // Recommendations
+                const recommendations = getRecommendations(rate, sectorRate, categoryRate);
+                const recList = document.getElementById('recommendations');
+                recList.innerHTML = '';
+                recommendations.forEach(rec => {
+                    const li = document.createElement('li');
+                    li.textContent = rec;
+                    recList.appendChild(li);
+                });
+
+                // Show result
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('resultContainer').style.display = 'block';
+
+                // Scroll on mobile
+                if (window.innerWidth < 1024) {
+                    document.getElementById('resultContainer').scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest'
+                    });
+                }
+            }, 1000);
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', populateSectorTable);
+    </script>
+</body>
+</html>

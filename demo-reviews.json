@@ -1,0 +1,92 @@
+[
+  {
+    "author": "Marie Dupont",
+    "rating": 5,
+    "text": "Excellent restaurant ! La nourriture était délicieuse et le service très agréable. Je recommande vivement ce lieu pour un dîner en famille ou entre amis. Les plats sont généreux et le rapport qualité-prix est imbattable.",
+    "date": "2024-11-15"
+  },
+  {
+    "author": "Jean Martin",
+    "rating": 4,
+    "text": "Très bon établissement, cadre sympathique et chaleureux. Juste un peu d'attente mais ça valait le coup. L'ambiance était parfaite et le personnel souriant.",
+    "date": "2024-11-10"
+  },
+  {
+    "author": "Sophie Bernard",
+    "rating": 2,
+    "text": "Décevant... Les plats étaient froids et le service très lent. Prix élevés pour la qualité proposée. Je ne reviendrai pas malheureusement. Dommage car le lieu est joli.",
+    "date": "2024-11-08"
+  },
+  {
+    "author": "Pierre Leroy",
+    "rating": 5,
+    "text": "Une expérience formidable ! L'ambiance est chaleureuse et le personnel aux petits soins. Tout était parfait, de l'entrée au dessert. Les saveurs étaient incroyables et la présentation magnifique.",
+    "date": "2024-11-05"
+  },
+  {
+    "author": "Claire Dubois",
+    "rating": 3,
+    "text": "Correct sans plus. La nourriture était bonne mais rien d'exceptionnel. Prix dans la moyenne. Le service était standard, ni bon ni mauvais.",
+    "date": "2024-11-01"
+  },
+  {
+    "author": "Luc Moreau",
+    "rating": 1,
+    "text": "Très mauvaise expérience. Service désagréable, nourriture médiocre. À éviter absolument. L'accueil était froid et les plats sans saveur. Vraiment décevant.",
+    "date": "2024-10-28"
+  },
+  {
+    "author": "Emma Laurent",
+    "rating": 5,
+    "text": "Je suis fan ! Tout est incroyable, de l'accueil au dessert. Le meilleur restaurant de la région sans hésitation. Je reviens régulièrement et c'est toujours aussi bon.",
+    "date": "2024-10-25"
+  },
+  {
+    "author": "Thomas Petit",
+    "rating": 4,
+    "text": "Bonne adresse, je reviendrai. Quelques petits détails à améliorer mais dans l'ensemble très satisfait. Le cadre est agréable et la cuisine de qualité.",
+    "date": "2024-10-20"
+  },
+  {
+    "author": "Julie Moreau",
+    "rating": 5,
+    "text": "Fantastique ! Une découverte exceptionnelle. Les saveurs sont au rendez-vous et le chef mérite tous les compliments. Service impeccable et rapide.",
+    "date": "2024-10-15"
+  },
+  {
+    "author": "Marc Durand",
+    "rating": 2,
+    "text": "Pas à la hauteur de mes attentes. Plats trop salés et portions petites pour le prix. L'attente était longue malgré peu de monde dans le restaurant.",
+    "date": "2024-10-10"
+  },
+  {
+    "author": "Isabelle Rousseau",
+    "rating": 4,
+    "text": "Très bonne expérience globale. Cuisine savoureuse et personnel aimable. Petit bémol sur le bruit ambiant mais rien de rédhibitoire. Je recommande.",
+    "date": "2024-10-05"
+  },
+  {
+    "author": "Nicolas Blanc",
+    "rating": 5,
+    "text": "Absolument parfait ! De l'accueil au départ, tout était impeccable. Les plats sont créatifs et délicieux. Bravo au chef et à toute l'équipe !",
+    "date": "2024-10-01"
+  },
+  {
+    "author": "Céline Mercier",
+    "rating": 3,
+    "text": "Moyennement satisfaite. Le cadre est sympa mais la nourriture manque de caractère. Service correct mais sans plus. Prix un peu élevés.",
+    "date": "2024-09-28"
+  },
+  {
+    "author": "Olivier Garcia",
+    "rating": 4,
+    "text": "Belle découverte ! Cuisine authentique et généreuse. Ambiance conviviale. Nous avons passé un excellent moment. À refaire sans hésiter.",
+    "date": "2024-09-25"
+  },
+  {
+    "author": "Anne Lefebvre",
+    "rating": 1,
+    "text": "Catastrophique. Service lamentable, plats immangeables. Nous sommes partis avant le dessert. Je déconseille fortement cet établissement.",
+    "date": "2024-09-20"
+  }
+]

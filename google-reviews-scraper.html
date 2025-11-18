@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extracteur d'Avis Google Business Profile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .input-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="url"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="url"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-right: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-export {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .btn-export:hover {
+            box-shadow: 0 5px 15px rgba(56, 239, 125, 0.4);
+        }
+
+        .results-section {
+            margin-top: 30px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            opacity: 0.9;
+        }
+
+        .reviews-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .reviews-table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .reviews-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .reviews-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .reviews-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .stars {
+            color: #ffd700;
+            font-size: 1.2em;
+        }
+
+        .sentiment {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .sentiment.positive {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .sentiment.negative {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .sentiment.neutral {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .info-box h3 {
+            color: #2196F3;
+            margin-bottom: 10px;
+        }
+
+        .info-box ul {
+            margin-left: 20px;
+        }
+
+        .info-box li {
+            margin-bottom: 5px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌟 Extracteur d'Avis Google Business Profile</h1>
+            <p>Récupérez et analysez les avis de votre établissement Google Business</p>
+        </div>
+
+        <div class="content">
+            <div class="info-box">
+                <h3>📋 Instructions d'utilisation</h3>
+                <ul>
+                    <li><strong>Option 1 (Recommandée) :</strong> Utilisez l'API Google Places avec votre clé API</li>
+                    <li><strong>Option 2 :</strong> Entrez l'ID de l'établissement (Place ID)</li>
+                    <li><strong>Option 3 :</strong> Importez un fichier JSON avec des données de démonstration</li>
+                </ul>
+                <p style="margin-top: 10px;"><strong>Note :</strong> Pour obtenir une clé API Google Places, visitez <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a> et activez l'API Places.</p>
+            </div>
+
+            <div class="input-section">
+                <div class="form-group">
+                    <label for="apiKey">Clé API Google Places (optionnelle) :</label>
+                    <input type="text" id="apiKey" placeholder="Entrez votre clé API Google Places">
+                </div>
+
+                <div class="form-group">
+                    <label for="placeId">Place ID ou Nom de l'établissement :</label>
+                    <input type="text" id="placeId" placeholder="Ex: ChIJN1t_tDeuEmsRUsoyG83frY4 ou 'Restaurant Le Gourmet, Paris'">
+                </div>
+
+                <div class="form-group">
+                    <label>Ou charger des données de démonstration :</label>
+                    <input type="file" id="fileInput" accept=".json">
+                </div>
+
+                <div>
+                    <button class="btn" id="fetchBtn" onclick="fetchReviews()">Récupérer les avis</button>
+                    <button class="btn" id="demoBtn" onclick="loadDemoData()">Charger données démo</button>
+                    <button class="btn btn-export hidden" id="exportBtn" onclick="exportToCSV()">Exporter en CSV</button>
+                </div>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Récupération des avis en cours...</p>
+            </div>
+
+            <div class="results-section hidden" id="results">
+                <div class="stats" id="stats"></div>
+                <div id="tableContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let reviewsData = [];
+
+        // Analyse de sentiment simple basée sur des mots-clés
+        function analyzeSentiment(text) {
+            if (!text) return 'neutral';
+
+            const textLower = text.toLowerCase();
+
+            const positiveWords = [
+                'excellent', 'super', 'génial', 'parfait', 'merveilleux', 'fantastique',
+                'incroyable', 'délicieux', 'magnifique', 'top', 'formidable', 'recommande',
+                'agréable', 'accueillant', 'chaleureux', 'sympathique', 'souriant',
+                'rapide', 'efficace', 'qualité', 'bon', 'bien', 'great', 'amazing',
+                'awesome', 'wonderful', 'love', 'best', 'perfect', 'nice', 'good'
+            ];
+
+            const negativeWords = [
+                'mauvais', 'horrible', 'nul', 'décevant', 'médiocre', 'terrible',
+                'désagréable', 'lent', 'froid', 'sale', 'cher', 'arnaque', 'éviter',
+                'pire', 'catastrophe', 'dégoûtant', 'inadmissible', 'bad', 'terrible',
+                'awful', 'worst', 'horrible', 'disgusting', 'poor', 'disappointing'
+            ];
+
+            let positiveCount = 0;
+            let negativeCount = 0;
+
+            positiveWords.forEach(word => {
+                if (textLower.includes(word)) positiveCount++;
+            });
+
+            negativeWords.forEach(word => {
+                if (textLower.includes(word)) negativeCount++;
+            });
+
+            if (positiveCount > negativeCount) return 'positive';
+            if (negativeCount > positiveCount) return 'negative';
+            return 'neutral';
+        }
+
+        // Générer des étoiles visuelles
+        function generateStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 !== 0;
+            let stars = '';
+
+            for (let i = 0; i < fullStars; i++) {
+                stars += '★';
+            }
+            if (hasHalfStar) {
+                stars += '½';
+            }
+            for (let i = fullStars + (hasHalfStar ? 1 : 0); i < 5; i++) {
+                stars += '☆';
+            }
+
+            return stars;
+        }
+
+        // Charger des données de démonstration
+        function loadDemoData() {
+            reviewsData = [
+                {
+                    author: "Marie Dupont",
+                    rating: 5,
+                    text: "Excellent restaurant ! La nourriture était délicieuse et le service très agréable. Je recommande vivement.",
+                    date: "2024-11-15"
+                },
+                {
+                    author: "Jean Martin",
+                    rating: 4,
+                    text: "Très bon établissement, cadre sympathique. Juste un peu d'attente mais ça valait le coup.",
+                    date: "2024-11-10"
+                },
+                {
+                    author: "Sophie Bernard",
+                    rating: 2,
+                    text: "Décevant... Les plats étaient froids et le service très lent. Prix élevés pour la qualité proposée.",
+                    date: "2024-11-08"
+                },
+                {
+                    author: "Pierre Leroy",
+                    rating: 5,
+                    text: "Une expérience formidable ! L'ambiance est chaleureuse et le personnel aux petits soins. Tout était parfait.",
+                    date: "2024-11-05"
+                },
+                {
+                    author: "Claire Dubois",
+                    rating: 3,
+                    text: "Correct sans plus. La nourriture était bonne mais rien d'exceptionnel. Prix dans la moyenne.",
+                    date: "2024-11-01"
+                },
+                {
+                    author: "Luc Moreau",
+                    rating: 1,
+                    text: "Très mauvaise expérience. Service désagréable, nourriture médiocre. À éviter absolument.",
+                    date: "2024-10-28"
+                },
+                {
+                    author: "Emma Laurent",
+                    rating: 5,
+                    text: "Je suis fan ! Tout est incroyable, de l'accueil au dessert. Le meilleur restaurant de la région.",
+                    date: "2024-10-25"
+                },
+                {
+                    author: "Thomas Petit",
+                    rating: 4,
+                    text: "Bonne adresse, je reviendrai. Quelques petits détails à améliorer mais dans l'ensemble très satisfait.",
+                    date: "2024-10-20"
+                }
+            ];
+
+            displayReviews();
+        }
+
+        // Récupérer les avis via l'API Google Places
+        async function fetchReviews() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const placeId = document.getElementById('placeId').value.trim();
+
+            if (!placeId) {
+                alert('Veuillez entrer un Place ID ou un nom d\'établissement');
+                return;
+            }
+
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('fetchBtn').disabled = true;
+
+            try {
+                if (apiKey) {
+                    // Utiliser l'API Google Places
+                    await fetchFromGoogleAPI(apiKey, placeId);
+                } else {
+                    alert('Sans clé API, veuillez utiliser les données de démonstration ou charger un fichier JSON.');
+                    document.getElementById('loading').classList.remove('active');
+                    document.getElementById('fetchBtn').disabled = false;
+                }
+            } catch (error) {
+                alert('Erreur lors de la récupération des avis: ' + error.message);
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('fetchBtn').disabled = false;
+            }
+        }
+
+        // Récupérer depuis l'API Google Places
+        async function fetchFromGoogleAPI(apiKey, placeId) {
+            try {
+                // Note: En production, cette requête doit passer par un serveur backend
+                // pour éviter d'exposer la clé API
+                const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=reviews,rating,user_ratings_total&key=${apiKey}`;
+
+                // Cette requête sera bloquée par CORS dans le navigateur
+                // Il faut utiliser un proxy ou un backend
+                alert('Note: Pour utiliser l\'API Google Places, vous devez configurer un serveur backend pour éviter les problèmes CORS. Pour le moment, utilisez les données de démonstration.');
+
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('fetchBtn').disabled = false;
+
+            } catch (error) {
+                throw new Error('Erreur API: ' + error.message);
+            }
+        }
+
+        // Afficher les avis
+        function displayReviews() {
+            if (reviewsData.length === 0) {
+                alert('Aucun avis à afficher');
+                return;
+            }
+
+            // Calculer les statistiques
+            const totalReviews = reviewsData.length;
+            const avgRating = (reviewsData.reduce((sum, r) => sum + r.rating, 0) / totalReviews).toFixed(1);
+
+            const sentiments = reviewsData.map(r => analyzeSentiment(r.text));
+            const positiveCount = sentiments.filter(s => s === 'positive').length;
+            const negativeCount = sentiments.filter(s => s === 'negative').length;
+            const neutralCount = sentiments.filter(s => s === 'neutral').length;
+
+            // Afficher les statistiques
+            const statsHTML = `
+                <div class="stat-card">
+                    <h3>${totalReviews}</h3>
+                    <p>Avis total</p>
+                </div>
+                <div class="stat-card">
+                    <h3>${avgRating} ★</h3>
+                    <p>Note moyenne</p>
+                </div>
+                <div class="stat-card">
+                    <h3>${positiveCount}</h3>
+                    <p>Avis positifs</p>
+                </div>
+                <div class="stat-card">
+                    <h3>${negativeCount}</h3>
+                    <p>Avis négatifs</p>
+                </div>
+            `;
+            document.getElementById('stats').innerHTML = statsHTML;
+
+            // Créer le tableau des avis
+            let tableHTML = `
+                <table class="reviews-table">
+                    <thead>
+                        <tr>
+                            <th>Auteur</th>
+                            <th>Note</th>
+                            <th>Commentaire</th>
+                            <th>Sentiment</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            reviewsData.forEach(review => {
+                const sentiment = analyzeSentiment(review.text);
+                const sentimentText = sentiment === 'positive' ? 'Positif' :
+                                     sentiment === 'negative' ? 'Négatif' : 'Neutre';
+
+                tableHTML += `
+                    <tr>
+                        <td><strong>${review.author}</strong></td>
+                        <td><span class="stars">${generateStars(review.rating)}</span> (${review.rating})</td>
+                        <td>${review.text || 'Pas de commentaire'}</td>
+                        <td><span class="sentiment ${sentiment}">${sentimentText}</span></td>
+                        <td>${review.date}</td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+
+            document.getElementById('tableContainer').innerHTML = tableHTML;
+            document.getElementById('results').classList.remove('hidden');
+            document.getElementById('exportBtn').classList.remove('hidden');
+            document.getElementById('loading').classList.remove('active');
+            document.getElementById('fetchBtn').disabled = false;
+        }
+
+        // Exporter en CSV
+        function exportToCSV() {
+            if (reviewsData.length === 0) {
+                alert('Aucune donnée à exporter');
+                return;
+            }
+
+            let csv = 'Auteur,Note,Commentaire,Sentiment,Date\n';
+
+            reviewsData.forEach(review => {
+                const sentiment = analyzeSentiment(review.text);
+                const sentimentText = sentiment === 'positive' ? 'Positif' :
+                                     sentiment === 'negative' ? 'Négatif' : 'Neutre';
+
+                // Échapper les guillemets et virgules dans le texte
+                const text = (review.text || '').replace(/"/g, '""');
+
+                csv += `"${review.author}",${review.rating},"${text}","${sentimentText}","${review.date}"\n`;
+            });
+
+            // Créer un blob et télécharger
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+
+            link.setAttribute('href', url);
+            link.setAttribute('download', `avis_google_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Charger un fichier JSON
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    reviewsData = JSON.parse(event.target.result);
+                    displayReviews();
+                } catch (error) {
+                    alert('Erreur lors de la lecture du fichier JSON: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        });
+    </script>
+</body>
+</html>

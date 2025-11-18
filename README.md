@@ -2,6 +2,18 @@
 
 Application Python pour récupérer automatiquement les commentaires, notes et sentiments d'une fiche Google Business Profile, avec export en CSV.
 
+## 🚀 Démarrage Rapide
+
+**Vous ne voulez pas installer Python sur votre PC?**
+
+👉 **Utilisez Google Colab (gratuit, en ligne)**: Consultez le **[README_COLAB.md](README_COLAB.md)** pour un guide ultra-simple!
+
+**Vous préférez installer localement?**
+
+👇 Continuez à lire ci-dessous.
+
+---
+
 ## 📋 Fonctionnalités
 
 - ✅ Récupération automatique des reviews Google Business Profile
